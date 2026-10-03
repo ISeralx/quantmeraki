@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="robots" content="noindex, nofollow">
 <title>Cursos · QuantMeraki</title>
-<meta name="description" content="Cursos gratis y en español de probabilidad, estadística, mercados, opciones y código para preparar las entrevistas de las firmas de trading.">
+<meta name="description" content="Catálogo de cursos gratis y en español: probabilidad y estadística, mercados y productos, teoría de juegos, finanzas cuantitativas, matemáticas rápidas y programación para quant developers.">
 <link rel="icon" href="assets/perfil-128.png">
 <script>try{var t=localStorage.getItem('qm-theme');document.documentElement.setAttribute('data-theme',t||'light');}catch(e){}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -13,75 +13,88 @@
 <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;500;600;700&family=Barlow+Semi+Condensed:wght@600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/qm.css">
 <style>
+  /* cabecera: texto a la izquierda, tarjeta "empieza por aquí" a la derecha */
   .phead .split{grid-template-columns:minmax(0,7fr) minmax(0,5fr);align-items:end}
+  .meta{display:flex;flex-wrap:wrap;align-items:center;gap:8px 14px;margin:22px 0 0;font-family:var(--disp);font-weight:700;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+  .meta .sep{color:var(--faint)}
+  .meta b{color:var(--acc-txt);font-weight:700}
   .start .h3{margin-top:10px}
   .start-p{display:flex;align-items:center;gap:12px;margin-top:20px}
   .start-p .bar-p{flex:1}
-  .start-p span{font-size:14px;color:var(--muted);white-space:nowrap}
+  .start-p span{font-size:14px;color:var(--muted);white-space:nowrap;font-variant-numeric:tabular-nums}
   .cm{font-size:14px;color:var(--muted);white-space:nowrap}
-  .tb1{margin-bottom:14px}
-  .tb2 .sel{flex:0 0 auto;min-width:200px}
-  .grp{margin-top:44px}
-  .grp.first-v{margin-top:20px}
-  .grp-h{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:4px 20px;margin-bottom:10px}
+
+  /* catálogo: grupos por área, cada uno con su listado en recuadro */
+  .tb2 .search{max-width:none}
+  .grp{margin-top:40px}
+  .grp.first-v{margin-top:0}
+  .grp-h{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:4px 20px;margin-bottom:12px}
   .grp-t{margin:0;font-family:var(--disp);font-weight:800;font-size:14px;letter-spacing:.24em;text-transform:uppercase;color:var(--txt)}
   .grp-h p{margin:0;font-size:14.5px;color:var(--muted)}
-  .mini{display:inline-flex;align-items:center;gap:8px;font-size:13px;color:var(--muted)}
-  .mini .bar-p{width:56px}
-  .propose{margin:28px 0 0;font-size:14.5px;color:var(--muted)}
-  .propose a{color:var(--acc-txt);border-bottom:1px solid var(--accent-line)}
+  .cline{display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px;margin-top:8px;font-size:13.5px;color:var(--muted);font-variant-numeric:tabular-nums}
+  .cline .sep{color:var(--faint)}
+  .cline .lv{display:inline-flex;align-items:center;gap:7px}
+  .mini{display:inline-flex;align-items:center;gap:8px;font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums;white-space:nowrap}
+  .mini .bar-p{width:64px}
+  .count{margin:0 0 16px}
+  .route-note{margin:28px 0 0;font-size:14.5px;color:var(--muted);max-width:60ch}
+  .route-note a{color:var(--acc-txt);border-bottom:1px solid var(--accent-line)}
+
+  /* cómo es una lección */
+  .how .item{padding:16px 0}
+  .how .item-n{align-self:start;padding-top:3px}
+
   @media (max-width:900px){
     .phead .split{grid-template-columns:minmax(0,1fr);align-items:start;gap:28px}
   }
   @media (max-width:600px){
-    .tb2 .sel{width:100%;min-width:0}
-    .grp{margin-top:36px}
+    .meta{gap:8px 12px}
+    .grp{margin-top:32px}
     .item.lead-num .item-n{align-self:start;padding-top:2px}
+    .start .btn{width:100%}
   }
 </style>
 </head>
-<body data-section="aprende">
+<body data-section="biblioteca">
 <a class="skip" href="#main">Saltar al contenido</a>
 
-<!-- ===================== CABECERA (copiar tal cual en todas las páginas) ===================== -->
+<!-- MENU:INICIO -->
+<nav class="sb" aria-label="Principal">
+  <a class="sb-logo" href="index.html" aria-label="QuantMeraki, inicio"><img src="assets/perfil-128.png" alt="" width="32" height="32"><span>QuantMeraki</span></a>
+  <div class="sb-scroll">
+    <a class="sb-a" href="index.html"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/><path d="M10 20v-6h4v6"/></svg>Inicio</a>
+    <a class="sb-a" href="progreso.html"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 20v-8M12 20V5M19 20v-9"/></svg>Mi progreso</a>
+    <p class="sb-g">Practica</p>
+    <a class="sb-a" href="rutas.html"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="6" cy="18" r="2.5"/><circle cx="18" cy="6" r="2.5"/><path d="M8.3 16.3C12.5 15.5 11.5 8.5 15.7 7.7"/></svg>Rutas</a>
+    <a class="sb-a" href="preparar-firma.html"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3.5"/><path d="M12 4v2.5M12 17.5V20M4 12h2.5M17.5 12H20"/></svg>Preparar una firma</a>
+    <p class="sb-g">Biblioteca</p>
+    <a class="sb-a" href="preguntas.html"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9.6 9.6a2.4 2.4 0 1 1 3.5 2.1c-.8.4-1.1.9-1.1 1.8"/><circle class="f" cx="12" cy="16.8" r="1"/></svg>Preguntas</a>
+    <a class="sb-a" href="cursos.html"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 6c-2-1.5-5-2-8-1.5V19c3-.5 6 0 8 1.5 2-1.5 5-2 8-1.5V4.5c-3-.5-6 0-8 1.5z"/><path d="M12 6v14.5"/></svg>Cursos</a>
+    <a class="sb-a" href="guias.html"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3h7l5 5v13H7z"/><path d="M14 3v5h5M10 13h5M10 17h5"/></svg>Guías</a>
+    <a class="sb-a" href="juegos.html"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="3"/><circle class="f" cx="9" cy="9" r="1.3"/><circle class="f" cx="15" cy="9" r="1.3"/><circle class="f" cx="9" cy="15" r="1.3"/><circle class="f" cx="15" cy="15" r="1.3"/></svg>Juegos de mercado</a>
+    <a class="sb-a" href="entrenadores.html"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="13.5" r="7.5"/><path d="M12 10v3.5l2.5 1.5M9.5 3h5M12 3v3"/></svg>Entrenadores</a>
+    <a class="sb-a" href="codigo.html"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 8l-4 4 4 4M16 8l4 4-4 4M13.5 5l-3 14"/></svg>Código</a>
+    <a class="sb-a" href="simulacros.html"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 4V3h6v1M9 13l2 2 4-4"/></svg>Pruebas</a>
+    <p class="sb-g">Explora</p>
+    <a class="sb-a" href="firmas.html"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 21h18M3 9.5l9-5.5 9 5.5M5 10v11M19 10v11M9.5 21v-8M14.5 21v-8"/></svg>Firmas</a>
+    <a class="sb-a" href="empleo.html"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M9 7V5h6v2M3 12h18"/></svg>Empleo</a>
+    <a class="sb-a" href="canal.html"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="3"/><path class="f" d="M10 9v6l5-3z"/></svg>Canal</a>
+  </div>
+  <div class="sb-foot">
+    <button class="sb-a" type="button" data-theme-toggle aria-label="Cambiar a modo oscuro"><svg class="ico i-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg><svg class="ico i-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg><span data-theme-label>Modo oscuro</span></button>
+    <a class="sb-a" href="sobre.html"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v5"/><circle class="f" cx="12" cy="8" r="1"/></svg>Sobre el proyecto</a>
+  </div>
+</nav>
 <header class="top">
   <div class="wrap bar">
     <a class="logo" href="index.html" aria-label="QuantMeraki, inicio"><img src="assets/perfil-128.png" alt="" width="34" height="34"><span>QuantMeraki</span></a>
-    <nav class="nav" aria-label="Principal">
-      <div class="dd">
-        <button class="dd-btn" type="button" aria-expanded="false" data-nav="practica">Practica</button>
-        <div class="menu" hidden>
-          <a href="entrenadores.html">Entrenadores<small>Cálculo mental y series, contra el reloj</small></a>
-          <a href="preguntas.html">Preguntas<small>Probabilidad, acertijos y series</small></a>
-          <a href="juegos.html">Juegos de mercado<small>Cotiza y ajusta tus precios</small></a>
-          <a href="simulacros.html">Simulacros<small>Pruebas cronometradas, como las de verdad</small></a>
-          <a href="codigo.html">Código<small>Problemas para developers</small></a>
-        </div>
-      </div>
-      <div class="dd">
-        <button class="dd-btn" type="button" aria-expanded="false" data-nav="aprende">Aprende</button>
-        <div class="menu" hidden>
-          <a href="rutas.html">Rutas<small>Trader, researcher o developer, paso a paso</small></a>
-          <a href="cursos.html">Cursos<small>Probabilidad, mercados y opciones</small></a>
-          <a href="guias.html">Guías<small>El sector y los procesos, explicados</small></a>
-        </div>
-      </div>
-      <div class="dd">
-        <button class="dd-btn" type="button" aria-expanded="false" data-nav="firmas">Firmas</button>
-        <div class="menu" hidden>
-          <a href="firmas.html">Directorio<small>Qué hace cada firma y cómo contrata</small></a>
-          <a href="empleo.html">Empleo<small>Prácticas y puestos para graduados</small></a>
-        </div>
-      </div>
-      <a href="canal.html" data-nav="canal">Canal</a>
-    </nav>
     <div class="tools">
       <a class="iconbtn" href="progreso.html" data-nav="progreso" aria-label="Mi progreso" title="Mi progreso"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 20v-8M12 20V5M19 20v-9"/></svg></a>
       <button class="iconbtn" type="button" data-theme-toggle aria-label="Cambiar a modo oscuro"><svg class="ico i-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg><svg class="ico i-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg></button>
-      <a class="btn solid sm cta" href="entrenador-calculo-mental.html">Empieza</a>
     </div>
   </div>
 </header>
+<!-- MENU:FIN -->
 
 <main id="main">
   <div class="wrap">
@@ -89,138 +102,61 @@
     <section class="phead">
       <div class="split">
         <div>
-          <nav class="crumbs" aria-label="Migas de pan"><a href="aprende.html">Aprende</a><span class="sep">/</span><span aria-current="page">Cursos</span></nav>
-          <p class="kicker"><b>Aprende</b> / Cursos</p>
+          <nav class="crumbs" aria-label="Migas de pan"><span>Biblioteca</span><span class="sep">/</span><span aria-current="page">Cursos</span></nav>
+          <p class="kicker"><b>Biblioteca</b> / Cursos</p>
           <h1 class="h1">Cursos</h1>
-          <p class="lead">Temarios cortos, lección a lección, con fórmulas, ejemplos resueltos y ejercicios. Todo gratis y sin registro.</p>
+          <p class="lead">Ocho cursos, lección a lección. Cada lección dura entre 10 y 12 minutos y lleva una o dos simulaciones, un ejemplo resuelto y ejercicios. Todo gratis y sin registro.</p>
+          <p class="meta" id="metaLine"></p>
         </div>
         <div class="card start">
           <p class="label">Empieza por aquí</p>
-          <h2 class="h3">Probabilidad para entrevistas</h2>
-          <p>La base de casi todas las preguntas de una primera entrevista. Diez lecciones cortas.</p>
-          <div class="start-p"><div class="bar-p" id="startBar" style="--p:0%"><i></i></div><span id="startTxt">0 de 10 lecciones</span></div>
-          <div class="card-foot"><a class="btn solid" id="startBtn" href="curso-probabilidad.html">Ver el curso</a><span class="cm">2 h 30 min</span></div>
+          <h2 class="h3" id="startT">Fundamentos de probabilidad y estadística</h2>
+          <p id="startD">La base de todo lo demás: reglas, distribuciones y la estadística justa para no fiarte de un resultado por casualidad.</p>
+          <div class="start-p"><div class="bar-p" id="startBar" style="--p:0%" role="progressbar" aria-label="Lecciones hechas" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><i></i></div><span id="startTxt"></span></div>
+          <div class="card-foot"><a class="btn solid" id="startBtn" href="curso.html?c=fundamentos">Ver el curso</a><span class="cm" id="startMin"></span></div>
         </div>
       </div>
     </section>
 
-    <section class="sec first" data-filter-root aria-label="Catálogo de cursos">
-      <div class="toolbar tb1">
-        <div class="chips scroll" role="group" aria-label="Área">
-          <button class="chip" type="button" data-filter="cat:all" aria-pressed="true">Todos</button>
-          <button class="chip" type="button" data-filter="cat:probabilidad" aria-pressed="false">Probabilidad</button>
-          <button class="chip" type="button" data-filter="cat:estadistica" aria-pressed="false">Estadística</button>
-          <button class="chip" type="button" data-filter="cat:mercados" aria-pressed="false">Mercados</button>
-          <button class="chip" type="button" data-filter="cat:opciones" aria-pressed="false">Opciones</button>
-          <button class="chip" type="button" data-filter="cat:codigo" aria-pressed="false">Código</button>
-          <button class="chip" type="button" data-filter="cat:entrevistas" aria-pressed="false">Entrevistas</button>
-        </div>
+    <section class="sec first" aria-labelledby="cat-h">
+      <p class="kicker"><b>01</b> / Catálogo</p>
+      <h2 class="h2" id="cat-h">Los ocho cursos</h2>
+      <p class="lead">Agrupados por área. Pulsa un área para quedarte solo con sus cursos, o busca un tema.</p>
+
+      <div class="toolbar" style="margin-top:28px">
+        <div class="chips scroll" role="group" aria-label="Área" id="areaChips"></div>
       </div>
       <div class="toolbar tb2">
-        <label class="search"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/></svg><span class="sr">Buscar cursos</span><input type="search" data-search placeholder="Buscar un curso o un tema"></label>
-        <label><span class="sr">Nivel</span><select class="sel" data-filter-select="lvl">
-          <option value="all">Todos los niveles</option>
-          <option value="1">Básico</option>
-          <option value="2">Intermedio</option>
-          <option value="3">Avanzado</option>
-        </select></label>
+        <label class="search"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/></svg><span class="sr">Buscar cursos</span><input type="search" id="q" placeholder="Buscar un curso, una lección o un tema" autocomplete="off"></label>
       </div>
-      <p class="count" data-count></p>
+      <p class="count" id="count" aria-live="polite"></p>
 
-      <div class="grp" data-grp>
-        <div class="grp-h"><h2 class="grp-t">Probabilidad</h2><p>La base de casi todas las preguntas.</p></div>
-        <div class="list">
-          <a class="item lead-num" href="curso-probabilidad.html" data-item data-tags="cat:probabilidad lvl:1">
-            <span class="item-n">01</span>
-            <span><span class="item-t">Probabilidad para entrevistas</span><span class="item-d">Contar, condicionar y calcular esperanzas de cabeza.</span></span>
-            <span class="item-m"><span class="cm">10 lecciones · 2 h 30 min</span><span class="meter" data-v="1" role="img" aria-label="Nivel básico"><i></i><i></i><i></i></span><span class="mini" id="rowProg"><span class="bar-p" style="--p:0%"><i></i></span><span>0/10</span></span><span class="arrow" aria-hidden="true">→</span></span>
-          </a>
-          <a class="item lead-num" href="#" data-soon data-item data-tags="cat:probabilidad lvl:3">
-            <span class="item-n">02</span>
-            <span><span class="item-t">Paseos aleatorios y martingalas</span><span class="item-d">La ruina del jugador (gambler's ruin), los juegos justos y cuándo parar.</span></span>
-            <span class="item-m"><span class="cm">8 lecciones · 2 h 40 min</span><span class="meter" data-v="3" role="img" aria-label="Nivel avanzado"><i></i><i></i><i></i></span><span class="arrow" aria-hidden="true">→</span></span>
-          </a>
+      <div id="groups"></div>
+      <p class="empty" id="empty" hidden>No hay cursos con esos filtros.</p>
+
+      <p class="route-note">Si vas a entrevistas de trading, la <a href="ruta-trader.html">Ruta Trader</a> ordena estos cursos con las preguntas, los juegos y los entrenadores que van con cada uno.</p>
+    </section>
+
+    <section class="sec" aria-labelledby="how-h">
+      <div class="split">
+        <div class="side">
+          <p class="kicker"><b>02</b> / Cómo es una lección</p>
+          <h2 class="h2" id="how-h">Corta, con simulación y con deberes</h2>
+          <p class="lead">Todas las lecciones siguen el mismo formato, para que sepas qué te espera antes de abrir una.</p>
+        </div>
+        <div class="list how">
+          <div class="item lead-num"><span class="item-n">01</span><span><span class="item-t">De 10 a 12 minutos</span><span class="item-d">Una idea por lección. Si necesita más tiempo, se parte en dos.</span></span></div>
+          <div class="item lead-num"><span class="item-n">02</span><span><span class="item-t">Una o dos simulaciones</span><span class="item-d">Mueves los parámetros y ves el resultado, en vez de creerte la fórmula.</span></span></div>
+          <div class="item lead-num"><span class="item-n">03</span><span><span class="item-t">Un ejemplo resuelto</span><span class="item-d">Un problema del estilo de las entrevistas, hecho paso a paso.</span></span></div>
+          <div class="item lead-num"><span class="item-n">04</span><span><span class="item-t">Dos o tres ejercicios</span><span class="item-d">Con respuesta y solución. Al acabar, marcas la lección como hecha y el curso lleva la cuenta.</span></span></div>
         </div>
       </div>
-
-      <div class="grp" data-grp>
-        <div class="grp-h"><h2 class="grp-t">Estadística</h2><p>Sacar conclusiones de datos con ruido.</p></div>
-        <div class="list">
-          <a class="item lead-num" href="#" data-soon data-item data-tags="cat:estadistica lvl:2">
-            <span class="item-n">03</span>
-            <span><span class="item-t">Estadística para trading</span><span class="item-d">Media, varianza, correlación e intervalos, con datos de mercado.</span></span>
-            <span class="item-m"><span class="cm">9 lecciones · 2 h 15 min</span><span class="meter" data-v="2" role="img" aria-label="Nivel intermedio"><i></i><i></i><i></i></span><span class="arrow" aria-hidden="true">→</span></span>
-          </a>
-          <a class="item lead-num" href="#" data-soon data-item data-tags="cat:estadistica lvl:3">
-            <span class="item-n">04</span>
-            <span><span class="item-t">Regresión y señales</span><span class="item-d">Mínimos cuadrados, sobreajuste (overfitting) y cómo validar una señal.</span></span>
-            <span class="item-m"><span class="cm">8 lecciones · 2 h 30 min</span><span class="meter" data-v="3" role="img" aria-label="Nivel avanzado"><i></i><i></i><i></i></span><span class="arrow" aria-hidden="true">→</span></span>
-          </a>
-        </div>
-      </div>
-
-      <div class="grp" data-grp>
-        <div class="grp-h"><h2 class="grp-t">Mercados</h2><p>Cómo se forma un precio y quién lo pone.</p></div>
-        <div class="list">
-          <a class="item lead-num" href="#" data-soon data-item data-tags="cat:mercados lvl:1">
-            <span class="item-n">05</span>
-            <span><span class="item-t">Cómo funciona un mercado</span><span class="item-d">Libro de órdenes (order book), diferencial (spread) y quién está al otro lado.</span></span>
-            <span class="item-m"><span class="cm">8 lecciones · 1 h 50 min</span><span class="meter" data-v="1" role="img" aria-label="Nivel básico"><i></i><i></i><i></i></span><span class="arrow" aria-hidden="true">→</span></span>
-          </a>
-          <a class="item lead-num" href="#" data-soon data-item data-tags="cat:mercados lvl:2">
-            <span class="item-n">06</span>
-            <span><span class="item-t">Creación de mercado</span><span class="item-d">Cotizar a dos lados (market making), gestionar el inventario y mover precios.</span></span>
-            <span class="item-m"><span class="cm">7 lecciones · 1 h 45 min</span><span class="meter" data-v="2" role="img" aria-label="Nivel intermedio"><i></i><i></i><i></i></span><span class="arrow" aria-hidden="true">→</span></span>
-          </a>
-        </div>
-      </div>
-
-      <div class="grp" data-grp>
-        <div class="grp-h"><h2 class="grp-t">Opciones</h2><p>Contratos que pagan según el precio de otro activo.</p></div>
-        <div class="list">
-          <a class="item lead-num" href="#" data-soon data-item data-tags="cat:opciones lvl:2">
-            <span class="item-n">07</span>
-            <span><span class="item-t">Opciones desde cero</span><span class="item-d">Pagos, paridad put-call, árbol binomial y griegas, con números.</span></span>
-            <span class="item-m"><span class="cm">10 lecciones · 3 h</span><span class="meter" data-v="2" role="img" aria-label="Nivel intermedio"><i></i><i></i><i></i></span><span class="arrow" aria-hidden="true">→</span></span>
-          </a>
-        </div>
-      </div>
-
-      <div class="grp" data-grp>
-        <div class="grp-h"><h2 class="grp-t">Código</h2><p>Programar lo justo para comprobar cualquier cuenta.</p></div>
-        <div class="list">
-          <a class="item lead-num" href="#" data-soon data-item data-tags="cat:codigo lvl:1">
-            <span class="item-n">08</span>
-            <span><span class="item-t">Python para quants</span><span class="item-d">NumPy, pandas y simulación de Montecarlo para comprobar tus resultados.</span></span>
-            <span class="item-m"><span class="cm">9 lecciones · 2 h 20 min</span><span class="meter" data-v="1" role="img" aria-label="Nivel básico"><i></i><i></i><i></i></span><span class="arrow" aria-hidden="true">→</span></span>
-          </a>
-        </div>
-      </div>
-
-      <div class="grp" data-grp>
-        <div class="grp-h"><h2 class="grp-t">Entrevistas</h2><p>Rapidez y estimación, para las primeras pruebas.</p></div>
-        <div class="list">
-          <a class="item lead-num" href="#" data-soon data-item data-tags="cat:entrevistas lvl:1">
-            <span class="item-n">09</span>
-            <span><span class="item-t">Cálculo mental con método</span><span class="item-d">Trucos para multiplicar, dividir y redondear rápido. Va con la serie de los miércoles del canal.</span></span>
-            <span class="item-m"><span class="cm">6 lecciones · 1 h 10 min</span><span class="meter" data-v="1" role="img" aria-label="Nivel básico"><i></i><i></i><i></i></span><span class="arrow" aria-hidden="true">→</span></span>
-          </a>
-          <a class="item lead-num" href="#" data-soon data-item data-tags="cat:entrevistas lvl:1">
-            <span class="item-n">10</span>
-            <span><span class="item-t">Estimaciones de Fermi</span><span class="item-d">Partir una pregunta imposible en supuestos que puedes defender.</span></span>
-            <span class="item-m"><span class="cm">5 lecciones · 1 h</span><span class="meter" data-v="1" role="img" aria-label="Nivel básico"><i></i><i></i><i></i></span><span class="arrow" aria-hidden="true">→</span></span>
-          </a>
-        </div>
-      </div>
-
-      <p class="empty" data-empty hidden>No hay cursos con esos filtros.</p>
-      <p class="propose">¿Echas en falta un tema? <a href="#" data-soon>Propón un curso</a></p>
     </section>
 
     <section class="sec" aria-labelledby="faq-h">
       <div class="split">
         <div class="side">
-          <p class="kicker"><b>Dudas</b> / Cursos</p>
+          <p class="kicker"><b>03</b> / Dudas</p>
           <h2 class="h2" id="faq-h">Preguntas frecuentes</h2>
           <p class="lead">Lo que conviene saber antes de empezar.</p>
         </div>
@@ -231,19 +167,19 @@
           </div>
           <div class="acc-row">
             <button class="acc-btn" type="button" aria-expanded="false" aria-controls="faq2"><span class="item-t">¿Por cuál empiezo?</span><span class="plus" aria-hidden="true">+</span></button>
-            <div class="acc-body" id="faq2" hidden><p>Por Probabilidad para entrevistas. Si ya sabes a qué puesto vas, sigue su <a class="acc-txt" href="rutas.html">ruta</a>: ordena cursos, preguntas y entrenadores.</p></div>
+            <div class="acc-body" id="faq2" hidden><p>Por Fundamentos de probabilidad y estadística. Si ya sabes a qué puesto vas, sigue su <a class="acc-txt" href="rutas.html">ruta</a>: ordena cursos, preguntas, juegos y entrenadores en el orden en que te los van a pedir.</p></div>
           </div>
           <div class="acc-row">
-            <button class="acc-btn" type="button" aria-expanded="false" aria-controls="faq3"><span class="item-t">¿Qué nivel de matemáticas necesito?</span><span class="plus" aria-hidden="true">+</span></button>
-            <div class="acc-body" id="faq3" hidden><p>Para los de nivel básico, el de bachillerato. Los avanzados dan por hecho que sabes derivar e integrar.</p></div>
+            <button class="acc-btn" type="button" aria-expanded="false" aria-controls="faq3"><span class="item-t">¿Qué significa que una lección esté «próximamente»?</span><span class="plus" aria-hidden="true">+</span></button>
+            <div class="acc-body" id="faq3" hidden><p>Que el temario ya está cerrado pero la lección todavía no está montada. Las vamos publicando por orden; en cada curso ves cuántas hay disponibles.</p></div>
           </div>
           <div class="acc-row">
-            <button class="acc-btn" type="button" aria-expanded="false" aria-controls="faq4"><span class="item-t">¿Dónde se guarda mi progreso?</span><span class="plus" aria-hidden="true">+</span></button>
-            <div class="acc-body" id="faq4" hidden><p>En este navegador. Lo ves en cada curso y en <a class="acc-txt" href="progreso.html">Mi progreso</a>. Si borras los datos del navegador, se pierde.</p></div>
+            <button class="acc-btn" type="button" aria-expanded="false" aria-controls="faq4"><span class="item-t">¿Qué nivel de matemáticas necesito?</span><span class="plus" aria-hidden="true">+</span></button>
+            <div class="acc-body" id="faq4" hidden><p>Para los de nivel básico, el de bachillerato. Los de nivel intermedio dan por hecho que sabes derivar e integrar.</p></div>
           </div>
           <div class="acc-row">
-            <button class="acc-btn" type="button" aria-expanded="false" aria-controls="faq5"><span class="item-t">¿Qué tienen que ver con el canal?</span><span class="plus" aria-hidden="true">+</span></button>
-            <div class="acc-body" id="faq5" hidden><p>Las lecciones cuentan con calma lo que los vídeos cuentan rápido. Al final de cada una tienes el vídeo relacionado y una pregunta para practicar.</p></div>
+            <button class="acc-btn" type="button" aria-expanded="false" aria-controls="faq5"><span class="item-t">¿Dónde se guarda mi progreso?</span><span class="plus" aria-hidden="true">+</span></button>
+            <div class="acc-body" id="faq5" hidden><p>En este navegador. Lo ves en cada curso y en <a class="acc-txt" href="progreso.html">Mi progreso</a>. Si borras los datos del navegador, se pierde.</p></div>
           </div>
         </div>
       </div>
@@ -264,42 +200,122 @@
   </div>
 </footer>
 
+<!-- BARRA:INICIO -->
 <nav class="tabbar" aria-label="Secciones">
   <a href="index.html" data-tab="inicio"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/><path d="M10 20v-6h4v6"/></svg><span>Inicio</span></a>
-  <a href="practica.html" data-tab="practica"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="4"/><circle class="f" cx="12" cy="12" r="1.4"/></svg><span>Practica</span></a>
-  <a href="aprende.html" data-tab="aprende"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 6c-2-1.5-5-2-8-1.5V19c3-.5 6 0 8 1.5 2-1.5 5-2 8-1.5V4.5c-3-.5-6 0-8 1.5z"/><path d="M12 6v14.5"/></svg><span>Aprende</span></a>
+  <a href="rutas.html" data-tab="rutas"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="6" cy="18" r="2.5"/><circle cx="18" cy="6" r="2.5"/><path d="M8.3 16.3C12.5 15.5 11.5 8.5 15.7 7.7"/></svg><span>Rutas</span></a>
+  <a href="biblioteca.html" data-tab="biblioteca"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h4v16H4zM9.5 4h4v16h-4z"/><path d="M15.2 5.2l3.6-.9 3.5 14.8-3.6.9z"/></svg><span>Biblioteca</span></a>
   <a href="firmas.html" data-tab="firmas"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 21h18M3 9.5l9-5.5 9 5.5M5 10v11M19 10v11M9.5 21v-8M14.5 21v-8"/></svg><span>Firmas</span></a>
   <a href="canal.html" data-tab="canal"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="3"/><path class="f" d="M10 9v6l5-3z"/></svg><span>Canal</span></a>
 </nav>
+<!-- BARRA:FIN -->
 
 <div class="toast" id="toast" role="status" hidden></div>
 <script src="assets/qm.js"></script>
+<script src="assets/catalogo.js"></script>
 <script>
-/* Cursos: progreso del curso montado y grupos que se ocultan si el filtro los vacía */
+/* Cursos: catálogo pintado desde assets/catalogo.js (única fuente de verdad).
+   Los filtros y el progreso van aquí y no con data-filter-root, porque qm.js
+   solo engancha lo que existe al cargar y estas filas se pintan después. */
 (function(){
-  var LECC=['contar-sin-perderse','complementario','probabilidad-condicionada','valor-esperado','linealidad-e-indicadores','varianza-y-riesgo','esperanza-condicionada','juegos-con-decisiones','tiempos-de-espera','paseos-aleatorios'];
-  function paint(){
-    var n=0;LECC.forEach(function(s){if(QM.isDone('leccion:'+s))n++;});
-    var p=Math.round(n/LECC.length*100)+'%';
-    var b=document.getElementById('startBar');if(b)b.style.setProperty('--p',p);
-    var t=document.getElementById('startTxt');if(t)t.textContent=n+' de '+LECC.length+' lecciones';
-    var a=document.getElementById('startBtn');if(a)a.textContent=n?'Continúa el curso':'Ver el curso';
-    var r=document.getElementById('rowProg');
-    if(r){r.querySelector('.bar-p').style.setProperty('--p',p);r.lastElementChild.textContent=n+'/'+LECC.length;}
-  }
-  paint();document.addEventListener('qm-progress',paint);
+  'use strict';
+  var CAT=window.QM_CAT,QM=window.QM;if(!CAT||!QM)return;
+  function $(id){return document.getElementById(id);}
+  function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
+  function pad(n){return (n<10?'0':'')+n;}
+  var NIVEL={'básico':1,'intermedio':2,'avanzado':3};
+  function nivelTxt(n){return 'Nivel '+n;}
 
-  var root=document.querySelector('[data-filter-root]');if(!root)return;
-  function groups(){
-    var first=true;
-    QM.each('[data-grp]',function(g){
-      var any=Array.prototype.some.call(g.querySelectorAll('[data-item]'),function(i){return !i.hidden;});
-      g.hidden=!any;g.classList.toggle('first-v',any&&first);if(any)first=false;
-    },root);
+  /* áreas del catálogo: agrupan los ocho cursos */
+  var AREAS=[
+    {id:'probabilidad',titulo:'Probabilidad y estadística',descripcion:'La base de casi todas las preguntas técnicas.',cursos:['fundamentos','avanzados']},
+    {id:'mercados',titulo:'Mercados y productos',descripcion:'Cómo se forma un precio, quién lo pone y qué se cotiza.',cursos:['mercados','activos']},
+    {id:'estrategia',titulo:'Estrategia',descripcion:'Jugar contra alguien que también piensa.',cursos:['juegos']},
+    {id:'matematicas',titulo:'Matemáticas',descripcion:'Las cuentas que sostienen los precios y las que se hacen de cabeza.',cursos:['finanzas','matematicas']},
+    {id:'codigo',titulo:'Código',descripcion:'Python como lo escribe un quant developer.',cursos:['programacion']}
+  ];
+
+  function disponibles(c){var n=0;c.secciones.forEach(function(s){s.lecciones.forEach(function(l){if(l.href)n++;});});return n;}
+  function textoBusqueda(c){
+    var t=[c.titulo,c.descripcion];
+    c.secciones.forEach(function(s){t.push(s.titulo);s.lecciones.forEach(function(l){t.push(l.titulo);});});
+    return QM.norm(t.join(' '));
   }
-  /* qm.js filtra en el propio control; esto corre después, al subir el evento */
-  ['click','input','change'].forEach(function(ev){root.addEventListener(ev,function(){groups();});});
-  groups();
+
+  /* ---------- cabecera: cifras del catálogo ---------- */
+  (function(){
+    var nC=CAT.cursos.length,nL=0,min=0,disp=0;
+    CAT.cursos.forEach(function(c){nL+=c.nLecciones;min+=c.min;disp+=disponibles(c);});
+    $('metaLine').innerHTML='<span><b>'+nC+'</b> cursos</span><span class="sep">·</span><span><b>'+nL+'</b> lecciones</span><span class="sep">·</span><span><b>'+esc(CAT.fmt(min))+'</b> en total</span><span class="sep">·</span><span><b>'+disp+'</b> lecciones disponibles</span>';
+  })();
+
+  /* ---------- chips de área ---------- */
+  var area='all',q='';
+  var chips=$('areaChips');
+  var chipHtml='<button class="chip" type="button" data-area="all" aria-pressed="true">Todas</button>';
+  AREAS.forEach(function(a){chipHtml+='<button class="chip" type="button" data-area="'+a.id+'" aria-pressed="false">'+esc(a.titulo)+'</button>';});
+  chips.innerHTML=chipHtml;
+  chips.addEventListener('click',function(e){
+    var b=e.target.closest('[data-area]');if(!b)return;
+    area=b.getAttribute('data-area');
+    QM.each('[data-area]',function(o){o.setAttribute('aria-pressed',String(o===b));},chips);
+    apply();
+  });
+  $('q').addEventListener('input',function(){q=QM.norm(this.value.trim());apply();});
+
+  /* ---------- grupos y filas ---------- */
+  var groups=$('groups'),rows=[],n=0,html='';
+  AREAS.forEach(function(a){
+    html+='<div class="grp" data-grp="'+a.id+'"><div class="grp-h"><h3 class="grp-t">'+esc(a.titulo)+'</h3><p>'+esc(a.descripcion)+'</p></div><div class="list">';
+    a.cursos.forEach(function(id){
+      var c=CAT.curso(id);if(!c)return;n++;
+      var lv=NIVEL[c.nivel]||1,disp=disponibles(c);
+      var dispTag=disp?'<span class="tag good">'+disp+' de '+c.nLecciones+' disponibles</span>':'<span class="tag">Próximamente</span><span class="cm">0 de '+c.nLecciones+' disponibles</span>';
+      html+='<a class="item lead-num" href="'+esc(c.href)+'" data-row="'+esc(c.id)+'" data-area-of="'+a.id+'">'
+        +'<span class="item-n">'+pad(n)+'</span>'
+        +'<span><span class="item-t">'+esc(c.titulo)+'</span><span class="item-d">'+esc(c.descripcion)+'</span>'
+        +'<span class="cline"><span class="lv"><span class="meter" data-v="'+lv+'" role="img" aria-label="'+esc(nivelTxt(c.nivel))+'"><i></i><i></i><i></i></span>'+esc(nivelTxt(c.nivel))+'</span><span class="sep">·</span><span>'+c.secciones.length+' secciones · '+c.nLecciones+' lecciones · '+esc(CAT.fmt(c.min))+'</span></span></span>'
+        +'<span class="item-m">'+dispTag+'<span class="mini" data-prog="'+esc(c.id)+'"><span class="bar-p" style="--p:0%"><i></i></span><span>0/'+c.nLecciones+'</span></span><span class="arrow" aria-hidden="true">→</span></span>'
+        +'</a>';
+      rows.push({id:c.id,area:a.id,txt:textoBusqueda(c)});
+    });
+    html+='</div></div>';
+  });
+  groups.innerHTML=html;
+
+  function apply(){
+    var shown=0,first=true;
+    rows.forEach(function(r){
+      var ok=(area==='all'||r.area===area)&&(!q||r.txt.indexOf(q)>=0);
+      var el=groups.querySelector('[data-row="'+r.id+'"]');if(el)el.hidden=!ok;
+      if(ok)shown++;
+    });
+    QM.each('[data-grp]',function(g){
+      var any=Array.prototype.some.call(g.querySelectorAll('[data-row]'),function(i){return !i.hidden;});
+      g.hidden=!any;g.classList.toggle('first-v',any&&first);if(any)first=false;
+    },groups);
+    $('count').textContent=shown===rows.length?rows.length+' cursos':shown+(shown===1?' curso':' cursos')+' de '+rows.length;
+    $('empty').hidden=shown>0;
+  }
+
+  /* ---------- progreso local: filas y tarjeta de inicio ---------- */
+  function paint(){
+    QM.each('[data-prog]',function(m){
+      var p=CAT.progresoCurso(m.getAttribute('data-prog'));
+      m.querySelector('.bar-p').style.setProperty('--p',(p.total?Math.round(p.hechos/p.total*100):0)+'%');
+      m.lastElementChild.textContent=p.hechos+'/'+p.total;
+    },groups);
+    var c=CAT.curso('fundamentos');if(!c)return;
+    var p=CAT.progresoCurso(c.id),pc=p.total?Math.round(p.hechos/p.total*100):0;
+    $('startT').textContent=c.titulo;
+    var bar=$('startBar');bar.style.setProperty('--p',pc+'%');bar.setAttribute('aria-valuenow',pc);
+    $('startTxt').textContent=p.hechos+' de '+p.total+' lecciones';
+    $('startMin').textContent=CAT.fmt(c.min);
+    var b=$('startBtn');b.setAttribute('href',c.href);b.textContent=p.hechos===p.total?'Repasar el curso':p.hechos?'Continúa el curso':'Ver el curso';
+  }
+
+  apply();paint();
+  document.addEventListener('qm-progress',paint);
 })();
 </script>
 </body>

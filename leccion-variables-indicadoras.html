@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="robots" content="noindex, nofollow">
 <title>Linealidad y variables indicadoras · QuantMeraki</title>
-<meta name="description" content="Lección de linealidad de la esperanza y variables indicadoras: por qué E[X+Y] = E[X]+E[Y] vale siempre, el truco del indicador, tres simuladores (sombreros, coleccionista y rachas) y cuatro ejercicios de entrevista con solución.">
+<meta name="description" content="Lección de linealidad de la esperanza y variables indicadoras: por qué E[X+Y] = E[X]+E[Y] vale siempre, el truco del indicador, dos simuladores (sombreros y rachas), un ejemplo resuelto (el coleccionista) y tres ejercicios de entrevista con solución.">
 <link rel="icon" href="assets/perfil-128.png">
 <script>try{var t=localStorage.getItem('qm-theme');document.documentElement.setAttribute('data-theme',t||'light');}catch(e){}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -31,6 +31,11 @@
     .toc{max-height:calc(100vh - 120px);overflow-y:auto;overscroll-behavior:contain;padding-right:6px;scrollbar-width:thin}
   }
 
+  /* arranque de cada sección: línea arriba, número grande y etiqueta */
+  .prose .kicker{margin:48px 0 10px;padding-top:30px;border-top:1px solid var(--line)}
+  .prose .kicker:first-child{margin-top:0;padding-top:0;border-top:0}
+  .prose .kicker+h2{margin-top:0}
+
   /* figuras estáticas (SVG en línea) */
   .fig{margin:20px 0 26px}
   .figsvg{display:block;width:100%;height:auto}
@@ -45,7 +50,6 @@
 
   /* simuladores */
   .lab{margin:20px 0 22px}
-  .prose .lab-q{font-size:15.5px;color:var(--dim);margin:0 0 14px;min-height:1.6em}
   .rng{display:grid;grid-template-columns:auto minmax(0,1fr) 44px;align-items:center;gap:14px;margin:0 0 18px}
   .rng input{width:100%;margin:0;accent-color:var(--accent);cursor:pointer}
   .rng output{font-family:var(--disp);font-weight:800;font-size:22px;line-height:1;text-align:right;font-variant-numeric:tabular-nums;color:var(--txt)}
@@ -61,31 +65,20 @@
   .lab .stat .v.m{color:var(--acc-txt)}
   .lab-btns{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-top:16px}
   .lab-btns .btn{padding:12px 10px}
-  .faces{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:8px;margin:0 0 6px}
-  .face{display:grid;place-items:center;gap:2px;aspect-ratio:1;max-width:100%;border:1px solid var(--line);border-radius:4px;background:var(--bg);color:var(--faint);transition:border-color .15s,color .15s,background .15s}
-  .face b{font-family:var(--disp);font-weight:800;font-size:24px;line-height:1}
-  .face small{font-size:11px;line-height:1;font-variant-numeric:tabular-nums;color:var(--faint)}
-  .face.on{border-color:var(--accent-line);background:var(--accent-dim);color:var(--txt)}
-  .face.on small{color:var(--acc-txt)}
-  .face.hit{border-color:var(--txt)}
 
-  /* receta y chuleta */
-  .rules{border-top:1px solid var(--line2);margin:12px 0 28px}
+  /* receta */
+  .rules{border:1px solid var(--line);border-radius:4px;padding-inline:20px;margin:12px 0 28px;background:var(--bg)}
   .rule{display:grid;grid-template-columns:150px minmax(0,1fr);gap:20px;padding:14px 0;border-bottom:1px solid var(--line2)}
+  .rule:last-child{border-bottom:0}
   .rule .nm{font-family:var(--disp);font-weight:800;text-transform:uppercase;font-size:13.5px;letter-spacing:.04em;line-height:1.3;color:var(--txt);padding-top:10px}
   .rule .nm i{display:block;font-family:var(--sans);font-weight:300;font-style:italic;text-transform:none;letter-spacing:0;font-size:12.5px;color:var(--muted);margin-top:3px}
   .rule .fbox{margin:0}
   .prose .rule p{font-size:15px;line-height:1.6;color:var(--muted);margin:8px 0 0}
 
-  /* trampas */
-  .prose .traps{list-style:none;padding:0;margin:12px 0 28px;border-top:1px solid var(--line2)}
-  .prose .traps li{display:grid;grid-template-columns:34px minmax(0,1fr);gap:8px;margin:0;padding:14px 0;border-bottom:1px solid var(--line2);font-size:16px;line-height:1.65}
-  .traps .n{font-family:var(--disp);font-weight:800;color:var(--acc-txt)}
-  .traps b{display:block;color:var(--txt);font-weight:600}
-
   /* ejercicios */
-  .exs{border-top:1px solid var(--line2);margin:12px 0 28px}
+  .exs{border:1px solid var(--line);border-radius:4px;padding-inline:20px;margin:12px 0 28px;background:var(--bg)}
   .ex{padding:22px 0;border-bottom:1px solid var(--line2)}
+  .ex:last-child{border-bottom:0}
   .ex-h{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:8px}
   .ex-h .label{color:var(--acc-txt)}
   .prose .ex>p{margin:0 0 14px}
@@ -106,6 +99,8 @@
   .done .btn{white-space:normal;text-align:center}
   .done .btn[aria-pressed="true"]{background:transparent;color:var(--good);border-color:var(--good-line)}
   .after .h3{margin:44px 0 14px}
+  .prevnext .none{display:flex;flex-direction:column;gap:4px;padding:16px 18px;border:1px dashed var(--line);border-radius:3px;color:var(--faint)}
+  .prevnext .none .t{color:var(--faint)}
 
   @media (max-width:900px){
     .doc{gap:24px}
@@ -127,8 +122,7 @@
     .charts{grid-template-columns:minmax(0,1fr)}
     .chart{height:160px}
     .lab-btns{grid-template-columns:repeat(2,minmax(0,1fr))}
-    .faces{gap:6px}
-    .face b{font-size:20px}
+    .rules,.exs{padding-inline:14px}
     .rule{grid-template-columns:minmax(0,1fr);gap:8px}
     .rule .nm{padding-top:0}
     .rule .nm i{display:inline;margin-left:6px}
@@ -136,7 +130,7 @@
   }
 </style>
 </head>
-<body data-section="aprende">
+<body data-section="biblioteca" data-parent="cursos.html">
 <a class="skip" href="#main">Saltar al contenido</a>
 
 <!-- ===================== CABECERA (copiar tal cual en todas las páginas) ===================== -->
@@ -183,14 +177,14 @@
   <div class="wrap">
 
     <section class="phead">
-      <nav class="crumbs" aria-label="Migas de pan"><a href="aprende.html">Aprende</a><span class="sep">/</span><a href="cursos.html">Cursos</a><span class="sep">/</span><a href="curso-probabilidad.html">Probabilidad</a><span class="sep">/</span><span aria-current="page">Linealidad e indicadores</span></nav>
-      <p class="kicker"><b>Lección 05</b> / Probabilidad para entrevistas</p>
+      <nav class="crumbs" aria-label="Migas de pan"><span>Biblioteca</span><span class="sep">/</span><a href="cursos.html">Cursos</a><span class="sep">/</span><a href="curso.html?c=avanzados">Temas avanzados de probabilidad y estadística</a><span class="sep">/</span><span aria-current="page">Linealidad e indicadores</span></nav>
+      <p class="kicker"><b>01</b> / Temas avanzados</p>
       <h1 class="h1">Linealidad y variables indicadoras</h1>
       <p class="lead">Sumar esperanzas no pide permiso: funciona aunque las variables dependan unas de otras. Con un truco de ceros y unos, los recuentos difíciles se vuelven sumas de probabilidades.</p>
       <div class="byline lmeta">
-        <span>Lección 5 de 10</span><span>Nivel básico</span><span>4 ejercicios</span>
-        <span class="time"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>15 min</span>
-        <button class="savebtn" type="button" data-save="leccion:variables-indicadoras" data-save-title="Linealidad y variables indicadoras" data-save-type="Lección" data-save-href="leccion-variables-indicadoras.html" data-save-mins="15"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h12v18l-6-4-6 4z"/></svg><span class="lbl">Guardar</span></button>
+        <span>Lección 1 de 5</span><span>Nivel medio</span><span>2 simulaciones</span><span>3 ejercicios</span>
+        <span class="time"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>11 min</span>
+        <button class="savebtn" type="button" data-save="leccion:variables-indicadoras" data-save-title="Linealidad y variables indicadoras" data-save-type="Lección" data-save-href="leccion-variables-indicadoras.html" data-save-mins="11"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h12v18l-6-4-6 4z"/></svg><span class="lbl">Guardar</span></button>
       </div>
     </section>
 
@@ -202,24 +196,17 @@
           <a href="#idea">La idea</a>
           <a href="#indicador">El truco del indicador</a>
           <a href="#sombreros">Los sombreros</a>
-          <a href="#coleccionista">El coleccionista</a>
           <a href="#rachas">Rachas en una moneda</a>
-          <a href="#mas">Dos más, en tres líneas</a>
-          <a href="#trampas">Trampas habituales</a>
+          <a href="#coleccionista">El coleccionista</a>
           <a href="#ejercicios">Ejercicios</a>
           <a href="#resumen">Lo que te llevas</a>
           <div class="toc-course">
-            <a class="tc-h" href="curso-probabilidad.html">Temario del curso</a>
-            <a href="curso-probabilidad.html" data-soon><b>01</b>Contar sin perderse</a>
-            <a href="curso-probabilidad.html" data-soon><b>02</b>El complementario</a>
-            <a href="curso-probabilidad.html" data-soon><b>03</b>Condicionada y Bayes</a>
-            <a href="leccion-valor-esperado.html"><b>04</b>Valor esperado</a>
-            <a href="leccion-variables-indicadoras.html" aria-current="page"><b>05</b>Linealidad e indicadores</a>
-            <a href="curso-probabilidad.html" data-soon><b>06</b>Varianza y riesgo</a>
-            <a href="curso-probabilidad.html" data-soon><b>07</b>Esperanza condicionada</a>
-            <a href="curso-probabilidad.html" data-soon><b>08</b>Juegos con decisiones</a>
-            <a href="curso-probabilidad.html" data-soon><b>09</b>Tiempos de espera</a>
-            <a href="curso-probabilidad.html" data-soon><b>10</b>Paseos aleatorios y ruina</a>
+            <a class="tc-h" href="curso.html?c=avanzados">Temario del curso</a>
+            <a href="leccion-variables-indicadoras.html" aria-current="page"><b>01</b>Linealidad e indicadores</a>
+            <a href="curso.html?c=avanzados" data-soon><b>02</b>Condicionamiento estratégico</a>
+            <a href="curso.html?c=avanzados" data-soon><b>03</b>Martingalas y juegos justos</a>
+            <a href="curso.html?c=avanzados" data-soon><b>04</b>Ruina del jugador y tiempos de llegada</a>
+            <a href="curso.html?c=avanzados" data-soon><b>05</b>Parada óptima: cuándo parar</a>
           </div>
         </div>
       </aside>
@@ -227,8 +214,9 @@
       <div>
         <article class="prose">
 
+          <p class="kicker"><b>01</b> / Concepto</p>
           <h2 id="idea">La idea</h2>
-          <p>En la <a href="leccion-valor-esperado.html">lección anterior</a> apareció de pasada: la esperanza de una suma es la suma de las esperanzas. Es la <strong>linealidad de la esperanza</strong> (linearity of expectation), y merece una lección entera por una razón: no tiene letra pequeña.</p>
+          <p>En <a href="leccion-valor-esperado.html">Independencia y valor esperado</a>, del curso de Fundamentos, apareció de pasada: la esperanza de una suma es la suma de las esperanzas. Es la <strong>linealidad de la esperanza</strong> (linearity of expectation), y merece una lección entera por una razón: no tiene letra pequeña.</p>
           <div class="fbox">\[E\!\left[\sum_{k=1}^{n} X_k\right] = \sum_{k=1}^{n} E[X_k]\]</div>
           <p class="fnote">Vale para cualquier número de sumandos y con cualquier dependencia entre ellos. Las constantes salen fuera: <span class="nw">\(E[aX + b] = a\,E[X] + b\).</span></p>
           <p>No hace falta que las variables sean independientes. Ni que tengan la misma distribución. Ni siquiera que sepas cómo se relacionan. Si solo quieres la media de la suma, te bastan las medias de cada parte.</p>
@@ -282,6 +270,7 @@
             <p>Casi todo lo que se cuenta en una entrevista (aciertos, coincidencias, cambios de signo, días en máximos) es una suma de piezas pequeñas y dependientes. La linealidad te deja ponerle precio sin calcular la distribución entera.</p>
           </div>
 
+          <p class="kicker"><b>02</b> / Receta</p>
           <h2 id="indicador">El truco del indicador</h2>
           <p>Una <strong>variable indicadora</strong> (indicator variable) es la variable más simple que existe: vale 1 si pasa algo y 0 si no. Y su esperanza es, exactamente, la probabilidad de que ese algo pase.</p>
           <div class="fbox">\[\begin{aligned} I_A &= \begin{cases}1 & \text{si ocurre } A\\[2pt] 0 & \text{si no}\end{cases}\\[8pt] E[I_A] &= 1\cdot P(A) + 0\cdot P(A^c) = P(A)\end{aligned}\]</div>
@@ -291,8 +280,9 @@
             <div class="rule"><div class="nm">Paso 2<i>un indicador por cosa</i></div><div><div class="fbox">\[N = I_1 + I_2 + \dots + I_m\]</div><p>Cada \(I_k\) vale 1 si la cosa \(k\) ocurre. Cuenta bien cuántas hay: \(m\) es el número de sumandos.</p></div></div>
             <div class="rule"><div class="nm">Paso 3<i>suma probabilidades</i></div><div><div class="fbox">\[E[N] = P(A_1) + \dots + P(A_m)\]</div><p>Linealidad más <span class="nw">\(E[I_k] = P(A_k)\).</span> Si todas valen lo mismo, <span class="nw">\(E[N] = m\cdot p\).</span></p></div></div>
           </div>
-          <p>Lo que viene son tres problemas clásicos resueltos con esta receta. Cada uno lleva su simulador: compara la media de las simulaciones con el número exacto.</p>
+          <p>Las dos simulaciones que vienen aplican la receta a dos clásicos de entrevista. En cada una, compara la media de las simulaciones con el número exacto.</p>
 
+          <p class="kicker"><b>03</b> / Simulación</p>
           <h2 id="sombreros">Los sombreros</h2>
           <p>\(n\) personas dejan el sombrero en el guardarropa. A la salida los devuelven al azar: cada persona recibe uno de los \(n\) sombreros y todos los repartos son igual de probables (una permutación aleatoria, random permutation). ¿Cuántas personas esperas que reciban el suyo?</p>
           <p>Lo que cuentas: personas con su sombrero. Un indicador por persona: \(I_k = 1\) si la persona \(k\) recibe el suyo. Como el sombrero que le toca es uno de \(n\) igual de probables, <span class="nw">\(P(I_k = 1) = \tfrac1n\).</span></p>
@@ -323,71 +313,9 @@
             <p class="sr" id="hatLive" aria-live="polite"></p>
           </div>
 
-          <p>Dos cosas que ver. La media converge a 1 con cualquier <span class="nw">\(n\):</span> mueve el deslizador. Y la barra del 0 (nadie recibe su sombrero, un desarreglo, derangement) se queda cerca del 36,8 %, que es <span class="nw">\(1/e\).</span> Eso ya no sale de la linealidad: ella da la media y solo la media. Pero la media es justo lo que te piden en la entrevista.</p>
+          <p>Dos cosas que ver. La media converge a 1 con cualquier <span class="nw">\(n\):</span> mueve el deslizador. Y la barra del 0 (nadie recibe su sombrero, un desarreglo, derangement) se queda cerca del 36,8 %, que es <span class="nw">\(1/e\).</span> Eso ya no lo da la linealidad, que solo da la media. Pero la media es justo lo que te piden en la entrevista.</p>
 
-          <h2 id="coleccionista">El coleccionista</h2>
-          <p>Tiras un dado hasta ver las seis caras. ¿Cuántas tiradas hacen falta, de media? Es el problema del coleccionista (coupon collector), y aquí la linealidad se usa de otra manera: no cuentas cosas, troceas una espera.</p>
-          <p>Parte el proceso en seis etapas. En la etapa \(k\) ya has visto \(k - 1\) caras y esperas una nueva: cada tirada te la da con probabilidad <span class="nw">\(\tfrac{7-k}{6}\).</span> Si algo pasa con probabilidad \(p\) en cada intento, tardas de media \(1/p\) intentos (lo verás con calma en la lección 9). El tiempo total \(T\) es la suma de las seis esperas, y la esperanza de la suma es la suma de las esperanzas:</p>
-          <div class="fbox">\[\begin{aligned} E[T] &= \frac66 + \frac65 + \frac64 + \frac63 + \frac62 + \frac61\\[4pt] &= 1 + 1{,}2 + 1{,}5 + 2 + 3 + 6\\[2pt] &= 14{,}7\end{aligned}\]</div>
-
-          <figure class="fig">
-            <!-- anchos exactos: 568 unidades útiles (578 menos cinco huecos de 2) repartidas en proporción 1 : 1,2 : 1,5 : 2 : 3 : 6 sobre 14,7 -->
-            <svg class="figsvg" viewBox="0 0 600 118" role="img" aria-label="Barra de 14,7 tiradas partida en seis tramos: 1, 1,2, 1,5, 2, 3 y 6 tiradas. Debajo de cada tramo, la probabilidad de cara nueva: 6/6, 5/6, 4/6, 3/6, 2/6 y 1/6. El último tramo, la sexta cara, ocupa cuatro de cada diez tiradas.">
-              <text class="t" x="10" y="14">ESPERA POR ETAPA, EN TIRADAS</text>
-              <text class="t" x="590" y="14" text-anchor="end">TOTAL 14,7</text>
-              <rect class="seg" x="11" y="52" width="38.64" height="32" rx="2" style="fill-opacity:.32"/>
-              <rect class="seg" x="51.64" y="52" width="46.37" height="32" rx="2" style="fill-opacity:.44"/>
-              <rect class="seg" x="100.01" y="52" width="57.96" height="32" rx="2" style="fill-opacity:.56"/>
-              <rect class="seg" x="159.97" y="52" width="77.28" height="32" rx="2" style="fill-opacity:.68"/>
-              <rect class="seg" x="239.25" y="52" width="115.92" height="32" rx="2" style="fill-opacity:.82"/>
-              <rect class="seg" x="357.17" y="52" width="231.84" height="32" rx="2"/>
-              <text class="v" x="30.3" y="45" text-anchor="middle">1</text>
-              <text class="v" x="74.8" y="45" text-anchor="middle">1,2</text>
-              <text class="v" x="129" y="45" text-anchor="middle">1,5</text>
-              <text class="v" x="198.6" y="45" text-anchor="middle">2</text>
-              <text class="v" x="297.2" y="45" text-anchor="middle">3</text>
-              <text class="v" x="473.1" y="45" text-anchor="middle">6</text>
-              <text x="30.3" y="106" text-anchor="middle">6/6</text>
-              <text x="74.8" y="106" text-anchor="middle">5/6</text>
-              <text x="129" y="106" text-anchor="middle">4/6</text>
-              <text x="198.6" y="106" text-anchor="middle">3/6</text>
-              <text x="297.2" y="106" text-anchor="middle">2/6</text>
-              <text x="473.1" y="106" text-anchor="middle">1/6</text>
-            </svg>
-            <figcaption>Cada tramo es una etapa: arriba, las tiradas que esperas; debajo, la probabilidad de que una tirada traiga cara nueva. Cuatro de cada diez tiradas se van en la última cara.</figcaption>
-          </figure>
-
-          <p>Con \(m\) caras en vez de seis, el mismo argumento da <span class="nw">\(m\cdot H_m\),</span> donde \(H_m = 1 + \tfrac12 + \dots + \tfrac1m\) es el número armónico (harmonic number). Para el dado, \(H_6 = 2{,}45\) y <span class="nw">\(6\cdot 2{,}45 = 14{,}7\).</span></p>
-
-          <div class="card lab" id="labCc">
-            <p class="lab-q" id="ccLine">Pulsa «Una ronda» para ver las tiradas una a una.</p>
-            <div class="faces" id="faces" aria-label="Caras del dado vistas en la ronda">
-              <span class="face"><b>1</b><small>·</small></span><span class="face"><b>2</b><small>·</small></span><span class="face"><b>3</b><small>·</small></span>
-              <span class="face"><b>4</b><small>·</small></span><span class="face"><b>5</b><small>·</small></span><span class="face"><b>6</b><small>·</small></span>
-            </div>
-            <p class="lab-note">Cada cara se enciende al salir por primera vez; debajo, la tirada en la que apareció.</p>
-            <div class="charts">
-              <div><p class="ct">Tiradas por ronda</p><div class="chart"><canvas id="ccHist" role="img" aria-label="Histograma del número de tiradas por ronda"></canvas></div></div>
-              <div><p class="ct">Media acumulada</p><div class="chart"><canvas id="ccMean" role="img" aria-label="Media acumulada frente al valor exacto, 14,7"></canvas></div></div>
-            </div>
-            <div class="stats">
-              <div class="stat"><span class="v" id="ccCnt">0</span><span class="k">Rondas</span></div>
-              <div class="stat"><span class="v" id="ccLast">–</span><span class="k">Última</span></div>
-              <div class="stat"><span class="v m" id="ccMeanV">–</span><span class="k">Media</span></div>
-              <div class="stat"><span class="v">14,7</span><span class="k">Exacto</span></div>
-            </div>
-            <div class="lab-btns">
-              <button class="btn solid" type="button" id="ccAnim">Una ronda</button>
-              <button class="btn" type="button" data-cc="100">100 rondas</button>
-              <button class="btn" type="button" data-cc="1000">1000</button>
-              <button class="btn ghost" type="button" id="ccReset">Borrar</button>
-            </div>
-            <p class="lab-note" id="ccNote" hidden>Has llegado a 20.000 rondas. Borra para empezar otra vez.</p>
-            <p class="sr" id="ccLive" aria-live="polite"></p>
-          </div>
-
-          <p>Mira la forma del histograma: ninguna ronda baja de 6, la cola de la derecha es larga y el 15 % de las rondas pasa de 20 tiradas. La media es 14,7, pero la ronda típica queda algo por debajo (la mitad de las rondas acaban en 13 tiradas o menos). Otra razón para no confundir media con «lo normal».</p>
-
+          <p class="kicker"><b>04</b> / Simulación</p>
           <h2 id="rachas">Rachas en una moneda</h2>
           <p>Lanza una moneda \(n\) veces y mira la secuencia. Una racha (run) es un bloque de resultados iguales seguidos: en CCXCXXX hay cuatro. ¿Cuántas rachas esperas?</p>
           <p>El truco está en mirar las fronteras. Empieza una racha nueva cada vez que un lanzamiento sale distinto del anterior. Llama \(J_k = 1\) si el lanzamiento \(k\) cambia respecto al <span class="nw">\(k - 1\):</span> hay \(n - 1\) comparaciones y cada una cambia con probabilidad <span class="nw">\(\tfrac12\).</span> El número de rachas es 1 (la primera) más los cambios:</p>
@@ -418,27 +346,46 @@
             <p class="sr" id="runLive" aria-live="polite"></p>
           </div>
 
-          <h2 id="mas">Dos más, en tres líneas</h2>
-          <h3>Caras distintas</h3>
-          <p>Tiras un dado \(k\) veces. ¿Cuántas caras distintas ves? Un indicador por cara: «ha salido al menos una vez». Una cara concreta falta en una tirada con probabilidad <span class="nw">\(\tfrac56\),</span> y en todas las \(k\) con <span class="nw">\((\tfrac56)^k\).</span></p>
-          <div class="fbox">\[\begin{aligned} E[D] &= 6\left(1 - \left(\tfrac56\right)^k\right)\\[4pt] &= 6\,(1 - 0{,}335) \approx 3{,}99 \quad (k = 6)\end{aligned}\]</div>
-          <p>Seis tiradas, unas cuatro caras distintas. Nada de listar los \(6^6 = 46\,656\) resultados.</p>
-          <h3>Parejas iguales</h3>
-          <p>Tiras cinco dados. ¿Cuántas parejas de dados muestran el mismo número? Hay \(\binom52 = 10\) parejas y cada una coincide con probabilidad <span class="nw">\(\tfrac16\).</span></p>
-          <div class="fbox">\[E[N] = 10\cdot\tfrac16 = \tfrac{5}{3} \approx 1{,}67\]</div>
-          <p>Las parejas comparten dados y dependen unas de otras. Ya sabes qué hacer con eso: nada.</p>
+          <p>Mira la tira: cada marca vertical es un indicador que ha valido 1. El error típico de la entrevista no está en la probabilidad, está en cuántos indicadores hay: \(n - 1\) fronteras en \(n\) lanzamientos, no <span class="nw">\(n\).</span></p>
 
-          <h2 id="trampas">Trampas habituales</h2>
-          <ol class="traps">
-            <li><span class="n">01</span><span><b>Buscar independencia donde no hace falta.</b> Para sumar esperanzas no se necesita. Si te bloqueas con «pero estos sucesos dependen entre sí», estás resolviendo un problema que no te han puesto.</span></li>
-            <li><span class="n">02</span><span><b>Pasar la esperanza por el máximo.</b> \(E[\max(X,Y)]\) no es <span class="nw">\(\max(E[X],E[Y])\).</span> Con dos dados, el mayor vale de media <span class="nw">\(\tfrac{161}{36} \approx 4{,}47\),</span> y no 3,5. Para máximos y mínimos hay que ir a la distribución.</span></li>
-            <li><span class="n">03</span><span><b>Multiplicar medias.</b> \(E[XY] = E[X]\,E[Y]\) solo si son independientes. Si <span class="nw">\(Y = X\),</span> <span class="nw">\(E[X^2] = \tfrac{91}{6} \approx 15{,}17\),</span> y no <span class="nw">\(3{,}5^2 = 12{,}25\).</span> La linealidad va con sumas, no con productos.</span></li>
-            <li><span class="n">04</span><span><b>Creer que la varianza también suma sin más.</b> \(\text{Var}(X+Y) = \text{Var}(X) + \text{Var}(Y)\) sí necesita independencia (o al menos correlación cero). En los tres mundos de las monedas la media era 1 en todos; la varianza iba de 0 a 1. Lo verás en la <a href="curso-probabilidad.html" data-soon>lección 6</a>.</span></li>
-            <li><span class="n">05</span><span><b>Contar mal los sumandos.</b> Hay \(n - 1\) fronteras en \(n\) lanzamientos, \(\binom{k}{2}\) parejas entre \(k\) personas y \(n\) cajas aunque también haya \(n\) bolas. En la entrevista, el error típico no está en la probabilidad: está en cuántos indicadores hay.</span></li>
-          </ol>
+          <p class="kicker"><b>05</b> / Ejemplo resuelto</p>
+          <h2 id="coleccionista">El coleccionista</h2>
+          <p>Tiras un dado hasta ver las seis caras. ¿Cuántas tiradas hacen falta, de media? Es el problema del coleccionista (coupon collector), y aquí la linealidad se usa de otra manera: no cuentas cosas, troceas una espera.</p>
+          <p>Parte el proceso en seis etapas. En la etapa \(k\) ya has visto \(k - 1\) caras y esperas una nueva: cada tirada te la da con probabilidad <span class="nw">\(\tfrac{7-k}{6}\).</span> Si algo pasa con probabilidad \(p\) en cada intento, tardas de media \(1/p\) intentos (es la media de la distribución geométrica, del <a href="curso.html?c=fundamentos">curso de Fundamentos</a>). El tiempo total \(T\) es la suma de las seis esperas, y la esperanza de la suma es la suma de las esperanzas:</p>
+          <div class="fbox">\[\begin{aligned} E[T] &= \frac66 + \frac65 + \frac64 + \frac63 + \frac62 + \frac61\\[4pt] &= 1 + 1{,}2 + 1{,}5 + 2 + 3 + 6\\[2pt] &= 14{,}7\end{aligned}\]</div>
 
-          <h2 id="ejercicios">Ejercicios</h2>
-          <p>Cuatro para comprobar que lo tienes. Escribe la respuesta con decimales (2,5) o como fracción (5/2).</p>
+          <figure class="fig">
+            <!-- anchos exactos: 568 unidades útiles (578 menos cinco huecos de 2) repartidas en proporción 1 : 1,2 : 1,5 : 2 : 3 : 6 sobre 14,7 -->
+            <svg class="figsvg" viewBox="0 0 600 118" role="img" aria-label="Barra de 14,7 tiradas partida en seis tramos: 1, 1,2, 1,5, 2, 3 y 6 tiradas. Debajo de cada tramo, la probabilidad de cara nueva: 6/6, 5/6, 4/6, 3/6, 2/6 y 1/6. El último tramo, la sexta cara, ocupa cuatro de cada diez tiradas.">
+              <text class="t" x="10" y="14">ESPERA POR ETAPA, EN TIRADAS</text>
+              <text class="t" x="590" y="14" text-anchor="end">TOTAL 14,7</text>
+              <rect class="seg" x="11" y="52" width="38.64" height="32" rx="2" style="fill-opacity:.32"/>
+              <rect class="seg" x="51.64" y="52" width="46.37" height="32" rx="2" style="fill-opacity:.44"/>
+              <rect class="seg" x="100.01" y="52" width="57.96" height="32" rx="2" style="fill-opacity:.56"/>
+              <rect class="seg" x="159.97" y="52" width="77.28" height="32" rx="2" style="fill-opacity:.68"/>
+              <rect class="seg" x="239.25" y="52" width="115.92" height="32" rx="2" style="fill-opacity:.82"/>
+              <rect class="seg" x="357.17" y="52" width="231.84" height="32" rx="2"/>
+              <text class="v" x="30.3" y="45" text-anchor="middle">1</text>
+              <text class="v" x="74.8" y="45" text-anchor="middle">1,2</text>
+              <text class="v" x="129" y="45" text-anchor="middle">1,5</text>
+              <text class="v" x="198.6" y="45" text-anchor="middle">2</text>
+              <text class="v" x="297.2" y="45" text-anchor="middle">3</text>
+              <text class="v" x="473.1" y="45" text-anchor="middle">6</text>
+              <text x="30.3" y="106" text-anchor="middle">6/6</text>
+              <text x="74.8" y="106" text-anchor="middle">5/6</text>
+              <text x="129" y="106" text-anchor="middle">4/6</text>
+              <text x="198.6" y="106" text-anchor="middle">3/6</text>
+              <text x="297.2" y="106" text-anchor="middle">2/6</text>
+              <text x="473.1" y="106" text-anchor="middle">1/6</text>
+            </svg>
+            <figcaption>Cada tramo es una etapa: arriba, las tiradas que esperas; debajo, la probabilidad de que una tirada traiga cara nueva. Cuatro de cada diez tiradas se van en la última cara.</figcaption>
+          </figure>
+
+          <p>Con \(m\) caras en vez de seis, el mismo argumento da <span class="nw">\(m\cdot H_m\),</span> donde \(H_m = 1 + \tfrac12 + \dots + \tfrac1m\) es el número armónico (harmonic number): \(H_6 = 2{,}45\) y <span class="nw">\(6\cdot 2{,}45 = 14{,}7\).</span> En la entrevista, di el 14,7 y luego la estructura: seis esperas cada vez más largas, y la última se lleva cuatro de cada diez tiradas.</p>
+
+          <p class="kicker"><b>06</b> / Ejercicios</p>
+          <h2 id="ejercicios">Tres de entrevista</h2>
+          <p>Resuélvelos antes de abrir la solución. Escribe la respuesta con decimales (2,5) o como fracción (5/2).</p>
           <div class="exs">
             <div class="ex">
               <div class="ex-h"><span class="label">Ejercicio 1</span><span class="meter" data-v="1" role="img" aria-label="Fácil"><i></i><i></i><i></i></span></div>
@@ -455,27 +402,21 @@
               <div class="callout" id="ex2s" hidden><span class="label">Solución</span><p>Un indicador por caja: «queda vacía». Cada bola la esquiva con probabilidad <span class="nw">\(\tfrac{9}{10}\),</span> y las diez, con <span class="nw">\((\tfrac{9}{10})^{10} \approx 0{,}349\).</span> Diez cajas: <span class="nw">\(E = 10\cdot 0{,}349 \approx 3{,}49\).</span></p><p>En general, con \(n\) bolas y \(n\) cajas, <span class="nw">\(E = n\,(1 - \tfrac1n)^n\),</span> que se acerca a <span class="nw">\(n/e \approx 0{,}368\,n\).</span> Con 100 bolas, 36,6 cajas vacías.</p></div>
             </div>
             <div class="ex">
-              <div class="ex-h"><span class="label">Ejercicio 3</span><span class="meter" data-v="2" role="img" aria-label="Media"><i></i><i></i><i></i></span></div>
-              <p>Barajas una baraja de póquer (52 cartas: 26 rojas y 26 negras) y la extiendes en fila. ¿Cuántas parejas de cartas vecinas esperas que sean del mismo color?</p>
-              <form class="ex-f" data-ans="25" novalidate><label class="sr" for="ex3i">Tu respuesta al ejercicio 3</label><input class="input" id="ex3i" type="text" inputmode="decimal" autocomplete="off" placeholder="Un número"><button class="btn" type="submit">Comprobar</button></form>
-              <div class="ex-foot"><p class="fb" aria-live="polite"></p><button class="more linkbtn" type="button" data-reveal="ex3s" data-alt="Ocultar solución" aria-expanded="false" aria-controls="ex3s">Ver solución</button></div>
-              <div class="callout" id="ex3s" hidden><span class="label">Solución</span><p>Hay 51 parejas de vecinas. Mira la primera carta de una pareja: de las 51 restantes, 25 son de su color, así que la pareja coincide con probabilidad <span class="nw">\(\tfrac{25}{51}\).</span> En total, <span class="nw">\(E = 51\cdot\tfrac{25}{51} = 25\).</span></p><p>Los 51 se cancelan: no hace falta ni calcular la fracción. Mismo truco para «mismo número»: \(51\cdot\tfrac{3}{51} = 3\) parejas.</p></div>
-            </div>
-            <div class="ex">
-              <div class="ex-h"><span class="label">Ejercicio 4</span><span class="meter" data-v="3" role="img" aria-label="Difícil"><i></i><i></i><i></i></span></div>
+              <div class="ex-h"><span class="label">Ejercicio 3</span><span class="meter" data-v="3" role="img" aria-label="Difícil"><i></i><i></i><i></i></span></div>
               <p>Una acción cotiza diez días. Supón que los diez precios son distintos y que cualquier orden es igual de probable. ¿Cuántos días esperas que marquen máximo histórico, contando el primero?</p>
-              <form class="ex-f" data-ans="2.92897" novalidate><label class="sr" for="ex4i">Tu respuesta al ejercicio 4</label><input class="input" id="ex4i" type="text" inputmode="decimal" autocomplete="off" placeholder="Con dos decimales"><button class="btn" type="submit">Comprobar</button></form>
-              <div class="ex-foot"><p class="fb" aria-live="polite"></p><button class="more linkbtn" type="button" data-reveal="ex4s" data-alt="Ocultar solución" aria-expanded="false" aria-controls="ex4s">Ver solución</button></div>
-              <div class="callout" id="ex4s" hidden><span class="label">Solución</span><p>El día \(k\) marca máximo histórico (record) si su precio es el mayor de los \(k\) primeros. Como cualquier orden es igual de probable, el mayor de esos \(k\) está en el último día con probabilidad <span class="nw">\(\tfrac1k\).</span></p><p>Un indicador por día: <span class="nw">\(E = 1 + \tfrac12 + \tfrac13 + \dots + \tfrac1{10} = H_{10} \approx 2{,}93\).</span> Con 100 días, <span class="nw">\(H_{100} \approx 5{,}19\):</span> los máximos crecen como el logaritmo. Los precios reales no cumplen la hipótesis de «cualquier orden es igual de probable», pero el modelo sirve de referencia: ver muchos más máximos de los que predice es señal de tendencia.</p></div>
+              <form class="ex-f" data-ans="2.92897" novalidate><label class="sr" for="ex3i">Tu respuesta al ejercicio 3</label><input class="input" id="ex3i" type="text" inputmode="decimal" autocomplete="off" placeholder="Con dos decimales"><button class="btn" type="submit">Comprobar</button></form>
+              <div class="ex-foot"><p class="fb" aria-live="polite"></p><button class="more linkbtn" type="button" data-reveal="ex3s" data-alt="Ocultar solución" aria-expanded="false" aria-controls="ex3s">Ver solución</button></div>
+              <div class="callout" id="ex3s" hidden><span class="label">Solución</span><p>El día \(k\) marca máximo histórico (record) si su precio es el mayor de los \(k\) primeros. Como cualquier orden es igual de probable, el mayor de esos \(k\) está en el último día con probabilidad <span class="nw">\(\tfrac1k\).</span></p><p>Un indicador por día: <span class="nw">\(E = 1 + \tfrac12 + \tfrac13 + \dots + \tfrac1{10} = H_{10} \approx 2{,}93\).</span> Con 100 días, <span class="nw">\(H_{100} \approx 5{,}19\):</span> los máximos crecen como el logaritmo. Los precios reales no cumplen la hipótesis de «cualquier orden es igual de probable», pero el modelo sirve de referencia: ver muchos más máximos de los que predice es señal de tendencia.</p></div>
             </div>
           </div>
 
+          <p class="kicker"><b>07</b> / Resumen</p>
           <h2 id="resumen">Lo que te llevas</h2>
           <div class="callout">
             <span class="label">Clave</span>
             <p>La esperanza de una suma es la suma de las esperanzas. Siempre: sin independencia, sin condiciones.</p>
-            <p>Para contar, usa indicadores: <span class="nw">\(E[I_A] = P(A)\).</span> Un recuento se vuelve una suma de probabilidades. Lo difícil es contar bien los sumandos.</p>
-            <p>Vale para sumas y solo para sumas. Máximos, productos y varianzas piden más.</p>
+            <p>Para contar, usa indicadores: <span class="nw">\(E[I_A] = P(A)\).</span> Un recuento se vuelve una suma de probabilidades. Lo difícil es contar bien los sumandos: \(n - 1\) fronteras en \(n\) lanzamientos, \(\binom{k}{2}\) parejas entre \(k\) personas.</p>
+            <p>Vale para sumas y solo para sumas. El máximo, el producto y la varianza piden más: \(E[\max(X,Y)]\) no es <span class="nw">\(\max(E[X],E[Y])\)</span> (con dos dados, el mayor vale de media 4,47, no 3,5), <span class="nw">\(E[XY] = E[X]\,E[Y]\)</span> solo con independencia, y la varianza de una suma solo se suma sin correlación.</p>
           </div>
         </article>
 
@@ -493,8 +434,8 @@
           </div>
 
           <nav class="prevnext" aria-label="Lecciones del curso">
-            <a href="leccion-valor-esperado.html"><span class="label">← Anterior</span><span class="t">Valor esperado</span></a>
-            <a class="next" href="leccion-probabilidad-geometrica.html"><span class="label">Siguiente →</span><span class="t">Probabilidad geométrica</span></a>
+            <span class="none"><span class="label">Anterior</span><span class="t">Es la primera del curso</span></span>
+            <a class="next" href="curso.html?c=avanzados" data-soon><span class="label">Siguiente →</span><span class="t">Condicionamiento estratégico</span></a>
           </nav>
         </div>
       </div>
@@ -526,7 +467,7 @@
 <div class="toast" id="toast" role="status" hidden></div>
 <script src="assets/qm.js"></script>
 <script>
-/* Lección: fórmulas, índice en el móvil, tres simuladores y ejercicios */
+/* Lección: fórmulas, índice en el móvil, dos simuladores y ejercicios */
 (function(){
   'use strict';
   /* ---------- MathJax (solo en esta página) ---------- */
@@ -659,63 +600,7 @@
     [cvS,cvH,cvM].forEach(function(cv){if('ResizeObserver' in window)new ResizeObserver(function(){paint();}).observe(cv);});
   })();
 
-  /* ---------- 2 · el coleccionista (dado hasta ver las seis caras) ---------- */
-  (function(){
-    var cvH=$('ccHist'),cvM=$('ccMean'),faces=document.querySelectorAll('#faces .face');
-    var el={line:$('ccLine'),cnt:$('ccCnt'),last:$('ccLast'),mean:$('ccMeanV'),note:$('ccNote'),live:$('ccLive')};
-    var btns=document.querySelectorAll('[data-cc]'),animBtn=$('ccAnim');
-    var BINS=35,means=[],sum=0,bins=[],last=null,anim=null,timer=0,i;
-    for(i=0;i<BINS;i++)bins.push(0);
-    var labels=[];for(var v=6;v<=40;v++)labels.push(v===40?'40+':(v===6||v%5===0?String(v):''));
-    function round(){var first=[0,0,0,0,0,0],got=0,r=0;while(got<6){var d=Math.floor(Math.random()*6);r++;if(!first[d]){first[d]=r;got++;}}return {first:first,rolls:r};}
-    function push(Rd){last=Rd;sum+=Rd.rolls;means.push(sum/(means.length+1));bins[Math.min(Rd.rolls-6,BINS-1)]++;}
-    function add(k){for(var i=0;i<k&&means.length<MAX;i++)push(round());}
-    function paintFaces(first,hit){
-      Array.prototype.forEach.call(faces,function(f,i){
-        f.classList.toggle('on',!!first[i]);f.classList.toggle('hit',i===hit);
-        f.querySelector('small').textContent=first[i]?String(first[i]):'·';
-      });
-    }
-    function setBusy(b){Array.prototype.forEach.call(btns,function(x){x.disabled=b||means.length>=MAX;});animBtn.disabled=b||means.length>=MAX;}
-    function paint(){
-      var m=means.length;
-      el.cnt.textContent=int(m);el.last.textContent=last?String(last.rolls):'–';el.mean.textContent=m?num(means[m-1],2):'–';
-      el.note.hidden=m<MAX;setBusy(!!anim);
-      if(!anim){
-        paintFaces(last?last.first:[0,0,0,0,0,0],-1);
-        el.line.textContent=last?('Última ronda: '+last.rolls+' tiradas hasta ver las seis caras.'):'Pulsa «Una ronda» para ver las tiradas una a una.';
-      }
-      cvM.setAttribute('aria-label',m?('Media acumulada tras '+int(m)+' rondas: '+num(means[m-1],2)+' tiradas. Valor exacto: 14,7.'):'Media acumulada frente al valor exacto, 14,7.');
-      barChart(cvH,bins,{labels:labels,mark:14.7-6+0.5,markLabel:'14,7'});
-      lineChart(cvM,means,14.7,6,24,[6,12,18,24],'E = 14,7','rondas');
-    }
-    function announce(){var m=means.length;if(m)el.live.textContent=int(m)+' rondas. Media: '+num(means[m-1],2)+' tiradas. Exacto: 14,7.';}
-    function animStep(){
-      var d=Math.floor(Math.random()*6);anim.r++;
-      if(!anim.first[d]){anim.first[d]=anim.r;anim.got++;}
-      el.line.textContent='Ronda '+int(means.length+1)+' · tirada '+anim.r+': sale un '+(d+1)+'.';
-      paintFaces(anim.first,d);
-      if(anim.got<6){timer=setTimeout(animStep,130);}
-      else{var Rd={first:anim.first,rolls:anim.r};anim=null;push(Rd);paint();announce();}
-    }
-    function startAnim(){
-      if(anim||means.length>=MAX)return;
-      if(reduce){add(1);paint();announce();return;}
-      anim={first:[0,0,0,0,0,0],got:0,r:0};setBusy(true);paintFaces(anim.first,-1);
-      el.line.textContent='Ronda '+int(means.length+1)+' · tirando…';
-      timer=setTimeout(animStep,130);
-    }
-    function reset(){R.stop();clearTimeout(timer);anim=null;means=[];sum=0;for(var i=0;i<BINS;i++)bins[i]=0;last=null;el.live.textContent='';}
-    var R=runner(add,function(){paint();},function(){return means.length;},announce);
-    Array.prototype.forEach.call(btns,function(b){b.addEventListener('click',function(){R.play(Number(b.getAttribute('data-cc')));});});
-    animBtn.addEventListener('click',startAnim);
-    $('ccReset').addEventListener('click',function(){reset();paint();});
-    add(200);paint();
-    repaint.push(paint);
-    [cvH,cvM].forEach(function(cv){if('ResizeObserver' in window)new ResizeObserver(function(){paint();}).observe(cv);});
-  })();
-
-  /* ---------- 3 · rachas en una moneda ---------- */
+  /* ---------- 2 · rachas en una moneda ---------- */
   (function(){
     var cvS=$('runStrip'),cvH=$('runHist'),cvM=$('runMean'),nIn=$('runN'),nOut=$('runNv');
     var el={cnt:$('runCnt'),last:$('runLast'),mean:$('runMeanV'),ex:$('runEx'),note:$('runNote'),live:$('runLive')};

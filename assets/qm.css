@@ -310,18 +310,63 @@ a.tile:hover{border-color:var(--accent-line);color:var(--txt)}
 .kicker.kn-on .kn{display:inline-grid;place-items:center;min-width:44px;height:44px;padding:0 8px;border:1px solid var(--accent-line);border-radius:3px;background:var(--accent-dim);color:var(--acc-txt);font-size:20px;letter-spacing:.02em;font-weight:800}
 
 /* ==========================================================================
-   Tablet y móvil
+   Menú (3-oct-2026)
+   - Ordenador (>= 1000 px): barra lateral fija a la izquierda (.sb); la cabecera
+     superior desaparece y el contenido se desplaza el ancho de la barra.
+   - Tableta y móvil (< 1000 px): barra superior fina (.top) y barra inferior (.tabbar).
+   Las reglas de ordenador van con body:has(.sb) para que una página que todavía
+   lleve la cabecera antigua siga funcionando mientras se integra el menú nuevo.
    ========================================================================== */
-@media (max-width:900px){
+:root{--sb:232px}
+.sb{display:none}
+@media (min-width:1000px){
+  .sb{display:flex;flex-direction:column;position:fixed;top:0;left:0;bottom:0;width:var(--sb);z-index:40;background:var(--panel);border-right:1px solid var(--line)}
+  .sb-logo{display:flex;align-items:center;gap:11px;padding:20px 20px 12px;flex:none}
+  .sb-logo img{width:32px;height:32px;border-radius:50%;display:block;box-shadow:0 0 0 1px var(--line)}
+  .sb-logo span{font-family:var(--disp);font-weight:800;font-size:15px;letter-spacing:.14em;text-transform:uppercase}
+  .sb-scroll{flex:1 1 auto;min-height:0;overflow-y:auto;overscroll-behavior:contain;padding:6px 12px 18px;scrollbar-width:thin}
+  .sb-g{font-family:var(--disp);font-weight:700;font-size:10.5px;letter-spacing:.22em;text-transform:uppercase;color:var(--faint);margin:22px 0 6px;padding:0 10px}
+  .sb-a{display:flex;align-items:center;gap:11px;min-height:38px;padding:7px 10px;border-radius:3px;font-size:14.5px;font-weight:500;line-height:1.2;color:var(--dim);background:none;border:0;width:100%;text-align:left;cursor:pointer;transition:background .15s,color .15s}
+  .sb-a .ico{width:18px;height:18px;color:var(--muted);transition:color .15s}
+  .sb-a:hover{background:var(--panel2);color:var(--txt)}
+  .sb-a:hover .ico{color:var(--txt)}
+  .sb-a[aria-current="page"]{background:var(--accent-dim);color:var(--acc-txt);font-weight:600;box-shadow:inset 2px 0 0 var(--accent)}
+  .sb-a[aria-current="page"] .ico{color:var(--acc-txt)}
+  .sb-foot{flex:none;border-top:1px solid var(--line);padding:10px 12px calc(12px + env(safe-area-inset-bottom,0px))}
+  .sb-foot .sb-a{min-height:36px;font-size:13.5px;color:var(--muted)}
+  body:has(.sb){padding-left:calc(var(--sb) + 32px);padding-right:32px}
+  body:has(.sb) .top{display:none}
+  body:has(.sb) .toast{left:calc(50% + var(--sb) / 2)}
+  body:has(.sb) .skip:focus{left:calc(var(--sb) + 16px)}
+}
+/* con la barra lateral, el contenido es más estrecho que la ventana: entre 1000 y 1160 px
+   los bloques a dos columnas pasan a una, igual que en tableta */
+@media (min-width:1000px) and (max-width:1160px){
+  body:has(.sb) :is(.split,.split.even,.doc){grid-template-columns:minmax(0,1fr)}
+  body:has(.sb) .toc{position:static}
+  body:has(.sb) :is(.grid3,.grid4){grid-template-columns:repeat(2,minmax(0,1fr))}
+  body:has(.sb) .stats{grid-template-columns:repeat(2,minmax(0,1fr))}
+  body:has(.sb) .foot .cols{grid-template-columns:repeat(2,minmax(0,1fr))}
+  body:has(.sb) .foot .brandcol{grid-column:1/-1}
+}
+/* tableta y móvil: barra superior fina + barra inferior */
+@media (max-width:999px){
   body{padding-bottom:calc(var(--tabbar) + env(safe-area-inset-bottom,0px))}
-  .bar{grid-template-columns:1fr auto;height:60px}
+  .bar{grid-template-columns:1fr auto;height:56px}
   .nav,.tools .cta{display:none}
+  .tools .iconbtn{width:38px;height:38px}
   .tabbar{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));position:fixed;left:0;right:0;bottom:0;z-index:50;background:var(--header-bg);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom,0px)}
   .tabbar a{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;height:var(--tabbar);font-family:var(--disp);font-weight:700;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);position:relative}
   .tabbar a .ico{width:22px;height:22px}
   .tabbar a[aria-current="page"]{color:var(--acc-txt)}
   .tabbar a[aria-current="page"]::before{content:"";position:absolute;top:0;left:30%;right:30%;height:2px;background:var(--accent)}
   .toast{bottom:calc(var(--tabbar) + 14px + env(safe-area-inset-bottom,0px))}
+}
+
+/* ==========================================================================
+   Tablet y móvil: contenido
+   ========================================================================== */
+@media (max-width:900px){
   .split,.split.even,.doc{grid-template-columns:minmax(0,1fr)}
   .toc{position:static}
   .grid3,.grid4{grid-template-columns:repeat(2,minmax(0,1fr))}

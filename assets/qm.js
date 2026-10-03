@@ -1,7 +1,7 @@
 /* ==========================================================================
    QuantMeraki · comportamiento común
    - Modo claro/oscuro (claro por defecto, se recuerda en el navegador)
-   - Menús desplegables, sección activa, avisos de borrador
+   - Barra lateral y barra inferior: elemento activo; avisos de borrador
    - Desplegables, "ver solución", pestañas, filtros y búsqueda
    - Progreso guardado en el navegador (QM.store / QM.done)
    ========================================================================== */
@@ -37,6 +37,8 @@
       b.setAttribute('aria-label',t==='light'?'Cambiar a modo oscuro':'Cambiar a modo claro');
       b.title=t==='light'?'Modo oscuro':'Modo claro';
     });
+    /* texto del botón de la barra lateral: enseña el modo al que cambias */
+    each('[data-theme-label]',function(l){l.textContent=t==='light'?'Modo oscuro':'Modo claro';});
     document.dispatchEvent(new CustomEvent('qm-theme',{detail:t}));
   }
   applyTheme(QM.theme(),false);
@@ -51,6 +53,21 @@
     if(section==='progreso')each('.tools [data-nav="progreso"]',function(a){a.setAttribute('aria-current','page');});
   }
   each('.menu a',function(a){if(a.getAttribute('href')===file)a.setAttribute('aria-current','page');});
+
+  /* ---------- barra lateral (ordenador): elemento activo ----------
+     1. el enlace cuyo href es el archivo actual (preguntas.html en preguntas.html);
+     2. si no, el que coincide con <body data-parent="preguntas.html"> (fichas y detalles);
+     3. si no, el de la sección de la barra inferior (inicio, rutas, firmas, canal, progreso). */
+  var parent=document.body.getAttribute('data-parent');
+  var SEC_HREF={inicio:'index.html',rutas:'rutas.html',firmas:'firmas.html',canal:'canal.html',progreso:'progreso.html'};
+  function markSb(href){
+    if(!href)return false;
+    var hit=null;
+    each('.sb a[href]:not(.sb-logo)',function(a){if(!hit&&a.getAttribute('href')===href)hit=a;});
+    if(hit)hit.setAttribute('aria-current','page');
+    return !!hit;
+  }
+  markSb(file)||markSb(parent)||markSb(SEC_HREF[section]);
 
   /* ---------- menús desplegables ---------- */
   function closeMenus(except){each('.dd-btn',function(b){if(b!==except){b.setAttribute('aria-expanded','false');var m=b.nextElementSibling;if(m)m.hidden=true;}});}
