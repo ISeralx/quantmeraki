@@ -1,0 +1,490 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>Valor esperado · QuantMeraki</title>
+<meta name="description" content="Lección de valor esperado para entrevistas de trading: la fórmula, un simulador, ejemplos resueltos, trampas habituales y tres ejercicios con solución.">
+<link rel="icon" href="assets/perfil-128.png">
+<script>try{var t=localStorage.getItem('qm-theme');document.documentElement.setAttribute('data-theme',t||'light');}catch(e){}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;500;600;700&family=Barlow+Semi+Condensed:wght@600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/qm.css">
+<style>
+  /* índice lateral: en esta lección + temario del curso */
+  .toc-btn{display:none}
+  .toc-course{margin-top:30px}
+  .toc-course .tc-h{display:block;padding:0 0 10px;border:0;font-family:var(--disp);font-weight:700;font-size:11.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+  .toc-course .tc-h:hover{color:var(--txt)}
+  .toc-course a:not(.tc-h){display:grid;grid-template-columns:26px minmax(0,1fr);font-size:13.5px;line-height:1.35}
+  .toc-course a b{font-family:var(--disp);font-weight:700;color:var(--faint)}
+  .toc a[aria-current="page"]{color:var(--txt);border-left-color:var(--accent)}
+  .toc a[aria-current="page"] b{color:var(--acc-txt)}
+  @media (min-width:901px){
+    .toc{max-height:calc(100vh - 120px);overflow-y:auto;overscroll-behavior:contain;padding-right:6px;scrollbar-width:thin}
+  }
+
+  /* simulador */
+  .lab{margin:20px 0 22px}
+  .lab .tabs{gap:8px}
+  .prose .lab-q{font-size:15.5px;color:var(--dim);margin:18px 0 0}
+  .lab .fbox{margin:12px 0 0}
+  .lab-viz{position:relative;height:220px;margin:18px 0 16px}
+  .lab-viz canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+  .lab .stat{padding:12px 14px}
+  .lab .stat .v{font-size:24px}
+  .lab .stat .v.m{color:var(--acc-txt)}
+  .lab-btns{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-top:16px}
+  .lab-btns .btn{padding:12px 10px}
+  .prose .lab-note{font-size:14px;color:var(--muted);margin:12px 0 0}
+
+  /* formulario de la lección */
+  .rules{border-top:1px solid var(--line2);margin:12px 0 28px}
+  .rule{display:grid;grid-template-columns:150px minmax(0,1fr);gap:20px;padding:14px 0;border-bottom:1px solid var(--line2)}
+  .rule .nm{font-family:var(--disp);font-weight:800;text-transform:uppercase;font-size:13.5px;letter-spacing:.04em;line-height:1.3;color:var(--txt);padding-top:10px}
+  .rule .nm i{display:block;font-family:var(--sans);font-weight:300;font-style:italic;text-transform:none;letter-spacing:0;font-size:12.5px;color:var(--muted);margin-top:3px}
+  .rule .fbox{margin:0}
+  .prose .rule p{font-size:15px;line-height:1.6;color:var(--muted);margin:8px 0 0}
+
+  /* trampas */
+  .prose .traps{list-style:none;padding:0;margin:12px 0 28px;border-top:1px solid var(--line2)}
+  .prose .traps li{display:grid;grid-template-columns:34px minmax(0,1fr);gap:8px;margin:0;padding:14px 0;border-bottom:1px solid var(--line2);font-size:16px;line-height:1.65}
+  .traps .n{font-family:var(--disp);font-weight:800;color:var(--acc-txt)}
+  .traps b{display:block;color:var(--txt);font-weight:600}
+
+  /* ejercicios */
+  .exs{border-top:1px solid var(--line2);margin:12px 0 28px}
+  .ex{padding:22px 0;border-bottom:1px solid var(--line2)}
+  .ex-h{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:8px}
+  .ex-h .label{color:var(--acc-txt)}
+  .prose .ex>p{margin:0 0 14px}
+  .ex-f{display:flex;gap:10px}
+  .ex-f .input{flex:1;min-width:0}
+  .ex-foot{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:4px 16px;min-height:44px;margin-top:8px}
+  .prose .fb{margin:0;font-size:15px}
+  .prose .fb.ok{color:var(--good)}
+  .prose .fb.bad{color:var(--bad)}
+  .linkbtn{background:none;border:0;padding:0;min-height:40px;cursor:pointer}
+  .ex .callout{margin:10px 0 0}
+  .prose .ex .callout p{font-size:16px}
+
+  /* final de la lección */
+  .after{max-width:680px}
+  .done{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:16px 24px;margin-top:8px}
+  .done p{margin:6px 0 0}
+  .done .btn{white-space:normal;text-align:center}
+  .done .btn[aria-pressed="true"]{background:transparent;color:var(--good);border-color:var(--good-line)}
+  .after .h3{margin:44px 0 14px}
+
+  @media (max-width:900px){
+    .doc{gap:24px}
+    .toc{position:sticky;top:calc(60px + env(safe-area-inset-top,0px));z-index:30;margin-inline:-20px;padding-inline:20px;background:var(--bg);border-bottom:1px solid var(--line)}
+    .toc-btn{display:grid;grid-template-columns:auto minmax(0,1fr) 24px;align-items:center;gap:12px;width:100%;min-height:48px;padding:0;background:none;border:0;cursor:pointer;text-align:left}
+    .toc-btn .label{color:var(--txt)}
+    .toc-btn .cur{font-size:14.5px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .toc-btn[aria-expanded="true"] .plus{transform:rotate(45deg);color:var(--acc-txt)}
+    .toc:not(.open) .toc-body{display:none}
+    .toc.open .toc-body{max-height:min(62vh,520px);overflow-y:auto;overscroll-behavior:contain;padding:4px 0 18px}
+    .prose h2,.prose [id]{scroll-margin-top:124px}
+  }
+  @media (max-width:600px){
+    .toc{margin-inline:-16px;padding-inline:16px}
+    .lab-viz{height:190px}
+    .lab-btns{grid-template-columns:repeat(2,minmax(0,1fr))}
+    .rule{grid-template-columns:minmax(0,1fr);gap:8px}
+    .rule .nm{padding-top:0}
+    .rule .nm i{display:inline;margin-left:6px}
+    .done .btn{width:100%}
+  }
+</style>
+</head>
+<body data-section="aprende">
+<a class="skip" href="#main">Saltar al contenido</a>
+
+<!-- ===================== CABECERA (copiar tal cual en todas las páginas) ===================== -->
+<header class="top">
+  <div class="wrap bar">
+    <a class="logo" href="index.html" aria-label="QuantMeraki, inicio"><img src="assets/perfil-128.png" alt="" width="34" height="34"><span>QuantMeraki</span></a>
+    <nav class="nav" aria-label="Principal">
+      <div class="dd">
+        <button class="dd-btn" type="button" aria-expanded="false" data-nav="practica">Practica</button>
+        <div class="menu" hidden>
+          <a href="entrenadores.html">Entrenadores<small>Cálculo mental y series, contra el reloj</small></a>
+          <a href="preguntas.html">Preguntas<small>Probabilidad, acertijos y series</small></a>
+          <a href="juegos.html">Juegos de mercado<small>Cotiza y ajusta tus precios</small></a>
+          <a href="simulacros.html">Simulacros<small>Pruebas cronometradas, como las de verdad</small></a>
+          <a href="codigo.html">Código<small>Problemas para developers</small></a>
+        </div>
+      </div>
+      <div class="dd">
+        <button class="dd-btn" type="button" aria-expanded="false" data-nav="aprende">Aprende</button>
+        <div class="menu" hidden>
+          <a href="rutas.html">Rutas<small>Trader, researcher o developer, paso a paso</small></a>
+          <a href="cursos.html">Cursos<small>Probabilidad, mercados y opciones</small></a>
+          <a href="guias.html">Guías<small>El sector y los procesos, explicados</small></a>
+        </div>
+      </div>
+      <div class="dd">
+        <button class="dd-btn" type="button" aria-expanded="false" data-nav="firmas">Firmas</button>
+        <div class="menu" hidden>
+          <a href="firmas.html">Directorio<small>Qué hace cada firma y cómo contrata</small></a>
+          <a href="empleo.html">Empleo<small>Prácticas y puestos para graduados</small></a>
+        </div>
+      </div>
+      <a href="canal.html" data-nav="canal">Canal</a>
+    </nav>
+    <div class="tools">
+      <a class="iconbtn" href="progreso.html" data-nav="progreso" aria-label="Mi progreso" title="Mi progreso"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 20v-8M12 20V5M19 20v-9"/></svg></a>
+      <button class="iconbtn" type="button" data-theme-toggle aria-label="Cambiar a modo oscuro"><svg class="ico i-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg><svg class="ico i-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg></button>
+      <a class="btn solid sm cta" href="entrenador-calculo-mental.html">Empieza</a>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+  <div class="wrap">
+
+    <section class="phead">
+      <nav class="crumbs" aria-label="Migas de pan"><a href="aprende.html">Aprende</a><span class="sep">/</span><a href="cursos.html">Cursos</a><span class="sep">/</span><a href="curso-probabilidad.html">Probabilidad</a><span class="sep">/</span><span aria-current="page">Valor esperado</span></nav>
+      <p class="kicker"><b>Lección 04</b> / Probabilidad para entrevistas</p>
+      <h1 class="h1">Valor esperado</h1>
+      <p class="lead">Cuánto vale un juego antes de jugarlo. Con esta idea se pone precio a cualquier apuesta.</p>
+      <div class="byline"><span>Lección 4 de 10</span><span>16 min</span><span>Nivel básico</span><span>3 ejercicios</span></div>
+    </section>
+
+    <div class="doc">
+      <aside class="toc" aria-label="Índice de la lección">
+        <button class="toc-btn" type="button" id="tocBtn" aria-expanded="false" aria-controls="tocBody"><span class="label">Índice</span><span class="cur" id="tocCur">La idea</span><span class="plus" aria-hidden="true">+</span></button>
+        <div class="toc-body" id="tocBody">
+          <span class="label">En esta lección</span>
+          <a href="#idea">La idea</a>
+          <a href="#simulador">Míralo en marcha</a>
+          <a href="#ejemplos">Ejemplos resueltos</a>
+          <a href="#reglas">Las reglas</a>
+          <a href="#trampas">Trampas habituales</a>
+          <a href="#ejercicios">Ejercicios</a>
+          <a href="#resumen">Lo que te llevas</a>
+          <div class="toc-course">
+            <a class="tc-h" href="curso-probabilidad.html">Temario del curso</a>
+            <a href="curso-probabilidad.html" data-soon><b>01</b>Contar sin perderse</a>
+            <a href="curso-probabilidad.html" data-soon><b>02</b>El complementario</a>
+            <a href="curso-probabilidad.html" data-soon><b>03</b>Condicionada y Bayes</a>
+            <a href="leccion-valor-esperado.html" aria-current="page"><b>04</b>Valor esperado</a>
+            <a href="curso-probabilidad.html" data-soon><b>05</b>Linealidad e indicadores</a>
+            <a href="curso-probabilidad.html" data-soon><b>06</b>Varianza y riesgo</a>
+            <a href="curso-probabilidad.html" data-soon><b>07</b>Esperanza condicionada</a>
+            <a href="curso-probabilidad.html" data-soon><b>08</b>Juegos con decisiones</a>
+            <a href="curso-probabilidad.html" data-soon><b>09</b>Tiempos de espera</a>
+            <a href="curso-probabilidad.html" data-soon><b>10</b>Paseos aleatorios y ruina</a>
+          </div>
+        </div>
+      </aside>
+
+      <div>
+        <article class="prose">
+
+          <h2 id="idea">La idea</h2>
+          <p>Imagina que repites un juego miles de veces y apuntas lo que cobras en cada partida. La media de todo eso tiene nombre: <strong>valor esperado</strong> (expected value), o esperanza. Y se puede calcular sin jugar: cada resultado por su probabilidad, y todo sumado.</p>
+          <div class="fbox">\[E[X] = \sum_x x\,P(X = x)\]</div>
+          <p class="fnote">\(X\) es lo que cobras en una partida. La suma recorre todos sus valores posibles.</p>
+          <p>Dos cosas conviene tenerlas claras desde el principio:</p>
+          <ul>
+            <li><strong>Es una media, no una predicción.</strong> Un dado vale 3,5 y nunca sale un 3,5.</li>
+            <li><strong>Habla del largo plazo.</strong> En diez partidas puede pasar casi cualquier cosa. En diez mil, la media se queda muy cerca.</li>
+          </ul>
+          <div class="callout">
+            <span class="label">Por qué le importa a un trader</span>
+            <p>En juegos como estos, el precio justo (fair value) de un contrato es su valor esperado. Comprar por debajo de ese precio, o vender por encima, es tener ventaja (edge).</p>
+          </div>
+
+          <h2 id="simulador">Míralo en marcha</h2>
+          <p>Elige un juego y juega. La línea naranja es la media de tus partidas; la discontinua, el valor esperado. Al principio la media va a saltos. Con miles de partidas se pega a la discontinua: es la ley de los grandes números (law of large numbers).</p>
+
+          <div class="card lab">
+            <div class="tabs" role="tablist" aria-label="Juego">
+              <button class="chip" type="button" role="tab" id="g-dado" data-g="dado" aria-selected="true" aria-controls="labPanel">Un dado</button>
+              <button class="chip" type="button" role="tab" id="g-dos" data-g="dos" aria-selected="false" aria-controls="labPanel" tabindex="-1">Dos dados</button>
+              <button class="chip" type="button" role="tab" id="g-ruleta" data-g="ruleta" aria-selected="false" aria-controls="labPanel" tabindex="-1">Ruleta</button>
+              <button class="chip" type="button" role="tab" id="g-ventaja" data-g="ventaja" aria-selected="false" aria-controls="labPanel" tabindex="-1">Ventaja del 52 %</button>
+            </div>
+            <div id="labPanel" role="tabpanel" aria-labelledby="g-dado">
+              <p class="lab-q" id="labQ">Tiras un dado y cobras, en euros, lo que sale.</p>
+              <div class="fbox" id="labF">\[E[X] = \frac{1+2+3+4+5+6}{6} = \frac{21}{6} = 3{,}5\]</div>
+              <div class="lab-viz"><canvas id="labCv" role="img" aria-label="Gráfica vacía: todavía no has jugado."></canvas></div>
+              <div class="stats">
+                <div class="stat"><span class="v" id="sN">0</span><span class="k">Partidas</span></div>
+                <div class="stat"><span class="v" id="sL">–</span><span class="k">Última</span></div>
+                <div class="stat"><span class="v m" id="sM">–</span><span class="k">Tu media</span></div>
+                <div class="stat"><span class="v" id="sE">3,5</span><span class="k">Valor esperado</span></div>
+              </div>
+              <div class="lab-btns">
+                <button class="btn solid" type="button" data-play="1">Jugar 1</button>
+                <button class="btn" type="button" data-play="100">Jugar 100</button>
+                <button class="btn" type="button" data-play="1000">Jugar 1000</button>
+                <button class="btn ghost" type="button" id="labReset">Borrar</button>
+              </div>
+              <p class="lab-note" id="labNote" hidden>Has llegado a 20.000 partidas. Borra para empezar otra vez.</p>
+              <p class="sr" id="labLive" aria-live="polite"></p>
+            </div>
+          </div>
+
+          <p>Compara la ruleta con la ventaja del 52 %. Las dos rondan el cero, una por debajo y otra por encima. En cien partidas no las distingues; en diez mil, sí. Una ventaja pequeña solo se nota con muchas repeticiones.</p>
+
+          <h2 id="ejemplos">Tres ejemplos resueltos</h2>
+
+          <h3>1 · Un dado</h3>
+          <p>Tiras un dado y cobras, en euros, lo que sale. Cada cara tiene probabilidad \(\tfrac16\):</p>
+          <div class="fbox">\[E[X] = 1\cdot\tfrac16 + 2\cdot\tfrac16 + \dots + 6\cdot\tfrac16 = \frac{21}{6} = 3{,}5\]</div>
+          <p>Si jugar cuesta menos de 3,5 €, el juego te favorece. Si cuesta más, favorece a quien lo organiza.</p>
+
+          <h3>2 · Linealidad: sin hacer la tabla</h3>
+          <p>Con dos dados, cobrando la suma, podrías escribir los 36 casos. No hace falta: la esperanza de una suma es la suma de las esperanzas. Es la linealidad de la esperanza (linearity of expectation).</p>
+          <div class="fbox">\[E[X+Y] = E[X] + E[Y] = 3{,}5 + 3{,}5 = 7\]</div>
+          <p>Se cumple siempre, aunque las variables dependan unas de otras, y eso la hace muy útil. Un ejemplo: lanzas 10 monedas en fila. ¿Cuántas veces salen, de media, dos caras seguidas?</p>
+          <p>Llama \(I_k\) a un indicador que vale 1 si las monedas \(k\) y \(k+1\) salen cara, y 0 si no. Hay nueve parejas de monedas vecinas, y cada una sale «cara, cara» con probabilidad \(\tfrac14\). El número de parejas \(N\) es la suma de los nueve indicadores:</p>
+          <div class="fbox">\[E[N] = \sum_{k=1}^{9} P(I_k = 1) = 9\cdot\tfrac14 = 2{,}25\]</div>
+          <p>Las parejas se solapan y dependen unas de otras: si la 1 y la 2 son cara, es más fácil que también lo sean la 2 y la 3. Da igual. Para sumar esperanzas no hace falta independencia.</p>
+
+          <h3>3 · La apuesta justa</h3>
+          <p>Una apuesta es justa (fair bet) si su valor esperado es cero: a la larga, nadie gana. Pagas 1 € por tirar un dado y, si sale un 6, cobras \(x\) euros. ¿Qué \(x\) la hace justa?</p>
+          <div class="fbox">\[E[\text{ganancia}] = x\cdot\tfrac16 - 1 = 0 \quad\Longrightarrow\quad x = 6\]</div>
+          <p>Si solo te pagan 5 €, pierdes de media \(\tfrac16\) de euro por partida, unos 17 céntimos. Ese es el margen de la casa.</p>
+          <p>Con un precio pasa lo mismo. Si un contrato paga lo que salga en un dado, su precio justo es 3,5 €. Quien compra a 3,3 € y vende a 3,7 € gana de media 20 céntimos por operación, siempre que el otro no sepa más que él. Lo puedes practicar en <a href="juego-hazme-un-mercado.html">Hazme un mercado</a>.</p>
+
+          <h2 id="reglas">Las reglas que más usarás</h2>
+          <p>Toda la lección, en formato de chuleta.</p>
+          <div class="rules">
+            <div class="rule"><div class="nm">Definición<i>expected value</i></div><div><div class="fbox">\[E[X] = \sum_x x\,P(X = x)\]</div><p>Si \(X\) es continua, la suma pasa a ser una integral: \(E[X] = \int x\,f(x)\,dx\).</p></div></div>
+            <div class="rule"><div class="nm">Linealidad<i>linearity</i></div><div><div class="fbox">\[E[aX + bY + c] = a\,E[X] + b\,E[Y] + c\]</div><p>Siempre, aunque \(X\) e \(Y\) dependan una de otra.</p></div></div>
+            <div class="rule"><div class="nm">Indicadores<i>indicator variables</i></div><div><div class="fbox">\[E[N] = \sum_i P(A_i)\]</div><p>\(N\) cuenta cuántos de los sucesos \(A_i\) ocurren. Es lo que has usado con las monedas.</p></div></div>
+            <div class="rule"><div class="nm">Función de X<i>LOTUS</i></div><div><div class="fbox">\[E[g(X)] = \sum_x g(x)\,P(X = x)\]</div><p>Basta con la distribución de \(X\). Casi nunca coincide con \(g(E[X])\).</p></div></div>
+            <div class="rule"><div class="nm">Producto<i>product</i></div><div><div class="fbox">\[E[XY] = E[X]\,E[Y]\]</div><p>Solo si \(X\) e \(Y\) son independientes.</p></div></div>
+            <div class="rule"><div class="nm">Precio justo<i>fair value</i></div><div><div class="fbox">\[\text{precio justo} = E[\text{lo que cobras}]\]</div><p>Una apuesta es justa cuando \(E[\text{ganancia}] = 0\).</p></div></div>
+          </div>
+
+          <h2 id="trampas">Trampas habituales</h2>
+          <ol class="traps">
+            <li><span class="n">01</span><span><b>Confundirlo con lo más probable.</b> El valor esperado es una media. Con un dado, 3,5 ni siquiera puede salir; en una lotería, lo más probable es no ganar nada.</span></li>
+            <li><span class="n">02</span><span><b>Aplicar la función a la media.</b> En general, \(E[g(X)] \ne g(E[X])\). Si cobras el cuadrado de lo que saca un dado, el juego vale \(\tfrac{91}{6} \approx 15{,}17\) €, y no \(3{,}5^2 = 12{,}25\) €.</span></li>
+            <li><span class="n">03</span><span><b>Olvidar lo que cuesta jugar.</b> Cuenta la ganancia neta: lo que cobras menos lo que pagas. Un premio de 5 € por sacar un 6 parece generoso hasta que restas el euro de cada partida.</span></li>
+            <li><span class="n">04</span><span><b>Creer que la suerte se compensa.</b> Tras cinco rojos seguidos, el rojo no «debe» salir menos, porque cada giro es independiente. Es la falacia del jugador (gambler's fallacy). La media se acerca al valor esperado porque las partidas nuevas diluyen a las antiguas, que siguen ahí.</span></li>
+            <li><span class="n">05</span><span><b>Mirar solo la media.</b> Dos apuestas con el mismo valor esperado pueden arriesgar cosas muy distintas. Eso lo mide la varianza, en la <a href="curso-probabilidad.html" data-soon>lección 6</a>.</span></li>
+          </ol>
+
+          <h2 id="ejercicios">Ejercicios</h2>
+          <p>Tres para comprobar que lo tienes. Escribe la respuesta con decimales (2,5) o como fracción (5/2).</p>
+          <div class="exs">
+            <div class="ex">
+              <div class="ex-h"><span class="label">Ejercicio 1</span><span class="meter" data-v="1" role="img" aria-label="Fácil"><i></i><i></i><i></i></span></div>
+              <p>Tiras un dado. Si sale par, cobras en euros lo que marca. Si sale impar, pagas 1 €. ¿Cuánto vale el juego?</p>
+              <form class="ex-f" data-ans="1.5" novalidate><label class="sr" for="ex1i">Tu respuesta al ejercicio 1, en euros</label><input class="input" id="ex1i" type="text" inputmode="decimal" autocomplete="off" placeholder="En euros, p. ej. 2,5"><button class="btn" type="submit">Comprobar</button></form>
+              <div class="ex-foot"><p class="fb" aria-live="polite"></p><button class="more linkbtn" type="button" data-reveal="ex1s" data-alt="Ocultar solución" aria-expanded="false" aria-controls="ex1s">Ver solución</button></div>
+              <div class="callout" id="ex1s" hidden><span class="label">Solución</span><p>Los pares aportan \((2+4+6)\cdot\tfrac16 = 2\). Los impares, \(-1\cdot\tfrac36 = -0{,}5\). En total, \(E = 2 - 0{,}5 = 1{,}5\) €.</p></div>
+            </div>
+            <div class="ex">
+              <div class="ex-h"><span class="label">Ejercicio 2</span><span class="meter" data-v="2" role="img" aria-label="Media"><i></i><i></i><i></i></span></div>
+              <p>Tiras un dado 12 veces seguidas. ¿Cuántas veces esperas que una tirada sea mayor que la anterior?</p>
+              <form class="ex-f" data-ans="4.5833333" novalidate><label class="sr" for="ex2i">Tu respuesta al ejercicio 2</label><input class="input" id="ex2i" type="text" inputmode="decimal" autocomplete="off" placeholder="Con dos decimales o en fracción"><button class="btn" type="submit">Comprobar</button></form>
+              <div class="ex-foot"><p class="fb" aria-live="polite"></p><button class="more linkbtn" type="button" data-reveal="ex2s" data-alt="Ocultar solución" aria-expanded="false" aria-controls="ex2s">Ver solución</button></div>
+              <div class="callout" id="ex2s" hidden><span class="label">Solución</span><p>Hay 11 parejas de tiradas seguidas. En cada pareja, de los 36 casos, 6 son empates y los otros 30 se reparten a partes iguales: la segunda es mayor en 15, con probabilidad \(\tfrac{15}{36} = \tfrac{5}{12}\).</p><p>Las parejas se solapan, pero la linealidad no necesita independencia: \(E = 11\cdot\tfrac{5}{12} = \tfrac{55}{12} \approx 4{,}58\).</p></div>
+            </div>
+            <div class="ex">
+              <div class="ex-h"><span class="label">Ejercicio 3</span><span class="meter" data-v="2" role="img" aria-label="Media"><i></i><i></i><i></i></span></div>
+              <p>Tiras dos dados. Si la suma es 7 o más, un amigo te paga 5 €. Si es menos de 7, le pagas tú \(x\) euros. ¿Qué \(x\) hace la apuesta justa?</p>
+              <form class="ex-f" data-ans="7" novalidate><label class="sr" for="ex3i">Tu respuesta al ejercicio 3, en euros</label><input class="input" id="ex3i" type="text" inputmode="decimal" autocomplete="off" placeholder="En euros"><button class="btn" type="submit">Comprobar</button></form>
+              <div class="ex-foot"><p class="fb" aria-live="polite"></p><button class="more linkbtn" type="button" data-reveal="ex3s" data-alt="Ocultar solución" aria-expanded="false" aria-controls="ex3s">Ver solución</button></div>
+              <div class="callout" id="ex3s" hidden><span class="label">Solución</span><p>La suma es 7 o más en 21 de los 36 casos, y menos de 7 en 15. La apuesta es justa si \(5\cdot\tfrac{21}{36} = x\cdot\tfrac{15}{36}\), es decir, \(x = \tfrac{105}{15} = 7\) €.</p></div>
+            </div>
+          </div>
+
+          <h2 id="resumen">Lo que te llevas</h2>
+          <div class="callout">
+            <span class="label">Clave</span>
+            <p>El valor esperado es la media a la larga: cada resultado por su probabilidad, y todo sumado.</p>
+            <p>La linealidad funciona siempre. Úsala para partir un problema difícil en trozos fáciles.</p>
+            <p>En un juego, el precio justo es el valor esperado. Tu ventaja es la distancia entre ese valor y el precio al que compras o vendes.</p>
+          </div>
+        </article>
+
+        <div class="after">
+          <div class="card done">
+            <div><span class="label">¿Terminada?</span><p class="small muted">Márcala y la verás en el temario y en Mi progreso.</p></div>
+            <button class="btn solid" type="button" data-done-toggle="leccion:valor-esperado" data-alt="Lección completada">Marcar lección como completada</button>
+          </div>
+
+          <h2 class="h3">Practica esto</h2>
+          <div class="list">
+            <a class="item" href="pregunta-juego-del-dado.html"><span><span class="item-t">El juego del dado</span><span class="item-d">¿Y si puedes volver a tirar una vez? El reto de la semana.</span></span><span class="item-m"><span class="tag">Pregunta</span><span class="arrow" aria-hidden="true">→</span></span></a>
+            <a class="item" href="video-que-hace-un-quant-trader.html"><span><span class="item-t">¿Qué hace realmente un quant trader?</span><span class="item-d">Ventajas pequeñas, repetidas muchas veces.</span></span><span class="item-m"><span class="tag">Vídeo</span><span class="arrow" aria-hidden="true">→</span></span></a>
+            <a class="item" href="juego-hazme-un-mercado.html"><span><span class="item-t">Hazme un mercado</span><span class="item-d">Pon precio a la suma de dos dados.</span></span><span class="item-m"><span class="tag">Juego</span><span class="arrow" aria-hidden="true">→</span></span></a>
+          </div>
+
+          <nav class="prevnext" aria-label="Lecciones del curso">
+            <a href="curso-probabilidad.html" data-soon><span class="label">← Anterior</span><span class="t">Condicionada y Bayes</span></a>
+            <a class="next" href="curso-probabilidad.html" data-soon><span class="label">Siguiente →</span><span class="t">Linealidad e indicadores</span></a>
+          </nav>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <div class="cols">
+      <div class="brandcol"><a class="logo" href="index.html"><img src="assets/perfil-128.png" alt="" width="34" height="34"><span>QuantMeraki</span></a><p class="claim">El mundo quant, en español.</p></div>
+      <div><h4>Practica</h4><ul><li><a href="entrenadores.html">Entrenadores</a></li><li><a href="preguntas.html">Preguntas</a></li><li><a href="juegos.html">Juegos de mercado</a></li><li><a href="simulacros.html">Simulacros</a></li><li><a href="codigo.html">Código</a></li></ul></div>
+      <div><h4>Aprende</h4><ul><li><a href="rutas.html">Rutas</a></li><li><a href="cursos.html">Cursos</a></li><li><a href="guias.html">Guías</a></li><li><a href="canal.html">El canal</a></li></ul></div>
+      <div><h4>QuantMeraki</h4><ul><li><a href="firmas.html">Firmas</a></li><li><a href="empleo.html">Empleo</a></li><li><a href="progreso.html">Mi progreso</a></li><li><a href="sobre.html">Sobre el proyecto</a></li></ul></div>
+    </div>
+    <div class="legal"><span>Contenido educativo, nunca asesoramiento financiero.</span><span>© 2026 QuantMeraki</span></div>
+  </div>
+</footer>
+
+<nav class="tabbar" aria-label="Secciones">
+  <a href="index.html" data-tab="inicio"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/><path d="M10 20v-6h4v6"/></svg><span>Inicio</span></a>
+  <a href="practica.html" data-tab="practica"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="4"/><circle class="f" cx="12" cy="12" r="1.4"/></svg><span>Practica</span></a>
+  <a href="aprende.html" data-tab="aprende"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 6c-2-1.5-5-2-8-1.5V19c3-.5 6 0 8 1.5 2-1.5 5-2 8-1.5V4.5c-3-.5-6 0-8 1.5z"/><path d="M12 6v14.5"/></svg><span>Aprende</span></a>
+  <a href="firmas.html" data-tab="firmas"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 21h18M3 9.5l9-5.5 9 5.5M5 10v11M19 10v11M9.5 21v-8M14.5 21v-8"/></svg><span>Firmas</span></a>
+  <a href="canal.html" data-tab="canal"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="3"/><path class="f" d="M10 9v6l5-3z"/></svg><span>Canal</span></a>
+</nav>
+
+<div class="toast" id="toast" role="status" hidden></div>
+<script src="assets/qm.js"></script>
+<script>
+/* Lección: fórmulas, índice en el móvil, simulador y ejercicios */
+(function(){
+  'use strict';
+  /* ---------- MathJax (solo en esta página) ---------- */
+  window.MathJax={tex:{inlineMath:[['\\(','\\)']]},svg:{fontCache:'global'}};
+  var mj=document.createElement('script');mj.async=true;mj.id='MathJax-script';
+  mj.src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-svg.js';
+  document.head.appendChild(mj);
+  function typeset(el){if(window.MathJax&&MathJax.typesetPromise){if(MathJax.typesetClear)MathJax.typesetClear([el]);MathJax.typesetPromise([el]).catch(function(){});}}
+
+  /* ---------- índice plegable en el móvil ---------- */
+  var toc=document.querySelector('.toc'),tb=document.getElementById('tocBtn'),body=document.getElementById('tocBody'),cur=document.getElementById('tocCur');
+  function setToc(open){toc.classList.toggle('open',open);tb.setAttribute('aria-expanded',String(open));}
+  tb.addEventListener('click',function(){setToc(!toc.classList.contains('open'));});
+  body.addEventListener('click',function(e){var a=e.target.closest&&e.target.closest('a');if(a&&a.getAttribute('href').charAt(0)==='#')setToc(false);});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape'&&toc.classList.contains('open')){setToc(false);tb.focus();}});
+  if('MutationObserver' in window){
+    new MutationObserver(function(){var a=body.querySelector('a[aria-current="true"]');if(a)cur.textContent=a.textContent;})
+      .observe(body,{subtree:true,attributes:true,attributeFilter:['aria-current']});
+  }
+
+  /* ---------- simulador ---------- */
+  var cv=document.getElementById('labCv');
+  var reduce=!!(window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+  var MAX=20000;
+  function die(){return 1+Math.floor(Math.random()*6);}
+  var G={
+    dado:{q:'Tiras un dado y cobras, en euros, lo que sale.',tex:'E[X] = \\frac{1+2+3+4+5+6}{6} = \\frac{21}{6} = 3{,}5',
+      ev:3.5,evs:'3,5',lo:1,hi:6,ticks:[1,2,3,4,5,6],dec:2,pm:false,draw:die},
+    dos:{q:'Tiras dos dados y cobras la suma.',tex:'E[S] = \\sum_{s=2}^{12} s\\,P(S = s) = \\frac{252}{36} = 7',
+      ev:7,evs:'7',lo:2,hi:12,ticks:[2,4,6,8,10,12],dec:2,pm:false,draw:function(){return die()+die();}},
+    ruleta:{q:'Ruleta europea: 37 casillas, 18 rojas. Apuestas 1 € al rojo y ganas 1 € o lo pierdes.',tex:'E = (+1)\\cdot\\tfrac{18}{37} + (-1)\\cdot\\tfrac{19}{37} = -\\tfrac{1}{37} \\approx -0{,}027',
+      ev:-1/37,evs:'−0,027',lo:-0.3,hi:0.3,ticks:[-0.2,0,0.2],dec:3,pm:true,draw:function(){return Math.random()*37<18?1:-1;}},
+    ventaja:{q:'Apuestas 1 € y ganas el 52 % de las veces. Es la ventaja pequeña del vídeo del canal.',tex:'E = (+1)\\cdot 0{,}52 + (-1)\\cdot 0{,}48 = +0{,}04',
+      ev:0.04,evs:'+0,04',lo:-0.3,hi:0.3,ticks:[-0.2,0,0.2],dec:3,pm:true,draw:function(){return Math.random()<0.52?1:-1;}}
+  };
+  var g='dado',means=[],sum=0,last=null,pending=0,rate=1,raf=0;
+  var el={q:document.getElementById('labQ'),f:document.getElementById('labF'),n:document.getElementById('sN'),l:document.getElementById('sL'),
+    m:document.getElementById('sM'),e:document.getElementById('sE'),live:document.getElementById('labLive'),note:document.getElementById('labNote'),
+    panel:document.getElementById('labPanel')};
+  var plays=document.querySelectorAll('[data-play]');
+
+  function num(v,dec){var s=Math.abs(v).toFixed(dec).replace('.',',');return (v<0&&Number(s.replace(',','.'))!==0?'−':'')+s;}
+  function int(n){return n.toLocaleString('es-ES');}
+  function tick(t){return t===0?'0':num(t,Number.isInteger(t)?0:1);}
+
+  function draw(){
+    var w=cv.clientWidth,h=cv.clientHeight;if(!w||!h)return;
+    var dpr=Math.min(window.devicePixelRatio||1,2);
+    if(cv.width!==Math.round(w*dpr)||cv.height!==Math.round(h*dpr)){cv.width=Math.round(w*dpr);cv.height=Math.round(h*dpr);}
+    var c=cv.getContext('2d');c.setTransform(dpr,0,0,dpr,0,0);c.clearRect(0,0,w,h);
+    var S=G[g],L=30,R=8,T=16,B=22,pw=w-L-R,ph=h-T-B,n=means.length;
+    var txt=QM.color('txt'),mut=QM.color('muted'),line=QM.color('line'),acc=QM.color('accent');
+    function Y(v){v=Math.max(S.lo,Math.min(S.hi,v));return T+(S.hi-v)/(S.hi-S.lo)*ph;}
+    c.font='400 11px Barlow, Arial, sans-serif';c.lineWidth=1;
+    c.textAlign='right';c.textBaseline='middle';
+    S.ticks.forEach(function(t){var y=Math.round(Y(t))+0.5;c.strokeStyle=line;c.beginPath();c.moveTo(L,y);c.lineTo(w-R,y);c.stroke();c.fillStyle=mut;c.fillText(tick(t),L-8,y);});
+    c.textBaseline='top';c.textAlign='left';c.fillStyle=mut;c.fillText('0',L,h-B+7);
+    c.textAlign='right';c.fillText(n?int(n)+(n===1?' partida':' partidas'):'partidas',w-R,h-B+7);
+    if(n){
+      c.strokeStyle=acc;c.lineWidth=2;c.lineJoin='round';c.lineCap='round';c.beginPath();
+      var px,k,lx=L,ly=Y(means[0]);
+      if(n<=pw){for(k=0;k<n;k++){px=L+(n===1?0:k/(n-1))*pw;if(k)c.lineTo(px,Y(means[k]));else c.moveTo(px,Y(means[k]));lx=px;ly=Y(means[k]);}}
+      else{var steps=Math.floor(pw);for(var i=0;i<=steps;i++){k=Math.round(i/steps*(n-1));px=L+i/steps*pw;if(i)c.lineTo(px,Y(means[k]));else c.moveTo(px,Y(means[k]));lx=px;ly=Y(means[k]);}}
+      c.stroke();
+      c.fillStyle=acc;c.beginPath();c.arc(lx,ly,4,0,Math.PI*2);c.fill();
+    }
+    var ye=Math.round(Y(S.ev))+0.5;
+    c.strokeStyle=txt;c.lineWidth=1.25;c.setLineDash([5,4]);c.beginPath();c.moveTo(L,ye);c.lineTo(w-R,ye);c.stroke();c.setLineDash([]);
+    c.font='600 12px Barlow, Arial, sans-serif';c.fillStyle=txt;c.textAlign='left';c.textBaseline='bottom';c.fillText('E = '+S.evs,L+6,ye-5);
+    if(!n){c.font='400 14px Barlow, Arial, sans-serif';c.fillStyle=mut;c.textAlign='center';c.textBaseline='middle';c.fillText('Pulsa «Jugar» para empezar',L+pw/2,T+ph*0.3);}
+  }
+
+  function paint(){
+    var S=G[g],n=means.length;
+    el.n.textContent=int(n);
+    el.l.textContent=last===null?'–':(S.pm?(last>0?'+1':'−1'):String(last));
+    el.m.textContent=n?num(means[n-1],S.dec):'–';
+    el.e.textContent=S.evs;
+    cv.setAttribute('aria-label',n?('Media de tus partidas frente al valor esperado. Tras '+int(n)+' partidas, tu media es '+num(means[n-1],S.dec)+' y el valor esperado, '+S.evs+'.'):'Gráfica vacía: todavía no has jugado.');
+    var full=n>=MAX;el.note.hidden=!full;
+    Array.prototype.forEach.call(plays,function(b){b.disabled=full;});
+    draw();
+  }
+  function add(k){var S=G[g];for(var i=0;i<k&&means.length<MAX;i++){var x=S.draw();sum+=x;last=x;means.push(sum/(means.length+1));}if(means.length>=MAX)pending=0;}
+  function announce(){var S=G[g],n=means.length;if(n)el.live.textContent=int(n)+' partidas. Tu media: '+num(means[n-1],S.dec)+'. Valor esperado: '+S.evs+'.';}
+  function step(){var k=Math.min(pending,rate);add(k);pending-=k;paint();if(pending>0)raf=requestAnimationFrame(step);else{raf=0;announce();}}
+  function play(k){
+    if(means.length>=MAX)return;
+    pending+=k;
+    if(reduce||pending<=1){add(pending);pending=0;paint();announce();return;}
+    rate=Math.max(1,Math.ceil(pending/36));
+    if(!raf)raf=requestAnimationFrame(step);
+  }
+  function reset(){if(raf)cancelAnimationFrame(raf);raf=0;pending=0;means=[];sum=0;last=null;el.live.textContent='';paint();}
+  function setGame(id){
+    if(!G[id]||id===g)return;g=id;reset();
+    el.q.textContent=G[id].q;el.f.textContent='\\['+G[id].tex+'\\]';typeset(el.f);
+    el.panel.setAttribute('aria-labelledby','g-'+id);
+  }
+  Array.prototype.forEach.call(plays,function(b){b.addEventListener('click',function(){play(Number(b.getAttribute('data-play')));});});
+  document.getElementById('labReset').addEventListener('click',reset);
+  var tl=document.querySelector('.lab [role="tablist"]');
+  tl.addEventListener('qm-tab',function(e){setGame(e.detail.getAttribute('data-g'));});
+  document.addEventListener('qm-theme',draw);
+  if('ResizeObserver' in window)new ResizeObserver(function(){draw();}).observe(cv);else window.addEventListener('resize',draw);
+  if(document.fonts&&document.fonts.ready)document.fonts.ready.then(draw);
+  paint();
+
+  /* ---------- ejercicios: se corrigen aquí mismo ---------- */
+  function parse(s){
+    s=String(s||'').toLowerCase().replace(/€|euros?|\s/g,'').replace(/−/g,'-').replace(',','.');
+    var m=s.match(/^(-?\d+(?:\.\d+)?)\/(\d+(?:\.\d+)?)$/);
+    if(m)return Number(m[2])?Number(m[1])/Number(m[2]):NaN;
+    return /^[-+]?(\d+\.?\d*|\.\d+)$/.test(s)?Number(s):NaN;
+  }
+  QM.each('.ex-f',function(f){
+    var ans=Number(f.getAttribute('data-ans')),inp=f.querySelector('input'),fb=f.parentNode.querySelector('.fb');
+    f.addEventListener('submit',function(e){
+      e.preventDefault();
+      var v=parse(inp.value);
+      inp.classList.remove('ok','bad');fb.classList.remove('ok','bad');
+      if(isNaN(v)){fb.textContent='Escribe un número, por ejemplo 2,5 o 5/2.';return;}
+      var ok=Math.abs(v-ans)<0.006;
+      inp.classList.add(ok?'ok':'bad');fb.classList.add(ok?'ok':'bad');
+      fb.textContent=ok?'Correcto.':'Todavía no. Repasa la cuenta o mira la solución.';
+    });
+    inp.addEventListener('input',function(){inp.classList.remove('ok','bad');fb.classList.remove('ok','bad');fb.textContent='';});
+  });
+})();
+</script>
+</body>
+</html>

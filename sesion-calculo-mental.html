@@ -1,0 +1,501 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>Sesión de cálculo mental · QuantMeraki</title>
+<meta name="description" content="Sesión cronometrada de cálculo mental: escribe el resultado y pasa a la siguiente. Al final, tus aciertos, tu precisión y tu ritmo.">
+<link rel="icon" href="assets/perfil-128.png">
+<script>try{var t=localStorage.getItem('qm-theme');document.documentElement.setAttribute('data-theme',t||'light');}catch(e){}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;500;600;700&family=Barlow+Semi+Condensed:wght@600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/qm.css">
+<style>
+  /* modo foco: sin barra inferior ni pie */
+  body{padding-bottom:env(safe-area-inset-bottom,0px)}
+  .fb{display:flex;align-items:center;gap:10px;height:60px}
+  .fb .logo{margin-right:auto}
+  .fname{margin-right:8px}
+  .stage{max-width:760px;margin:0 auto;padding:clamp(28px,7vh,80px) 0 56px}
+
+  /* antes de empezar */
+  #intro .h1{margin-top:4px}
+  .rules{margin-top:30px;border-top:1px solid var(--line2)}
+  .rule{display:grid;grid-template-columns:120px minmax(0,1fr);gap:16px;padding:15px 0;border-bottom:1px solid var(--line2)}
+  .rk{font-family:var(--disp);font-weight:700;font-size:13px;letter-spacing:.16em;text-transform:uppercase;color:var(--txt)}
+  .rd{font-size:15px;color:var(--muted)}
+  .intro-btns{margin-top:32px}
+  .btn.big{min-height:52px;padding-inline:34px;font-size:14px}
+  .ibest{margin:18px 0 0;font-size:14px;color:var(--muted)}
+
+  /* durante la sesión */
+  .st{display:flex;justify-content:space-between;align-items:baseline;gap:12px}
+  .stv{font-family:var(--disp);font-weight:800;font-size:22px;letter-spacing:.02em;color:var(--txt);font-variant-numeric:tabular-nums;margin-left:8px}
+  .stv.low{color:var(--acc-txt)}
+  .tbar{height:3px;background:var(--line);border-radius:2px;margin-top:12px;overflow:hidden}
+  .tbar i{display:block;height:100%;background:var(--accent);transform-origin:left center}
+  .qk{margin:clamp(28px,7vh,64px) 0 0;text-align:center;font-family:var(--disp);font-weight:700;font-size:12px;letter-spacing:.24em;text-transform:uppercase;color:var(--muted)}
+  .q{margin:10px 0 clamp(24px,5vh,44px);text-align:center;font-family:var(--disp);font-weight:800;font-size:clamp(50px,13vw,104px);line-height:1.05;letter-spacing:.01em;font-variant-numeric:tabular-nums;text-wrap:balance}
+  .ans{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;max-width:520px;margin:0 auto}
+  .ain{display:block;width:100%;min-width:0;min-height:58px;background:var(--bg);border:1px solid var(--line);border-radius:3px;color:var(--txt);font-family:var(--disp);font-weight:700;font-size:30px;letter-spacing:.04em;text-align:center;padding:8px 12px;font-variant-numeric:tabular-nums;transition:border-color .2s,box-shadow .2s}
+  .ain:focus{outline:none;border-color:var(--accent)}
+  .ain.ok{border-color:var(--good);box-shadow:0 0 0 3px var(--good-dim);transition:none}
+  .ain.bad{border-color:var(--bad);box-shadow:0 0 0 3px var(--bad-dim);transition:none}
+  .ain:disabled{opacity:.5}
+  .skipb{min-height:58px}
+  .hint{margin:16px 0 0;text-align:center;font-size:13.5px;color:var(--muted)}
+  .hint kbd{font-family:var(--disp);font-weight:700;font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;border:1px solid var(--line);border-radius:2px;padding:1px 6px;color:var(--dim)}
+  .glow{position:fixed;left:0;right:0;bottom:0;height:36vh;z-index:30;pointer-events:none;opacity:0;transition:opacity .45s ease}
+  .glow[data-k="ok"]{background:linear-gradient(to top,var(--good-line),var(--good-dim) 30%,transparent)}
+  .glow[data-k="bad"]{background:linear-gradient(to top,var(--bad-line),var(--bad-dim) 30%,transparent)}
+  .glow.on{opacity:.75;transition:none}
+
+  /* resultados */
+  #done .h1{outline:none}
+  .dbtns{margin-top:28px}
+  #done .stats{margin-top:36px}
+  .blk{margin-top:44px}
+  .blk>.h3{margin-bottom:14px}
+  .cb-h{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:8px 16px;margin-bottom:14px}
+  .lg{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:13px;color:var(--muted)}
+  .lg span{display:inline-flex;align-items:center;gap:6px}
+  .lg i{width:10px;height:10px;border-radius:2px;background:var(--accent)}
+  .lg i.o{background:var(--faint)}
+  .chartbox{border:1px solid var(--line);border-radius:4px;background:var(--panel);padding:16px 18px 12px}
+  .chart{position:relative;height:180px}
+  .chart canvas{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:pan-y}
+  .tip{position:absolute;z-index:2;pointer-events:none;background:var(--raise);border:1px solid var(--line);border-radius:3px;padding:6px 10px;font-size:13px;line-height:1.4;color:var(--dim);box-shadow:var(--shadow);white-space:nowrap}
+  .tip b{color:var(--txt);font-weight:600}
+  .cb-foot{display:flex;justify-content:space-between;font-size:12px;color:var(--faint);margin-top:6px}
+  .opr{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr) 92px 76px;align-items:center;gap:8px 20px;padding:14px 0;border-bottom:1px solid var(--line2)}
+  .opr.hd{padding:0 0 10px}
+  .opr.hd span{font-family:var(--disp);font-weight:700;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+  .opn{font-family:var(--disp);font-weight:700;font-size:16px;letter-spacing:.04em;text-transform:uppercase}
+  .opv{font-size:15px;color:var(--dim);text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+  .opr.hd .opv{text-align:right}
+  .rv{display:grid;grid-template-columns:minmax(0,1fr) auto auto;align-items:baseline;gap:6px 20px;padding:13px 0;border-bottom:1px solid var(--line2)}
+  .rq{font-family:var(--disp);font-weight:700;font-size:19px;letter-spacing:.02em;font-variant-numeric:tabular-nums}
+  .ra{font-family:var(--disp);font-weight:800;font-size:19px;color:var(--acc-txt);font-variant-numeric:tabular-nums;text-align:right}
+  .rt{font-size:14px;color:var(--muted);text-align:right;min-width:88px}
+  .more-rv{margin:12px 0 0;font-size:14px;color:var(--muted)}
+  .first-line{border-top:1px solid var(--line2)}
+
+  @media (hover:none){.hint{display:none}}
+  @media (max-width:600px){
+    .fname{display:none}
+    .stage{padding-top:22px}
+    .rule{grid-template-columns:minmax(0,1fr);gap:2px}
+    .intro-btns .btn{flex:1 1 100%}
+    .qk{margin-top:28px}
+    .q{margin-bottom:22px}
+    .ain{font-size:26px}
+    .opr{grid-template-columns:minmax(0,1fr) auto auto;gap:8px 16px}
+    .opr .bar-p{grid-column:1/-1;grid-row:2}
+    .opr.hd .hbar{display:none}
+    .rv{grid-template-columns:minmax(0,1fr) auto}
+    .rt{grid-column:1/-1;text-align:left;min-width:0}
+    .dbtns .btn{flex:1 1 0}
+    .chartbox{padding:14px 14px 10px}
+  }
+</style>
+</head>
+<body data-section="practica">
+<a class="skip" href="#main">Saltar al contenido</a>
+
+<header class="top">
+  <div class="wrap fb">
+    <a class="logo" href="index.html" aria-label="QuantMeraki, inicio"><img src="assets/perfil-128.png" alt="" width="34" height="34"><span>QuantMeraki</span></a>
+    <span class="label fname">Cálculo mental</span>
+    <button class="iconbtn" type="button" data-theme-toggle aria-label="Cambiar a modo oscuro"><svg class="ico i-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg><svg class="ico i-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg></button>
+    <a class="iconbtn" id="quit" href="entrenador-calculo-mental.html" aria-label="Salir al entrenador" title="Salir"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></a>
+  </div>
+</header>
+
+<main id="main">
+  <div class="stage">
+
+    <section id="intro" aria-labelledby="i-h">
+      <p class="kicker"><b>Cálculo mental</b> / Sesión</p>
+      <h1 class="h1" id="i-h">1 minuto</h1>
+      <p class="lead" id="iSet">Multiplicaciones, porcentajes, fracciones a decimal, restas y divisiones. Dificultad normal.</p>
+      <div class="rules">
+        <div class="rule"><span class="rk">Escribe</span><span class="rd">Si el resultado es correcto, pasa sola a la siguiente.</span></div>
+        <div class="rule"><span class="rk">Decimales</span><span class="rd">Con coma o con punto: 0,375 o 0.375. Sin puntos de miles.</span></div>
+        <div class="rule"><span class="rk">Atascado</span><span class="rd">Pulsa Saltar o la barra espaciadora. Cuenta como fallo.</span></div>
+      </div>
+      <div class="btns intro-btns"><button class="btn solid big" type="button" id="start">Empezar</button><a class="btn ghost big" id="change" href="entrenador-calculo-mental.html">Cambiar ajustes</a></div>
+      <p class="ibest" id="iBest"></p>
+    </section>
+
+    <section id="play" aria-label="Sesión en curso" hidden>
+      <div class="st">
+        <span class="label">Aciertos<b class="stv" id="pScore">0</b></span>
+        <span class="label"><span class="sr">Tiempo restante</span><b class="stv" id="pTime">1:00</b></span>
+      </div>
+      <div class="tbar" aria-hidden="true"><i id="pBar"></i></div>
+      <p class="qk" id="pKind">Multiplica</p>
+      <p class="q" id="pQ" aria-live="polite"></p>
+      <div class="ans">
+        <label class="sr" for="pIn">Tu respuesta</label>
+        <input class="ain" id="pIn" type="text" inputmode="decimal" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" enterkeyhint="enter">
+        <button class="btn ghost skipb" type="button" id="pSkip">Saltar</button>
+      </div>
+      <p class="hint"><kbd>Intro</kbd> comprueba · <kbd>Espacio</kbd> salta</p>
+    </section>
+
+    <section id="done" aria-labelledby="d-h" hidden>
+      <p class="kicker"><b>Sesión terminada</b> / <span id="dSet">1 minuto · Normal</span></p>
+      <h1 class="h1" id="d-h" tabindex="-1"><span class="acc" id="dS">0</span> <span id="dW">aciertos</span></h1>
+      <p class="lead" id="dSub"></p>
+      <div class="btns dbtns"><button class="btn solid" type="button" id="again">Repetir</button><a class="btn ghost" id="back" href="entrenador-calculo-mental.html">Volver</a></div>
+
+      <div class="stats">
+        <div class="stat"><span class="v" id="dOk">0</span><span class="k">Aciertos</span></div>
+        <div class="stat"><span class="v" id="dAcc">—</span><span class="k">Precisión</span></div>
+        <div class="stat"><span class="v" id="dPace">—</span><span class="k">Por acierto</span></div>
+        <div class="stat"><span class="v" id="dBest">—</span><span class="k" id="dBestK">Récord 1 min</span></div>
+      </div>
+
+      <div class="blk" id="dChartBlk">
+        <div class="cb-h"><h2 class="h3" id="dChartH">Tus sesiones de 1 minuto</h2><span class="lg" aria-hidden="true"><span><i></i>Esta sesión</span><span><i class="o"></i>Anteriores</span></span></div>
+        <div class="chartbox">
+          <div class="chart"><canvas id="chart" role="img" aria-label="Aciertos por sesión"></canvas><div class="tip" id="tip" hidden></div></div>
+          <div class="cb-foot" aria-hidden="true"><span>Más antigua</span><span>Esta</span></div>
+        </div>
+      </div>
+
+      <div class="blk">
+        <h2 class="h3">Por operación</h2>
+        <div id="dOps"></div>
+      </div>
+
+      <div class="blk" id="dRevBlk">
+        <h2 class="h3">Repasa</h2>
+        <div class="first-line" id="dRev"></div>
+        <p class="more-rv" id="dRevMore" hidden></p>
+      </div>
+    </section>
+
+  </div>
+</main>
+
+<div class="glow" id="glow" aria-hidden="true"></div>
+<div class="toast" id="toast" role="status" hidden></div>
+<script src="assets/qm.js"></script>
+<script>
+/* Sesión de cálculo mental: preguntas, reloj, resultados y marcas */
+(function(){
+  var OPS=['mul','por','fra','res','div'],DURS=[60,120,300];
+  var NAME={mul:'Multiplicaciones',por:'Porcentajes',fra:'Fracciones a decimal',res:'Restas',div:'Divisiones'};
+  var KIND={mul:'Multiplica',por:'Porcentaje',fra:'Pásalo a decimal',res:'Resta',div:'Divide'};
+  function $(id){return document.getElementById(id);}
+
+  /* ---------- ajustes: URL, si no los guardados, si no los de siempre ---------- */
+  function okT(v){v=+v;return DURS.indexOf(v)>=0?v:null;}
+  function okOps(v){if(!v)return null;var a=(Array.isArray(v)?v:String(v).split(','));var r=OPS.filter(function(o){return a.indexOf(o)>=0;});return r.length?r:null;}
+  function okDif(v){return v==='normal'||v==='dificil'?v:null;}
+  var qs=new URLSearchParams(location.search),saved=QM.store.get('calculo:ajustes',null)||{};
+  var S={
+    t:okT(qs.get('t'))||okT(saved.t)||60,
+    ops:okOps(qs.get('ops'))||okOps(saved.ops)||OPS.slice(),
+    dif:okDif(qs.get('dif'))||okDif(saved.dif)||'normal'
+  };
+  var OPK=S.ops.join(','),HARD=S.dif==='dificil';
+  var LOBBY='entrenador-calculo-mental.html?t='+S.t+'&ops='+OPK+'&dif='+S.dif;
+  function durTxt(t){return t===60?'1 minuto':(t/60)+' minutos';}
+  function dec(x,n){return x.toFixed(n).replace('.',',');}
+  function fmt(x){return String(x).replace('.',',');}
+
+  /* ---------- generador: todas las cuentas tienen resultado exacto ---------- */
+  function ri(a,b){return a+Math.floor(Math.random()*(b-a+1));}
+  function pick(a){return a[Math.floor(Math.random()*a.length)];}
+  function gcd(a,b){while(b){var t=a%b;a=b;b=t;}return a;}
+  function cents(x){return Math.floor(x/100)+','+('0'+(x%100)).slice(-2);}
+  var GEN={
+    mul:function(h){
+      var r=Math.random(),a,b;
+      if(!h){
+        if(r<.55){do{a=ri(12,99);}while(a%10===0);b=ri(3,9);return {q:a+' × '+b,a:a*b};}
+        if(r<.8){var m=ri(2,9)*10,d=ri(1,4);return {q:(m-d)+' × '+(m+d),a:m*m-d*d};}
+        do{a=ri(12,99);}while(a%10===0);return {q:a+' × 11',a:a*11};
+      }
+      if(r<.5){do{a=ri(13,79);b=ri(13,79);}while(a%10===0||b%10===0);return {q:a+' × '+b,a:a*b};}
+      if(r<.8){do{a=ri(101,499);}while(a%10===0);b=ri(3,9);return {q:a+' × '+b,a:a*b};}
+      do{a=ri(21,99);}while(a%10===0);return {q:a+'²',a:a*a};
+    },
+    por:function(h){
+      /* n es múltiplo de m: el resultado sale entero (normal) o con un decimal (difícil) */
+      var p,n,P,m;
+      if(!h){
+        p=pick([5,10,15,20,25,30,40,60,75,80]);m=100/gcd(p,100);
+        do{n=m*ri(Math.ceil(12/m),Math.floor(600/m));}while(n%100===0);
+        return {q:p+' % de '+n,a:p*n/100};
+      }
+      p=pick([2.5,7.5,12.5,17.5,35,45,62.5,85,120,150]);P=Math.round(p*10);m=100/gcd(P,100);
+      do{n=m*ri(Math.ceil(16/m),Math.floor(960/m));}while(n%100===0);
+      return {q:fmt(p)+' % de '+n,a:P*n/1000};
+    },
+    fra:function(h){
+      var b,a;
+      if(!h){b=pick([4,5,8,8,10,20,25]);do{a=ri(1,b-1);}while(gcd(a,b)!==1);return {q:a+'/'+b,a:a/b};}
+      b=pick([8,16,16,20,25,32,40,50,80,125]);do{a=ri(1,2*b-1);}while(gcd(a,b)!==1);return {q:a+'/'+b,a:a/b};
+    },
+    res:function(h){
+      var a,b;
+      if(!h){
+        if(Math.random()<.5){do{b=ri(101,899);}while(b%10===0);return {q:'1000 − '+b,a:1000-b};}
+        a=ri(300,999);do{b=ri(101,a-30);}while(b%10===0);return {q:a+' − '+b,a:a-b};
+      }
+      if(Math.random()<.6){a=ri(2001,9999);do{b=ri(1001,a-200);}while(b%10===0);return {q:a+' − '+b,a:a-b};}
+      var A=pick([10,20,50,100]),x;do{x=ri(101,A*100-101);}while(x%10===0);
+      return {q:A+' − '+cents(x),a:(A*100-x)/100};
+    },
+    div:function(h){
+      var d,q,n;
+      if(!h){d=ri(3,12);do{q=ri(6,25);}while(q===10||q===20);if(d===10)d=11;return {q:(d*q)+' ÷ '+d,a:q};}
+      if(Math.random()<.65){d=ri(13,29);do{q=ri(12,79);}while(q%10===0);if(d===20)d=21;return {q:(d*q)+' ÷ '+d,a:q};}
+      d=pick([4,8,16,25,40]);do{n=ri(d+1,12*d);}while(n%d===0);return {q:n+' ÷ '+d,a:n/d};
+    }
+  };
+  /* acepta coma o punto; devuelve null si no es un número */
+  function parse(s){
+    s=String(s).replace(/\s/g,'').replace(',','.');
+    if(!/^\d*\.?\d*$/.test(s)||!/\d/.test(s))return null;
+    return parseFloat(s);
+  }
+  function same(v,a){return v!==null&&Math.abs(v-a)<1e-9;}
+
+  /* ---------- pantallas ---------- */
+  var scr={intro:$('intro'),play:$('play'),done:$('done')};
+  function show(k){Object.keys(scr).forEach(function(n){scr[n].hidden=n!==k;});window.scrollTo(0,0);}
+  var setTxt=S.ops.length===OPS.length?'Todas las operaciones':S.ops.map(function(o,i){var n=NAME[o];return i?n.toLowerCase():n;}).join(', ').replace(/, ([^,]*)$/,' y $1');
+  $('i-h').textContent=durTxt(S.t);
+  $('iSet').textContent=setTxt+'. Dificultad '+(HARD?'difícil':'normal')+'.';
+  $('quit').href=LOBBY;$('change').href=LOBBY;$('back').href=LOBBY;
+  $('dSet').textContent=durTxt(S.t)+' · '+(HARD?'Difícil':'Normal');
+  var b0=QM.best('calculo-'+S.t);
+  $('iBest').textContent=typeof b0==='number'?'Tu récord en '+durTxt(S.t)+': '+b0+(b0===1?' acierto.':' aciertos.'):'Aún no tienes marca en '+durTxt(S.t)+'.';
+
+  var pIn=$('pIn'),pQ=$('pQ'),pKind=$('pKind'),pScore=$('pScore'),pTime=$('pTime'),pBar=$('pBar'),glow=$('glow');
+  var R=null;
+
+  function mmss(ms){var s=Math.ceil(ms/1000);return Math.floor(s/60)+':'+('0'+(s%60)).slice(-2);}
+  function flash(k){
+    glow.setAttribute('data-k',k);glow.classList.add('on');
+    pIn.classList.remove('ok','bad');void pIn.offsetWidth;pIn.classList.add(k);
+    clearTimeout(R.ft);R.ft=setTimeout(function(){glow.classList.remove('on');pIn.classList.remove(k);},k==='ok'?140:380);
+  }
+  function nextQ(){
+    var o,g,n=0;
+    do{o=pick(S.ops);g=GEN[o](HARD);}while(g.q===R.lastQ&&n++<6);
+    R.cur={op:o,q:g.q,a:g.a,miss:null};R.lastQ=g.q;R.qT=performance.now();
+    pKind.textContent=KIND[o];pQ.textContent=g.q;pIn.value='';
+  }
+  function tick(){
+    if(!R||!R.on)return;
+    var left=Math.max(0,R.end-performance.now());
+    pTime.textContent=mmss(left);
+    pTime.classList.toggle('low',left<10000);
+    pBar.style.transform='scaleX('+(left/(S.t*1000)).toFixed(4)+')';
+    if(left<=0){finish();return;}
+    R.raf=requestAnimationFrame(tick);
+  }
+  function start(){
+    if(R&&R.on)return;
+    R={on:true,ok:0,bad:0,skip:0,per:{},miss:[],lastQ:'',ft:0};
+    S.ops.forEach(function(o){R.per[o]={ok:0,bad:0,skip:0,ms:0};});
+    QM.store.set('calculo:ajustes',{t:S.t,ops:OPK,dif:S.dif});
+    show('play');
+    pScore.textContent='0';pTime.textContent=mmss(S.t*1000);pBar.style.transform='scaleX(1)';
+    pIn.disabled=false;pIn.value='';pIn.focus();
+    nextQ();
+    R.end=performance.now()+S.t*1000;
+    R.to=setTimeout(finish,S.t*1000+60);
+    tick();
+  }
+  function correct(){
+    var c=R.cur,p=R.per[c.op];
+    R.ok++;p.ok++;p.ms+=performance.now()-R.qT;
+    pScore.textContent=R.ok;flash('ok');nextQ();
+  }
+  function wrong(raw){
+    var c=R.cur;R.bad++;R.per[c.op].bad++;
+    if(!c.miss){c.miss={q:c.q,a:c.a,tu:raw};R.miss.push(c.miss);}else c.miss.tu=raw;
+    flash('bad');pIn.select();
+  }
+  function skip(){
+    if(!R||!R.on)return;
+    var c=R.cur;R.skip++;R.per[c.op].skip++;
+    if(!c.miss)R.miss.push({q:c.q,a:c.a,tu:null});
+    nextQ();pIn.focus();
+  }
+  pIn.addEventListener('input',function(){
+    if(!R||!R.on)return;
+    if(same(parse(pIn.value),R.cur.a))correct();
+  });
+  pIn.addEventListener('keydown',function(e){
+    if(!R||!R.on)return;
+    if(e.key===' '||e.key==='Spacebar'){e.preventDefault();skip();return;}
+    if(e.key==='Enter'){
+      e.preventDefault();
+      var raw=pIn.value.trim();if(!raw)return;
+      if(same(parse(raw),R.cur.a))correct();else wrong(raw);
+    }
+  });
+  $('pSkip').addEventListener('click',skip);
+  $('start').addEventListener('click',start);
+  $('again').addEventListener('click',start);
+
+  /* ---------- final: guardar y enseñar resultados ---------- */
+  function finish(){
+    if(!R||!R.on)return;
+    R.on=false;cancelAnimationFrame(R.raf);clearTimeout(R.to);clearTimeout(R.ft);
+    glow.classList.remove('on');pIn.classList.remove('ok','bad');
+    pIn.disabled=true;pIn.blur();
+    var tried=R.ok+R.bad+R.skip,acc=tried?R.ok/tried:0,key='calculo-'+S.t;
+    var prev=QM.best(key),saved=tried>0;
+    if(saved){
+      QM.history('calculo',{t:Date.now(),s:R.ok,d:S.t,a:Math.round(acc*1000)/1000,ops:OPK,dif:S.dif});
+      QM.best(key,R.ok);
+    }
+    var best=QM.best(key);
+    $('dS').textContent=R.ok;$('dW').textContent=R.ok===1?'acierto':'aciertos';
+    var sub;
+    if(!saved)sub='No has respondido ninguna, así que esta sesión no se guarda.';
+    else if(typeof prev!=='number')sub='Tu primera marca en '+durTxt(S.t)+'. A partir de aquí, a batirla.';
+    else if(R.ok>prev)sub='Nueva marca en '+durTxt(S.t)+'. La anterior era '+prev+'.';
+    else if(R.ok===prev)sub='Igualas tu marca en '+durTxt(S.t)+'.';
+    else sub='Tu récord en '+durTxt(S.t)+' es '+prev+'. Te faltan '+(prev-R.ok)+' para igualarlo.';
+    $('dSub').textContent=sub;
+    $('dOk').textContent=R.ok;
+    $('dAcc').textContent=tried?Math.round(acc*100)+' %':'—';
+    $('dPace').textContent=R.ok?dec(S.t/R.ok,1)+' s':'—';
+    $('dBest').textContent=typeof best==='number'?best:'—';
+    $('dBestK').textContent='Récord '+(S.t/60)+' min';
+    renderOps();renderReview();
+    show('done');
+    renderChart(saved);
+    R.doneAt=performance.now();
+    $('d-h').focus();
+  }
+
+  function renderOps(){
+    var box=$('dOps');box.innerHTML='';
+    var hd=document.createElement('div');hd.className='opr hd';
+    hd.innerHTML='<span>Operación</span><span class="hbar">Precisión</span><span class="opv">Aciertos</span><span class="opv">Por acierto</span>';
+    box.appendChild(hd);
+    S.ops.forEach(function(o){
+      var p=R.per[o],n=p.ok+p.bad+p.skip,row=document.createElement('div');row.className='opr';
+      var nm=document.createElement('span');nm.className='opn';nm.textContent=NAME[o];
+      var bar=document.createElement('div');bar.className='bar-p';bar.style.setProperty('--p',(n?Math.round(p.ok/n*100):0)+'%');
+      bar.setAttribute('role','img');bar.setAttribute('aria-label','Precisión '+(n?Math.round(p.ok/n*100)+' %':'sin intentos'));
+      bar.appendChild(document.createElement('i'));
+      var c1=document.createElement('span');c1.className='opv';c1.textContent=n?p.ok+' de '+n:'—';
+      var c2=document.createElement('span');c2.className='opv';c2.textContent=p.ok?dec(p.ms/p.ok/1000,1)+' s':'—';
+      row.appendChild(nm);row.appendChild(bar);row.appendChild(c1);row.appendChild(c2);
+      box.appendChild(row);
+    });
+  }
+  function renderReview(){
+    var box=$('dRev'),more=$('dRevMore');box.innerHTML='';
+    $('dRevBlk').hidden=!R.miss.length;
+    R.miss.slice(0,8).forEach(function(m){
+      var row=document.createElement('div');row.className='rv';
+      var q=document.createElement('span');q.className='rq';q.textContent=m.q;
+      var a=document.createElement('span');a.className='ra';a.textContent=fmt(m.a);
+      var t=document.createElement('span');t.className='rt';t.textContent=m.tu===null?'Saltada':'Tú: '+m.tu;
+      row.appendChild(q);row.appendChild(a);row.appendChild(t);box.appendChild(row);
+    });
+    var extra=R.miss.length-8;
+    more.hidden=extra<=0;
+    if(extra>0)more.textContent='Y '+extra+(extra===1?' más.':' más.');
+  }
+
+  /* ---------- gráfica: tus sesiones de esta duración ---------- */
+  var cv=$('chart'),tip=$('tip'),bars=[],data=[];
+  function rr(c,x,y,w,h,r){
+    r=Math.min(r,h,w/2);c.beginPath();c.moveTo(x,y+h);c.lineTo(x,y+r);
+    c.quadraticCurveTo(x,y,x+r,y);c.lineTo(x+w-r,y);c.quadraticCurveTo(x+w,y,x+w,y+r);
+    c.lineTo(x+w,y+h);c.closePath();c.fill();
+  }
+  function draw(){
+    var w=cv.clientWidth,h=cv.clientHeight;if(!w||!h||!data.length)return;
+    var dpr=Math.min(window.devicePixelRatio||1,2);
+    cv.width=Math.round(w*dpr);cv.height=Math.round(h*dpr);
+    var c=cv.getContext('2d');c.setTransform(dpr,0,0,dpr,0,0);c.clearRect(0,0,w,h);
+    var padL=30,padR=4,padT=22,padB=2,ph=h-padT-padB,pw=w-padL-padR;
+    var mx=0,imax=0;data.forEach(function(d,i){if(d.s>=mx){mx=d.s;imax=i;}});
+    var step=mx<=10?2:mx<=25?5:mx<=60?10:20,top=Math.max(step*2,Math.ceil(mx/step)*step);
+    c.font='500 11px Barlow, sans-serif';c.textAlign='right';c.textBaseline='middle';
+    [0,top/2,top].forEach(function(v){
+      var y=Math.round(padT+ph*(1-v/top))+.5;
+      c.strokeStyle=QM.color('line2');c.lineWidth=1;c.beginPath();c.moveTo(padL,y);c.lineTo(w-padR,y);c.stroke();
+      c.fillStyle=QM.color('muted');c.fillText(String(v).replace('.',','),padL-8,y);
+    });
+    var n=Math.max(data.length,12),slot=pw/n,bw=Math.min(24,Math.max(4,slot-4));
+    bars=[];
+    data.forEach(function(d,i){
+      var x=padL+i*slot+(slot-bw)/2,bh=Math.max(2,ph*d.s/top),y=padT+ph-bh;
+      c.fillStyle=d.hi?QM.color('accent'):QM.color('faint');
+      rr(c,x,y,bw,bh,2);
+      bars.push({x0:padL+i*slot,x1:padL+(i+1)*slot,cx:x+bw/2,y:y,d:d});
+    });
+    c.font='700 12px "Barlow Semi Condensed", Barlow, sans-serif';c.textAlign='center';c.textBaseline='bottom';c.fillStyle=QM.color('txt');
+    var last=bars.length-1;
+    c.fillText(String(bars[last].d.s),bars[last].cx,bars[last].y-5);
+    if(Math.abs(imax-last)>=2){c.fillStyle=QM.color('muted');c.fillText(String(bars[imax].d.s),bars[imax].cx,bars[imax].y-5);}
+  }
+  function when(t){
+    var d=new Date(t);
+    return d.toLocaleDateString('es-ES',{day:'numeric',month:'short'})+', '+d.toLocaleTimeString('es-ES',{hour:'2-digit',minute:'2-digit'});
+  }
+  function showTip(e){
+    if(!bars.length)return;
+    var r=cv.getBoundingClientRect(),x=e.clientX-r.left,b=null;
+    bars.forEach(function(k){if(x>=k.x0&&x<k.x1)b=k;});
+    if(!b){tip.hidden=true;return;}
+    tip.innerHTML='';
+    var s=document.createElement('b');s.textContent=b.d.s+(b.d.s===1?' acierto':' aciertos');
+    tip.appendChild(s);
+    tip.appendChild(document.createTextNode(' · '+Math.round((b.d.a||0)*100)+' %'));
+    tip.appendChild(document.createElement('br'));
+    tip.appendChild(document.createTextNode(when(b.d.t)));
+    tip.hidden=false;
+    var tw=tip.offsetWidth,th=tip.offsetHeight;
+    tip.style.left=Math.max(0,Math.min(cv.clientWidth-tw,b.cx-tw/2))+'px';
+    tip.style.top=Math.max(0,b.y-th-8)+'px';
+  }
+  cv.addEventListener('pointermove',showTip);
+  cv.addEventListener('pointerdown',showTip);
+  cv.addEventListener('pointerleave',function(){tip.hidden=true;});
+  document.addEventListener('qm-theme',draw);
+  if('ResizeObserver' in window)new ResizeObserver(draw).observe(cv);else window.addEventListener('resize',draw);
+
+  function renderChart(saved){
+    var mine=(QM.history('calculo')||[]).filter(function(e){return e&&e.d===S.t&&typeof e.s==='number';}).slice(-20);
+    $('dChartBlk').hidden=!mine.length;
+    $('dChartH').textContent='Tus sesiones de '+durTxt(S.t);
+    tip.hidden=true;
+    if(!mine.length)return;
+    data=mine.map(function(e,i){return {s:e.s,a:e.a,t:e.t,hi:saved&&i===mine.length-1};});
+    var lo=Math.min.apply(null,data.map(function(d){return d.s;})),hi=Math.max.apply(null,data.map(function(d){return d.s;}));
+    cv.setAttribute('aria-label','Aciertos en tus últimas '+data.length+' sesiones de '+durTxt(S.t)+': entre '+lo+' y '+hi+'. Esta, '+R.ok+'.');
+    draw();
+  }
+
+  /* Intro para empezar o repetir desde el teclado */
+  document.addEventListener('keydown',function(e){
+    if(e.key!=='Enter'||e.defaultPrevented)return;
+    var a=document.activeElement,tag=a&&a.tagName;
+    if(tag==='A'||tag==='BUTTON'||tag==='INPUT')return;
+    if(!scr.done.hidden&&R&&performance.now()-R.doneAt>700){e.preventDefault();start();}
+    else if(!scr.intro.hidden){e.preventDefault();start();}
+  });
+
+  $('start').focus();
+})();
+</script>
+</body>
+</html>

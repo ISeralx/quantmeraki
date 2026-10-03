@@ -1,0 +1,276 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>Simulacros · QuantMeraki</title>
+<meta name="description" content="Pruebas cronometradas para practicar las primeras fases de selección de las firmas de trading: cálculo mental, series, probabilidad, estimación y atención. Gratis y en español.">
+<link rel="icon" href="assets/perfil-128.png">
+<script>try{var t=localStorage.getItem('qm-theme');document.documentElement.setAttribute('data-theme',t||'light');}catch(e){}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;500;600;700&family=Barlow+Semi+Condensed:wght@600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/qm.css">
+<style>
+  .ph{display:grid;grid-template-columns:minmax(0,1fr) 220px;gap:40px;align-items:end}
+  .dial{margin:0;justify-self:end;width:220px;text-align:center}
+  .dial-svg{display:block;width:100%;height:auto}
+  .dial-svg .tk{stroke:var(--line);stroke-width:2;stroke-linecap:round;transition:stroke .2s}
+  .dial-svg .tk.done{stroke:var(--faint)}
+  .dial-svg .tk.now{stroke:var(--accent)}
+  .dial-svg .v{fill:var(--txt);font-family:var(--disp);font-weight:800;font-size:46px}
+  .dial-svg .k{fill:var(--muted);font-family:var(--disp);font-weight:700;font-size:10px;letter-spacing:.2em;text-transform:uppercase}
+  .dial figcaption{margin-top:10px}
+  .gly{display:grid;place-items:center;width:40px;height:40px;border:1px solid var(--line);border-radius:3px;color:var(--muted)}
+  .gly .ico{width:20px;height:20px}
+  .gly.on{color:var(--acc-txt);border-color:var(--accent-line)}
+  .fmt{font-family:var(--disp);font-weight:700;font-size:12.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);white-space:nowrap}
+  .fmt b{color:var(--dim);font-weight:700}
+  .fmt i{font-style:normal;color:var(--faint);margin:0 6px}
+  .steps .item{padding:20px 0}
+  .side .callout{margin:28px 0 0}
+  .side .callout p{font-size:15px;color:var(--dim)}
+  @media (max-width:900px){
+    .ph{grid-template-columns:minmax(0,1fr)}
+    .dial{display:none}
+  }
+  @media (max-width:600px){
+    .toolbar{flex-wrap:nowrap}
+    .gly{width:34px;height:34px}
+    .gly .ico{width:18px;height:18px}
+    .item.lead-num .item-m{gap:6px 12px}
+  }
+</style>
+</head>
+<body data-section="practica">
+<a class="skip" href="#main">Saltar al contenido</a>
+
+<header class="top">
+  <div class="wrap bar">
+    <a class="logo" href="index.html" aria-label="QuantMeraki, inicio"><img src="assets/perfil-128.png" alt="" width="34" height="34"><span>QuantMeraki</span></a>
+    <nav class="nav" aria-label="Principal">
+      <div class="dd">
+        <button class="dd-btn" type="button" aria-expanded="false" data-nav="practica">Practica</button>
+        <div class="menu" hidden>
+          <a href="entrenadores.html">Entrenadores<small>Cálculo mental y series, contra el reloj</small></a>
+          <a href="preguntas.html">Preguntas<small>Probabilidad, acertijos y series</small></a>
+          <a href="juegos.html">Juegos de mercado<small>Cotiza y ajusta tus precios</small></a>
+          <a href="simulacros.html">Simulacros<small>Pruebas cronometradas, como las de verdad</small></a>
+          <a href="codigo.html">Código<small>Problemas para developers</small></a>
+        </div>
+      </div>
+      <div class="dd">
+        <button class="dd-btn" type="button" aria-expanded="false" data-nav="aprende">Aprende</button>
+        <div class="menu" hidden>
+          <a href="rutas.html">Rutas<small>Trader, researcher o developer, paso a paso</small></a>
+          <a href="cursos.html">Cursos<small>Probabilidad, mercados y opciones</small></a>
+          <a href="guias.html">Guías<small>El sector y los procesos, explicados</small></a>
+        </div>
+      </div>
+      <div class="dd">
+        <button class="dd-btn" type="button" aria-expanded="false" data-nav="firmas">Firmas</button>
+        <div class="menu" hidden>
+          <a href="firmas.html">Directorio<small>Qué hace cada firma y cómo contrata</small></a>
+          <a href="empleo.html">Empleo<small>Prácticas y puestos para graduados</small></a>
+        </div>
+      </div>
+      <a href="canal.html" data-nav="canal">Canal</a>
+    </nav>
+    <div class="tools">
+      <a class="iconbtn" href="progreso.html" data-nav="progreso" aria-label="Mi progreso" title="Mi progreso"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 20v-8M12 20V5M19 20v-9"/></svg></a>
+      <button class="iconbtn" type="button" data-theme-toggle aria-label="Cambiar a modo oscuro"><svg class="ico i-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg><svg class="ico i-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg></button>
+      <a class="btn solid sm cta" href="entrenador-calculo-mental.html">Empieza</a>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+  <div class="wrap">
+
+    <section class="phead ph">
+      <div>
+        <nav class="crumbs" aria-label="Migas de pan"><a href="practica.html">Practica</a><span class="sep">/</span><span aria-current="page">Simulacros</span></nav>
+        <p class="kicker"><b>Practica</b> / Simulacros</p>
+        <h1 class="h1">Simulacros</h1>
+        <p class="lead">Pruebas cronometradas con los formatos típicos de las primeras fases de selección. Para coger ritmo antes de la de verdad.</p>
+      </div>
+      <figure class="dial" role="img" aria-label="Un reloj con 80 marcas: 80 preguntas en 8 minutos son 6 segundos por pregunta">
+        <div id="dial"></div>
+        <figcaption class="label">80 preguntas en 8 minutos</figcaption>
+      </figure>
+    </section>
+
+    <section class="sec first" data-filter-root aria-label="Lista de simulacros">
+      <div class="toolbar">
+        <div class="chips scroll" role="group" aria-label="Tipo de prueba">
+          <button class="chip" type="button" data-filter="cat:all" aria-pressed="true">Todos</button>
+          <button class="chip" type="button" data-filter="cat:calculo" aria-pressed="false">Cálculo</button>
+          <button class="chip" type="button" data-filter="cat:series" aria-pressed="false">Series y patrones</button>
+          <button class="chip" type="button" data-filter="cat:probabilidad" aria-pressed="false">Probabilidad</button>
+          <button class="chip" type="button" data-filter="cat:estimacion" aria-pressed="false">Estimación</button>
+          <button class="chip" type="button" data-filter="cat:atencion" aria-pressed="false">Atención</button>
+        </div>
+        <p class="count" data-count></p>
+      </div>
+
+      <div class="list">
+        <a class="item lead-num" href="simulacro-calculo.html" data-item data-tags="cat:calculo">
+          <span class="gly on" aria-hidden="true"><svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="13.5" r="7"/><path d="M12 13.5V10M10 3h4M17.6 7.4l1.4-1.4"/></svg></span>
+          <span><span class="item-t">Cálculo mental 8 minutos</span><span class="item-d">Velocidad y exactitud con enteros, decimales, fracciones y porcentajes. Sin papel.</span></span>
+          <span class="item-m"><span class="fmt"><b>8</b> min<i>·</i><b>80</b> preguntas</span><span class="tag acc" id="bestTag" hidden></span><span class="check" data-done-mark="simulacro:calculo" aria-hidden="true"></span><span class="arrow" aria-hidden="true">→</span></span>
+        </a>
+        <a class="item lead-num" href="#" data-soon data-item data-tags="cat:calculo">
+          <span class="gly" aria-hidden="true"><svg class="ico" viewBox="0 0 24 24"><circle cx="5" cy="12" r="2.2"/><circle cx="12" cy="12" r="2.2"/><circle class="f" cx="19" cy="12" r="2.2"/><path d="M3 18h18"/></svg></span>
+          <span><span class="item-t">Cálculo tipo test</span><span class="item-d">Cinco opciones y los fallos restan. Mide cuándo arriesgar y cuándo saltar.</span></span>
+          <span class="item-m"><span class="fmt"><b>6</b> min<i>·</i><b>50</b> preguntas</span><span class="check" data-done-mark="simulacro:calculo-tipo-test" aria-hidden="true"></span><span class="arrow" aria-hidden="true">→</span></span>
+        </a>
+        <a class="item lead-num" href="#" data-soon data-item data-tags="cat:calculo">
+          <span class="gly" aria-hidden="true"><svg class="ico" viewBox="0 0 24 24"><path d="M3 12h4M10 12h4M17 12h4"/><path d="M18.5 9.5L21 12l-2.5 2.5"/></svg></span>
+          <span><span class="item-t">Cálculo encadenado</span><span class="item-d">Operaciones seguidas sin apuntar los pasos. Mide la memoria de trabajo.</span></span>
+          <span class="item-m"><span class="fmt"><b>5</b> min<i>·</i><b>25</b> cadenas</span><span class="check" data-done-mark="simulacro:calculo-encadenado" aria-hidden="true"></span><span class="arrow" aria-hidden="true">→</span></span>
+        </a>
+        <a class="item lead-num" href="#" data-soon data-item data-tags="cat:series">
+          <span class="gly" aria-hidden="true"><svg class="ico" viewBox="0 0 24 24"><path d="M5 19v-3M10 19v-6M15 19v-9M20 19V5"/></svg></span>
+          <span><span class="item-t">Series numéricas</span><span class="item-d">Encontrar la regla y el siguiente número: diferencias, razones y alternancias.</span></span>
+          <span class="item-m"><span class="fmt"><b>10</b> min<i>·</i><b>30</b> series</span><span class="check" data-done-mark="simulacro:series-numericas" aria-hidden="true"></span><span class="arrow" aria-hidden="true">→</span></span>
+        </a>
+        <a class="item lead-num" href="#" data-soon data-item data-tags="cat:series">
+          <span class="gly" aria-hidden="true"><svg class="ico" viewBox="0 0 24 24"><rect x="3.5" y="3.5" width="4" height="4"/><rect x="10" y="3.5" width="4" height="4"/><rect x="16.5" y="3.5" width="4" height="4"/><rect x="3.5" y="10" width="4" height="4"/><rect x="10" y="10" width="4" height="4"/><rect x="16.5" y="10" width="4" height="4"/><rect x="3.5" y="16.5" width="4" height="4"/><rect x="10" y="16.5" width="4" height="4"/><circle class="f" cx="18.5" cy="18.5" r="1.2"/></svg></span>
+          <span><span class="item-t">Razonamiento abstracto</span><span class="item-d">La pieza que falta en una cuadrícula de figuras. Patrones sin números.</span></span>
+          <span class="item-m"><span class="fmt"><b>12</b> min<i>·</i><b>24</b> matrices</span><span class="check" data-done-mark="simulacro:razonamiento-abstracto" aria-hidden="true"></span><span class="arrow" aria-hidden="true">→</span></span>
+        </a>
+        <a class="item lead-num" href="#" data-soon data-item data-tags="cat:probabilidad">
+          <span class="gly" aria-hidden="true"><svg class="ico" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="2"/><circle class="f" cx="8.5" cy="8.5" r="1.4"/><circle class="f" cx="12" cy="12" r="1.4"/><circle class="f" cx="15.5" cy="15.5" r="1.4"/></svg></span>
+          <span><span class="item-t">Probabilidad en 15 minutos</span><span class="item-d">Dados, cartas y monedas. Probabilidades y valores esperados exactos.</span></span>
+          <span class="item-m"><span class="fmt"><b>15</b> min<i>·</i><b>20</b> preguntas</span><span class="check" data-done-mark="simulacro:probabilidad" aria-hidden="true"></span><span class="arrow" aria-hidden="true">→</span></span>
+        </a>
+        <a class="item lead-num" href="#" data-soon data-item data-tags="cat:probabilidad">
+          <span class="gly" aria-hidden="true"><svg class="ico" viewBox="0 0 24 24"><path d="M3 19c3.5 0 4.5-12 9-12s5.5 12 9 12"/><path d="M12 7v12"/></svg></span>
+          <span><span class="item-t">Valor esperado y apuestas</span><span class="item-d">Decidir si una apuesta compensa y cuánto pagarías por jugarla.</span></span>
+          <span class="item-m"><span class="fmt"><b>10</b> min<i>·</i><b>12</b> preguntas</span><span class="check" data-done-mark="simulacro:valor-esperado" aria-hidden="true"></span><span class="arrow" aria-hidden="true">→</span></span>
+        </a>
+        <a class="item lead-num" href="#" data-soon data-item data-tags="cat:estimacion">
+          <span class="gly" aria-hidden="true"><svg class="ico" viewBox="0 0 24 24"><path d="M5 10c2.3-2 4.4-2 7 0s4.7 2 7 0M5 15.5c2.3-2 4.4-2 7 0s4.7 2 7 0"/></svg></span>
+          <span><span class="item-t">Estimación</span><span class="item-d">Cifras reales por órdenes de magnitud: plantear supuestos y acotar.</span></span>
+          <span class="item-m"><span class="fmt"><b>10</b> min<i>·</i><b>15</b> preguntas</span><span class="check" data-done-mark="simulacro:estimacion" aria-hidden="true"></span><span class="arrow" aria-hidden="true">→</span></span>
+        </a>
+        <a class="item lead-num" href="#" data-soon data-item data-tags="cat:atencion">
+          <span class="gly" aria-hidden="true"><svg class="ico" viewBox="0 0 24 24"><path d="M2.5 12S6 6 12 6s9.5 6 9.5 6-3.5 6-9.5 6-9.5-6-9.5-6z"/><circle cx="12" cy="12" r="2.6"/></svg></span>
+          <span><span class="item-t">Atención y memoria</span><span class="item-d">Recordar secuencias de cifras y encontrar diferencias con prisa.</span></span>
+          <span class="item-m"><span class="fmt"><b>12</b> min<i>·</i><b>4</b> bloques</span><span class="check" data-done-mark="simulacro:atencion-memoria" aria-hidden="true"></span><span class="arrow" aria-hidden="true">→</span></span>
+        </a>
+        <a class="item lead-num" href="#" data-soon data-item data-tags="cat:atencion">
+          <span class="gly" aria-hidden="true"><svg class="ico" viewBox="0 0 24 24"><circle cx="9" cy="12" r="5.5"/><circle cx="15" cy="12" r="5.5"/></svg></span>
+          <span><span class="item-t">Doble tarea</span><span class="item-d">Calcular mientras vigilas una señal. Mide cómo repartes la atención.</span></span>
+          <span class="item-m"><span class="fmt"><b>8</b> min<i>·</i><b>2</b> tareas</span><span class="check" data-done-mark="simulacro:doble-tarea" aria-hidden="true"></span><span class="arrow" aria-hidden="true">→</span></span>
+        </a>
+      </div>
+      <p class="empty" data-empty hidden>No hay simulacros de este tipo todavía.</p>
+    </section>
+
+    <section class="sec" aria-labelledby="uso-h">
+      <div class="split">
+        <div class="side">
+          <p class="kicker"><b>01</b> / Cómo usarlos</p>
+          <h2 class="h2" id="uso-h">Hazlo como el día de la prueba</h2>
+          <p class="lead">Un simulacro sirve si lo haces entero, sin pausas y con las mismas reglas.</p>
+          <div class="callout">
+            <span class="label">Aviso</span>
+            <p>Son formatos genéricos de práctica, no las pruebas de ninguna firma. Entrenas el tipo de habilidad; las preguntas reales serán otras.</p>
+          </div>
+        </div>
+        <div class="list steps">
+          <div class="item lead-num"><span class="item-n">01</span><span><span class="item-t">Primero, cada técnica suelta</span><span class="item-d">Practica cada tipo de cuenta en los <a class="acc-txt" href="entrenadores.html">entrenadores</a> hasta hacerlo sin pensar.</span></span></div>
+          <div class="item lead-num"><span class="item-n">02</span><span><span class="item-t">Después, la prueba entera</span><span class="item-d">Sin calculadora, sin papel y con el móvil en silencio. El reloj no se para.</span></span></div>
+          <div class="item lead-num"><span class="item-n">03</span><span><span class="item-t">Repasa los fallos</span><span class="item-d">Al terminar ves cada error con la respuesta buena. Eso es lo que toca entrenar.</span></span></div>
+          <div class="item lead-num"><span class="item-n">04</span><span><span class="item-t">Repite cada pocos días</span><span class="item-d">Las preguntas cambian en cada intento. Compárate con tu historial, no con otros.</span></span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="sec" style="padding-top:0" aria-labelledby="faq-h">
+      <div class="split">
+        <div class="side">
+          <p class="kicker"><b>02</b> / Dudas</p>
+          <h2 class="h2" id="faq-h">Preguntas frecuentes</h2>
+          <a class="more" href="progreso.html">Ver mi progreso →</a>
+        </div>
+        <div class="list">
+          <div class="acc-row">
+            <button class="acc-btn" type="button" aria-expanded="false" aria-controls="faq1"><span class="item-t">¿Son las pruebas que ponen las firmas?</span><span class="plus" aria-hidden="true">+</span></button>
+            <div class="acc-body" id="faq1" hidden><p>No. Son formatos que hacemos nosotros para practicar el mismo tipo de habilidad: cálculo rápido, series, probabilidad. Cada firma tiene sus pruebas y las cambia. Las fases de cada proceso, según lo que publica la propia firma, las contamos en su <a class="acc-txt" href="firmas.html">ficha</a>.</p></div>
+          </div>
+          <div class="acc-row">
+            <button class="acc-btn" type="button" aria-expanded="false" aria-controls="faq2"><span class="item-t">¿Puedo usar calculadora o papel?</span><span class="plus" aria-hidden="true">+</span></button>
+            <div class="acc-body" id="faq2" hidden><p>En los de cálculo, no: la gracia es hacerlo de cabeza. Cada simulacro dice antes de empezar qué está permitido.</p></div>
+          </div>
+          <div class="acc-row">
+            <button class="acc-btn" type="button" aria-expanded="false" aria-controls="faq3"><span class="item-t">¿Qué puntuación es buena?</span><span class="plus" aria-hidden="true">+</span></button>
+            <div class="acc-body" id="faq3" hidden><p>No hay un corte público que valga para todas las firmas. Lo útil es tu tendencia: si subes de un intento a otro sin perder precisión, vas bien.</p></div>
+          </div>
+          <div class="acc-row">
+            <button class="acc-btn" type="button" aria-expanded="false" aria-controls="faq4"><span class="item-t">¿Se repiten las preguntas?</span><span class="plus" aria-hidden="true">+</span></button>
+            <div class="acc-body" id="faq4" hidden><p>No. Se generan al azar en cada intento, así que no se pueden aprender de memoria.</p></div>
+          </div>
+          <div class="acc-row">
+            <button class="acc-btn" type="button" aria-expanded="false" aria-controls="faq5"><span class="item-t">¿Dónde se guardan mis resultados?</span><span class="plus" aria-hidden="true">+</span></button>
+            <div class="acc-body" id="faq5" hidden><p>En este navegador. No hay cuentas ni servidor, y si borras los datos del navegador se pierden. Los tienes todos juntos en <a class="acc-txt" href="progreso.html">Mi progreso</a>.</p></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <div class="cols">
+      <div class="brandcol"><a class="logo" href="index.html"><img src="assets/perfil-128.png" alt="" width="34" height="34"><span>QuantMeraki</span></a><p class="claim">El mundo quant, en español.</p></div>
+      <div><h4>Practica</h4><ul><li><a href="entrenadores.html">Entrenadores</a></li><li><a href="preguntas.html">Preguntas</a></li><li><a href="juegos.html">Juegos de mercado</a></li><li><a href="simulacros.html">Simulacros</a></li><li><a href="codigo.html">Código</a></li></ul></div>
+      <div><h4>Aprende</h4><ul><li><a href="rutas.html">Rutas</a></li><li><a href="cursos.html">Cursos</a></li><li><a href="guias.html">Guías</a></li><li><a href="canal.html">El canal</a></li></ul></div>
+      <div><h4>QuantMeraki</h4><ul><li><a href="firmas.html">Firmas</a></li><li><a href="empleo.html">Empleo</a></li><li><a href="progreso.html">Mi progreso</a></li><li><a href="sobre.html">Sobre el proyecto</a></li></ul></div>
+    </div>
+    <div class="legal"><span>Contenido educativo, nunca asesoramiento financiero.</span><span>© 2026 QuantMeraki</span></div>
+  </div>
+</footer>
+
+<nav class="tabbar" aria-label="Secciones">
+  <a href="index.html" data-tab="inicio"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/><path d="M10 20v-6h4v6"/></svg><span>Inicio</span></a>
+  <a href="practica.html" data-tab="practica"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="4"/><circle class="f" cx="12" cy="12" r="1.4"/></svg><span>Practica</span></a>
+  <a href="aprende.html" data-tab="aprende"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 6c-2-1.5-5-2-8-1.5V19c3-.5 6 0 8 1.5 2-1.5 5-2 8-1.5V4.5c-3-.5-6 0-8 1.5z"/><path d="M12 6v14.5"/></svg><span>Aprende</span></a>
+  <a href="firmas.html" data-tab="firmas"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 21h18M3 9.5l9-5.5 9 5.5M5 10v11M19 10v11M9.5 21v-8M14.5 21v-8"/></svg><span>Firmas</span></a>
+  <a href="canal.html" data-tab="canal"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="3"/><path class="f" d="M10 9v6l5-3z"/></svg><span>Canal</span></a>
+</nav>
+
+<div class="toast" id="toast" role="status" hidden></div>
+<script src="assets/qm.js"></script>
+<script>
+(function(){
+  /* mejor marca del simulacro de cálculo en su fila */
+  var best=QM.best('simulacro-calculo'),tag=document.getElementById('bestTag');
+  if(tag&&typeof best==='number'){tag.textContent='Mejor '+best+'/80';tag.hidden=false;}
+
+  /* reloj de 80 marcas: 8 minutos entre 80 preguntas son 6 segundos por pregunta */
+  var host=document.getElementById('dial');if(!host)return;
+  var NS='http://www.w3.org/2000/svg',svg=document.createElementNS(NS,'svg'),ticks=[];
+  svg.setAttribute('viewBox','0 0 200 200');svg.setAttribute('class','dial-svg');svg.setAttribute('aria-hidden','true');svg.setAttribute('focusable','false');
+  for(var i=0;i<80;i++){
+    var a=i/80*2*Math.PI-Math.PI/2,c=Math.cos(a),s=Math.sin(a),r1=i%10===0?76:82,r2=93,l=document.createElementNS(NS,'line');
+    l.setAttribute('x1',(100+r1*c).toFixed(2));l.setAttribute('y1',(100+r1*s).toFixed(2));
+    l.setAttribute('x2',(100+r2*c).toFixed(2));l.setAttribute('y2',(100+r2*s).toFixed(2));
+    l.setAttribute('class','tk');svg.appendChild(l);ticks.push(l);
+  }
+  function txt(cls,y,str){var t=document.createElementNS(NS,'text');t.setAttribute('class',cls);t.setAttribute('x','100');t.setAttribute('y',y);t.setAttribute('text-anchor','middle');t.textContent=str;svg.appendChild(t);}
+  txt('v','108','6 s');txt('k','130','por pregunta');
+  host.appendChild(svg);
+  function paint(n){for(var j=0;j<80;j++)ticks[j].setAttribute('class','tk'+(j<n?' done':'')+(j===n?' now':''));}
+  var reduce=!!(window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+  if(reduce){paint(79);return;}
+  var n=0;paint(0);
+  var iv=setInterval(function(){n++;paint(n);if(n>=79)clearInterval(iv);},20);
+})();
+</script>
+</body>
+</html>
