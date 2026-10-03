@@ -393,7 +393,7 @@ a.tile:hover{border-color:var(--accent-line);color:var(--txt)}
   .chip{min-height:40px}
   .crumbs a{display:inline-block;padding-block:10px}
   .crumbs{margin-bottom:8px}
-  .chips.scroll{flex-wrap:nowrap;overflow-x:auto;margin-inline:-16px;padding-inline:16px;scrollbar-width:none;min-width:0;max-width:100vw}
+  .chips.scroll{flex-wrap:nowrap;overflow-x:auto;margin-inline:-16px;padding-inline:16px;scrollbar-width:none;min-width:0;max-width:calc(100% + 32px)}
   .chips.scroll::-webkit-scrollbar{display:none}
   .toolbar{flex-direction:column;align-items:stretch}
   .search{flex:none;width:100%;max-width:none}
