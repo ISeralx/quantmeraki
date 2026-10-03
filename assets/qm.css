@@ -137,6 +137,8 @@ main{display:block;position:relative;z-index:1}
 .crumbs .sep{color:var(--faint)}
 .crumbs [aria-current]{color:var(--dim)}
 
+/* las migas ya dicen dónde estás: el kicker sin número sobra justo debajo */
+.phead .crumbs+.kicker:not(.kn-on){display:none}
 /* ---------- secciones ---------- */
 .sec{padding-block:clamp(48px,7vw,96px)}
 .sec.tight{padding-block:clamp(24px,4vw,44px)}

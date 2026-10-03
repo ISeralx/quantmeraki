@@ -632,7 +632,7 @@
       $('[data-nx-k]').textContent='Sección '+nn(next.seccion)+' · '+(TIPO[next.tipo]||next.tipo)+' · '+CAT.fmt(next.min);
       $('[data-nx-t]').textContent=next.titulo;
       go.href=built?next.href:'#s'+next.seccion;
-      go.textContent=built?'Continuar: '+next.titulo:'Ver en su sección';
+      go.textContent=built?'Continuar':'Ver en su sección';
       if(built)go.removeAttribute('data-open');else go.setAttribute('data-open',next.seccion);
     }else{
       $('[data-nx-l]').textContent='Ruta completada';
