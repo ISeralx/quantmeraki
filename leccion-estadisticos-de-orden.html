@@ -1,0 +1,668 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>Estadísticos de orden · QuantMeraki</title>
+<meta name="description" content="Lección de estadísticos de orden para entrevistas de trading: dónde cae el mayor de n puntos al azar, el truco de los huecos, la densidad del máximo, la versión con dados y cinco ejercicios con solución.">
+<link rel="icon" href="assets/perfil-128.png">
+<script>try{var t=localStorage.getItem('qm-theme');document.documentElement.setAttribute('data-theme',t||'light');}catch(e){}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;500;600;700&family=Barlow+Semi+Condensed:wght@600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/qm.css">
+<style>
+  /* cabecera: tiempo y guardar */
+  .actions{align-items:center;margin-top:18px}
+
+  /* índice lateral: en esta lección + temario del curso */
+  .toc-btn{display:none}
+  .toc-course{margin-top:30px}
+  .toc-course .tc-h{display:block;padding:0 0 10px;border:0;font-family:var(--disp);font-weight:700;font-size:11.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+  .toc-course .tc-h:hover{color:var(--txt)}
+  .toc-course a:not(.tc-h){display:grid;grid-template-columns:26px minmax(0,1fr);font-size:13.5px;line-height:1.35}
+  .toc-course a b{font-family:var(--disp);font-weight:700;color:var(--faint)}
+  .toc a[aria-current="page"]{color:var(--txt);border-left-color:var(--accent)}
+  .toc a[aria-current="page"] b{color:var(--acc-txt)}
+  @media (min-width:901px){
+    .toc{max-height:calc(100vh - 120px);overflow-y:auto;overscroll-behavior:contain;padding-right:6px;scrollbar-width:thin}
+  }
+
+  /* laboratorios */
+  .lab{margin:20px 0 22px}
+  .lab .tabs{gap:8px;margin-bottom:14px}
+  .lab-viz{position:relative;height:220px;margin:6px 0 16px}
+  .lab-viz canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+  .lab .stat{padding:12px 14px}
+  .lab .stat .v{font-size:24px}
+  .lab .stat .v.m{color:var(--acc-txt)}
+  .lab-btns{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-top:16px}
+  .lab-btns .btn{padding:12px 10px}
+  .prose .lab-note{font-size:14px;color:var(--muted);margin:12px 0 0}
+  .ctl{display:flex;align-items:center;gap:16px;margin:0 0 10px}
+  .ctl label{font-family:var(--disp);font-weight:700;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);white-space:nowrap}
+  .ctl label .num{color:var(--txt);font-size:16px;letter-spacing:0;margin:0 2px}
+  .ctl input[type="range"]{flex:1;min-width:0;margin:0;accent-color:var(--accent);height:28px;cursor:pointer}
+
+  /* dados: cuadrícula 6 x 6 y reparto */
+  .dwrap{display:grid;grid-template-columns:auto minmax(0,1fr);gap:28px 36px;align-items:start}
+  .dgrid{display:grid;grid-template-columns:repeat(7,40px);border-top:1px solid var(--line2);border-left:1px solid var(--line2)}
+  .dgrid span{display:grid;place-items:center;height:40px;border-right:1px solid var(--line2);border-bottom:1px solid var(--line2);font-family:var(--disp);font-weight:700;font-size:15px;color:var(--dim);transition:background .15s,color .15s}
+  .dgrid .dh{font-size:12px;color:var(--muted);background:var(--panel2)}
+  .dgrid .dc.on{background:var(--accent);color:var(--accent-ink)}
+  .prose .dcap{font-size:13px;line-height:1.5;color:var(--muted);margin:10px 0 0;max-width:280px}
+  .prose .dwrap p.label{font-size:11.5px;line-height:1.5;color:var(--muted);margin:0 0 6px}
+  .drows{border-top:1px solid var(--line2);margin-top:10px}
+  .drow{display:grid;grid-template-columns:56px minmax(0,1fr) 46px 86px;align-items:center;gap:12px;width:100%;padding:9px 0;background:none;border:0;border-bottom:1px solid var(--line2);text-align:left;cursor:pointer;font-family:var(--disp);font-weight:700;font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums;transition:color .15s}
+  .drow:hover{color:var(--txt)}
+  .drow[aria-pressed="true"]{color:var(--txt)}
+  .drow .dk{letter-spacing:.06em}
+  .drow .dbar{display:block;height:4px;background:var(--line);border-radius:2px;overflow:hidden}
+  .drow .dbar i{display:block;height:100%;width:var(--w);background:var(--faint);transition:background .15s}
+  .drow[aria-pressed="true"] .dbar i{background:var(--accent)}
+  .drow .dn{text-align:right}
+  .drow .dcn{text-align:right;color:var(--muted)}
+  .drow[aria-pressed="true"] .dcn{color:var(--acc-txt)}
+  .prose .dtxt{font-size:15.5px;color:var(--dim);margin:12px 0 0;min-height:52px}
+
+  /* chuleta */
+  .rules{border-top:1px solid var(--line2);margin:12px 0 28px}
+  .rule{display:grid;grid-template-columns:150px minmax(0,1fr);gap:20px;padding:14px 0;border-bottom:1px solid var(--line2)}
+  .rule .nm{font-family:var(--disp);font-weight:800;text-transform:uppercase;font-size:13.5px;letter-spacing:.04em;line-height:1.3;color:var(--txt);padding-top:10px}
+  .rule .nm i{display:block;font-family:var(--sans);font-weight:300;font-style:italic;text-transform:none;letter-spacing:0;font-size:12.5px;color:var(--muted);margin-top:3px}
+  .rule .fbox{margin:0}
+  .prose .rule p{font-size:15px;line-height:1.6;color:var(--muted);margin:8px 0 0}
+
+  /* trampas */
+  .prose .traps{list-style:none;padding:0;margin:12px 0 28px;border-top:1px solid var(--line2)}
+  .prose .traps li{display:grid;grid-template-columns:34px minmax(0,1fr);gap:8px;margin:0;padding:14px 0;border-bottom:1px solid var(--line2);font-size:16px;line-height:1.65}
+  .traps .n{font-family:var(--disp);font-weight:800;color:var(--acc-txt)}
+  .traps b{display:block;color:var(--txt);font-weight:600}
+
+  /* ejercicios */
+  .exs{border-top:1px solid var(--line2);margin:12px 0 28px}
+  .ex{padding:22px 0;border-bottom:1px solid var(--line2)}
+  .ex-h{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:8px}
+  .ex-h .label{color:var(--acc-txt)}
+  .prose .ex>p{margin:0 0 14px}
+  .ex-f{display:flex;gap:10px}
+  .ex-f .input{flex:1;min-width:0}
+  .ex-foot{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:4px 16px;min-height:44px;margin-top:8px}
+  .prose .fb{margin:0;font-size:15px}
+  .prose .fb.ok{color:var(--good)}
+  .prose .fb.bad{color:var(--bad)}
+  .linkbtn{background:none;border:0;padding:0;min-height:40px;cursor:pointer}
+  .ex .callout{margin:10px 0 0}
+  .prose .ex .callout p{font-size:16px}
+
+  /* final de la lección */
+  .after{max-width:680px}
+  .done{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:16px 24px;margin-top:8px}
+  .done p{margin:6px 0 0}
+  .done .btn{white-space:normal;text-align:center}
+  .done .btn[aria-pressed="true"]{background:transparent;color:var(--good);border-color:var(--good-line)}
+  .after .h3{margin:44px 0 14px}
+
+  @media (max-width:900px){
+    .doc{gap:24px}
+    .toc{position:sticky;top:calc(60px + env(safe-area-inset-top,0px));z-index:30;margin-inline:-20px;padding-inline:20px;background:var(--bg);border-bottom:1px solid var(--line)}
+    .toc-btn{display:grid;grid-template-columns:auto minmax(0,1fr) 24px;align-items:center;gap:12px;width:100%;min-height:48px;padding:0;background:none;border:0;cursor:pointer;text-align:left}
+    .toc-btn .label{color:var(--txt)}
+    .toc-btn .cur{font-size:14.5px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .toc-btn[aria-expanded="true"] .plus{transform:rotate(45deg);color:var(--acc-txt)}
+    .toc:not(.open) .toc-body{display:none}
+    .toc.open .toc-body{max-height:min(62vh,520px);overflow-y:auto;overscroll-behavior:contain;padding:4px 0 18px}
+    .prose h2,.prose [id]{scroll-margin-top:124px}
+  }
+  @media (max-width:600px){
+    .toc{margin-inline:-16px;padding-inline:16px}
+    .lab-btns{grid-template-columns:repeat(2,minmax(0,1fr))}
+    .dwrap{grid-template-columns:minmax(0,1fr)}
+    .dgrid{grid-template-columns:repeat(7,minmax(0,1fr));max-width:300px}
+    .dgrid span{height:auto;aspect-ratio:1}
+    .drow{grid-template-columns:52px minmax(0,1fr) 44px 80px;gap:8px;font-size:12.5px}
+    .rule{grid-template-columns:minmax(0,1fr);gap:8px}
+    .rule .nm{padding-top:0}
+    .rule .nm i{display:inline;margin-left:6px}
+    .done .btn{width:100%}
+  }
+</style>
+</head>
+<body data-section="aprende">
+<a class="skip" href="#main">Saltar al contenido</a>
+
+<!-- ===================== CABECERA (copiar tal cual en todas las páginas) ===================== -->
+<header class="top">
+  <div class="wrap bar">
+    <a class="logo" href="index.html" aria-label="QuantMeraki, inicio"><img src="assets/perfil-128.png" alt="" width="34" height="34"><span>QuantMeraki</span></a>
+    <nav class="nav" aria-label="Principal">
+      <div class="dd">
+        <button class="dd-btn" type="button" aria-expanded="false" data-nav="practica">Practica</button>
+        <div class="menu" hidden>
+          <a href="entrenadores.html">Entrenadores<small>Cálculo mental y series, contra el reloj</small></a>
+          <a href="preguntas.html">Preguntas<small>Probabilidad, acertijos y series</small></a>
+          <a href="juegos.html">Juegos de mercado<small>Cotiza y ajusta tus precios</small></a>
+          <a href="simulacros.html">Simulacros<small>Pruebas cronometradas, como las de verdad</small></a>
+          <a href="codigo.html">Código<small>Problemas para developers</small></a>
+        </div>
+      </div>
+      <div class="dd">
+        <button class="dd-btn" type="button" aria-expanded="false" data-nav="aprende">Aprende</button>
+        <div class="menu" hidden>
+          <a href="rutas.html">Rutas<small>Trader, researcher o developer, paso a paso</small></a>
+          <a href="cursos.html">Cursos<small>Probabilidad, mercados y opciones</small></a>
+          <a href="guias.html">Guías<small>El sector y los procesos, explicados</small></a>
+        </div>
+      </div>
+      <div class="dd">
+        <button class="dd-btn" type="button" aria-expanded="false" data-nav="firmas">Firmas</button>
+        <div class="menu" hidden>
+          <a href="firmas.html">Directorio<small>Qué hace cada firma y cómo contrata</small></a>
+          <a href="empleo.html">Empleo<small>Prácticas y puestos para graduados</small></a>
+        </div>
+      </div>
+      <a href="canal.html" data-nav="canal">Canal</a>
+    </nav>
+    <div class="tools">
+      <a class="iconbtn" href="progreso.html" data-nav="progreso" aria-label="Mi progreso" title="Mi progreso"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 20v-8M12 20V5M19 20v-9"/></svg></a>
+      <button class="iconbtn" type="button" data-theme-toggle aria-label="Cambiar a modo oscuro"><svg class="ico i-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg><svg class="ico i-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg></button>
+      <a class="btn solid sm cta" href="entrenador-calculo-mental.html">Empieza</a>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+  <div class="wrap">
+
+    <section class="phead">
+      <nav class="crumbs" aria-label="Migas de pan"><a href="aprende.html">Aprende</a><span class="sep">/</span><a href="cursos.html">Cursos</a><span class="sep">/</span><a href="curso-probabilidad.html">Probabilidad</a><span class="sep">/</span><span aria-current="page">Estadísticos de orden</span></nav>
+      <p class="kicker"><b>Lección</b> / Probabilidad para entrevistas</p>
+      <h1 class="h1">Estadísticos de orden</h1>
+      <p class="lead">Tira varios puntos al azar sobre un segmento. Dónde caen el mayor, el menor y los del medio se calcula de cabeza.</p>
+      <div class="byline"><span>Probabilidad para entrevistas</span><span>Nivel medio</span><span>3 simuladores</span><span>5 ejercicios</span></div>
+      <div class="btns actions">
+        <span class="time"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>18 min</span>
+        <button class="savebtn" type="button" data-save="leccion:estadisticos-de-orden" data-save-title="Estadísticos de orden" data-save-type="Lección" data-save-href="leccion-estadisticos-de-orden.html" data-save-mins="18"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h12v18l-6-4-6 4z"/></svg><span class="lbl">Guardar</span></button>
+      </div>
+    </section>
+
+    <div class="doc">
+      <aside class="toc" aria-label="Índice de la lección">
+        <button class="toc-btn" type="button" id="tocBtn" aria-expanded="false" aria-controls="tocBody"><span class="label">Índice</span><span class="cur" id="tocCur">La idea</span><span class="plus" aria-hidden="true">+</span></button>
+        <div class="toc-body" id="tocBody">
+          <span class="label">En esta lección</span>
+          <a href="#idea">La idea</a>
+          <a href="#simulador">Míralo en marcha</a>
+          <a href="#maximo">El máximo y el mínimo</a>
+          <a href="#dados">Con dados</a>
+          <a href="#reglas">Las reglas</a>
+          <a href="#trampas">Trampas habituales</a>
+          <a href="#ejercicios">Ejercicios</a>
+          <a href="#resumen">Lo que te llevas</a>
+          <div class="toc-course">
+            <a class="tc-h" href="curso-probabilidad.html">Temario del curso</a>
+            <a href="leccion-valor-esperado.html"><b>01</b>Valor esperado</a>
+            <a href="leccion-variables-indicadoras.html"><b>02</b>Variables indicadoras</a>
+            <a href="leccion-probabilidad-geometrica.html"><b>03</b>Probabilidad geométrica</a>
+            <a href="leccion-estadisticos-de-orden.html" aria-current="page"><b>04</b>Estadísticos de orden</a>
+          </div>
+        </div>
+      </aside>
+
+      <div>
+        <article class="prose">
+
+          <h2 id="idea">La idea</h2>
+          <p>Tiras tres puntos al azar sobre una regla que va de 0 a 1, y los ordenas de menor a mayor. Esos valores ordenados son los <strong>estadísticos de orden</strong> (order statistics) de la muestra. Se escriben con el puesto entre paréntesis:</p>
+          <div class="fbox">\[X_{(1)} \le X_{(2)} \le \dots \le X_{(n)}\]</div>
+          <p class="fnote">\(X_{(1)}\) es el menor, \(X_{(n)}\) el mayor y \(X_{(k)}\) el que ocupa el puesto \(k\) empezando por abajo.</p>
+          <p>La pregunta de entrevista es: ¿dónde cae, de media, cada uno? Hay un truco que la resuelve sin integrar nada.</p>
+          <p>Los \(n\) puntos parten el segmento en \(n+1\) <strong>huecos</strong> (spacings). Ninguno es especial: por simetría, los \(n+1\) tienen la misma distribución. Y entre todos miden 1. Así que cada hueco mide, de media, \(\tfrac{1}{n+1}\).</p>
+          <p>El punto que ocupa el puesto \(k\) está justo donde terminan los primeros \(k\) huecos. Por linealidad, su posición media es la suma de \(k\) huecos medios:</p>
+          <div class="fbox">\[E\big[X_{(k)}\big] = \frac{k}{n+1}\]</div>
+          <p>Con tres puntos: \(\tfrac14\), \(\tfrac24\) y \(\tfrac34\). Con nueve, el del medio cae en \(\tfrac12\) y el mayor en \(\tfrac{9}{10}\). De media, los puntos se reparten como si alguien los hubiera colocado a intervalos iguales.</p>
+          <div class="callout">
+            <span class="label">Por qué le importa a un trader</span>
+            <p>Si cinco rivales cotizan un precio al azar dentro de un intervalo, el mejor de ellos está, de media, a \(\tfrac16\) del extremo. Cuantos más compiten, más se pega el mejor al borde. Es lo que hay detrás de muchas preguntas de subastas y de «cuánto tengo que afinar para ganar».</p>
+          </div>
+
+          <h2 id="simulador">Míralo en marcha</h2>
+          <p>Elige cuántos puntos y tira. Arriba, la última tirada: los puntos y los huecos coloreados. Abajo, la posición media de cada punto ordenado tras todas las tiradas; las marcas grises son los valores exactos \(\tfrac{k}{n+1}\). Con una tirada las medias saltan. Con mil, se clavan en las marcas.</p>
+
+          <div class="card lab">
+            <div class="ctl"><label for="segN">n = <span class="num" id="segNv">3</span> puntos</label><input type="range" id="segN" min="1" max="10" value="3" step="1"></div>
+            <div class="lab-viz"><canvas id="segCv" role="img" aria-label="Un segmento con tres puntos al azar y sus huecos coloreados; debajo, la posición media de cada punto frente a las marcas 1/4, 2/4 y 3/4."></canvas></div>
+            <div class="stats">
+              <div class="stat"><span class="v" id="sgR">1</span><span class="k">Tiradas</span></div>
+              <div class="stat"><span class="v m" id="sgM">–</span><span class="k">Media del mayor</span></div>
+              <div class="stat"><span class="v" id="sgE">0,750</span><span class="k">Exacto n/(n+1)</span></div>
+              <div class="stat"><span class="v" id="sgD">–</span><span class="k">Mayor desvío</span></div>
+            </div>
+            <div class="lab-btns">
+              <button class="btn solid" type="button" data-seg="1">Tirar 1</button>
+              <button class="btn" type="button" data-seg="100">Tirar 100</button>
+              <button class="btn" type="button" data-seg="1000">Tirar 1000</button>
+              <button class="btn ghost" type="button" id="segReset">Borrar</button>
+            </div>
+            <p class="lab-note">El mayor desvío es la distancia más grande entre una media y su marca. Fíjate en cómo baja con las tiradas.</p>
+            <p class="sr" id="segLive" aria-live="polite"></p>
+          </div>
+
+          <p>Sube \(n\) hasta 10 y mira el mayor: su marca está en \(\tfrac{10}{11} \approx 0{,}91\). No en 1. Por muchos puntos que tires, al mayor siempre le queda un hueco medio hasta el borde.</p>
+
+          <h2 id="maximo">El máximo y el mínimo</h2>
+          <p>El mayor de los \(n\) es el más preguntado, y su distribución sale de una sola frase: <strong>el máximo es menor o igual que \(x\) si, y solo si, todos los puntos lo son</strong>. Como son independientes, las probabilidades se multiplican:</p>
+          <div class="fbox">\[\begin{aligned}&P\big(X_{(n)} \le x\big) = P(\text{todos} \le x) \\ &\qquad = P(X_1 \le x)\cdots P(X_n \le x) \\ &\qquad = x^n\end{aligned}\]</div>
+          <p>Esa es su función de distribución (CDF). Derivando sale la densidad (density), que se amontona cerca de 1 cuando \(n\) crece:</p>
+          <div class="fbox">\[\begin{aligned}f_{(n)}(x) &= n\,x^{\,n-1} \\[4pt] E\big[X_{(n)}\big] &= \int_0^1 x\cdot n\,x^{\,n-1}\,dx = \frac{n}{n+1}\end{aligned}\]</div>
+          <p>Coincide con el truco de los huecos. Para el mínimo, el espejo: es mayor que \(x\) solo si todos lo son, así que \(P(X_{(1)} > x) = (1-x)^n\), la densidad es \(n(1-x)^{n-1}\) y la media, \(\tfrac{1}{n+1}\).</p>
+
+          <div class="card lab">
+            <div class="tabs" role="tablist" aria-label="Qué mirar">
+              <button class="chip" type="button" role="tab" id="m-max" data-m="max" aria-selected="true" aria-controls="histPanel">Máximo</button>
+              <button class="chip" type="button" role="tab" id="m-min" data-m="min" aria-selected="false" aria-controls="histPanel" tabindex="-1">Mínimo</button>
+            </div>
+            <div id="histPanel" role="tabpanel" aria-labelledby="m-max">
+              <div class="ctl"><label for="hN">n = <span class="num" id="hNv">3</span> puntos</label><input type="range" id="hN" min="1" max="10" value="3" step="1"></div>
+              <div class="lab-viz"><canvas id="hCv" role="img" aria-label="Histograma del máximo de tres puntos al azar con la curva 3x² encima y una línea discontinua en la media, 0,75."></canvas></div>
+              <div class="stats">
+                <div class="stat"><span class="v" id="hsN">0</span><span class="k">Muestras</span></div>
+                <div class="stat"><span class="v m" id="hsM">–</span><span class="k">Media muestral</span></div>
+                <div class="stat"><span class="v" id="hsE">0,750</span><span class="k">Exacto</span></div>
+                <div class="stat"><span class="v" id="hsH">–</span><span class="k">Fracción ≤ 0,5</span></div>
+              </div>
+              <div class="lab-btns">
+                <button class="btn solid" type="button" data-h="1000">Muestrear 1000</button>
+                <button class="btn" type="button" data-h="10000">Muestrear 10 000</button>
+                <button class="btn ghost" type="button" id="hReset">Borrar</button>
+              </div>
+              <p class="lab-note" id="hNote">La curva es \(n\,x^{\,n-1}\). La fracción exacta por debajo de 0,5 es \((\tfrac12)^n\): con \(n = 3\), \(\tfrac18 = 0{,}125\).</p>
+              <p class="sr" id="hLive" aria-live="polite"></p>
+            </div>
+          </div>
+
+          <p>El <strong>rango</strong> (range) es la distancia del menor al mayor. Como la esperanza de una resta es la resta de las esperanzas, no hace falta saber nada más:</p>
+          <div class="fbox">\[\begin{aligned}E\big[X_{(n)} - X_{(1)}\big] &= \frac{n}{n+1} - \frac{1}{n+1} \\[4pt] &= \frac{n-1}{n+1}\end{aligned}\]</div>
+          <p>Con dos puntos, el rango es la distancia entre ellos, \(|X - Y|\), y sale \(\tfrac13\). Es el mismo número que se calcula con áreas en la lección de <a href="leccion-probabilidad-geometrica.html">probabilidad geométrica</a>; aquí sale en una línea.</p>
+          <div class="callout">
+            <span class="label">Si te piden el k-ésimo en general</span>
+            <p>Para que \(X_{(k)}\) caiga en \(x\) hace falta un punto ahí, \(k-1\) por debajo y \(n-k\) por encima. Contando de cuántas formas se reparten los papeles:</p>
+            <div class="fbox">\[\begin{aligned}f_{(k)}(x) &= c_k\;x^{\,k-1}(1-x)^{\,n-k}, \\[4pt] c_k &= \frac{n!}{(k-1)!\,(n-k)!}\end{aligned}\]</div>
+            <p>\(c_k\) cuenta de cuántas formas se eligen el punto del medio, los de abajo y los de arriba. Es una distribución beta (Beta distribution) con parámetros \(k\) y \(n+1-k\). Su media es \(\tfrac{k}{n+1}\), como ya sabías. En una entrevista basta con decir «es una beta» y dar la media.</p>
+          </div>
+
+          <h2 id="dados">Con dados</h2>
+          <p>Con valores discretos el truco de los huecos ya no sirve: hay empates y los huecos no se reparten por simetría. Se cuenta. Tiras dos dados y te quedas con el mayor. En la cuadrícula de 36 casillas, las que tienen máximo \(k\) forman una escuadra: la fila \(k\), la columna \(k\) y la esquina compartida. Son \(2k-1\) casillas.</p>
+
+          <div class="card lab">
+            <div class="dwrap">
+              <div>
+                <div class="dgrid" id="dgrid" role="img" aria-label="Cuadrícula de seis por seis con el máximo de cada pareja de dados. Las casillas con máximo 4 forman una escuadra de siete casillas.">
+                  <span class="dh"></span><span class="dh">1</span><span class="dh">2</span><span class="dh">3</span><span class="dh">4</span><span class="dh">5</span><span class="dh">6</span>
+                  <span class="dh">1</span><span class="dc" data-k="1">1</span><span class="dc" data-k="2">2</span><span class="dc" data-k="3">3</span><span class="dc" data-k="4">4</span><span class="dc" data-k="5">5</span><span class="dc" data-k="6">6</span>
+                  <span class="dh">2</span><span class="dc" data-k="2">2</span><span class="dc" data-k="2">2</span><span class="dc" data-k="3">3</span><span class="dc" data-k="4">4</span><span class="dc" data-k="5">5</span><span class="dc" data-k="6">6</span>
+                  <span class="dh">3</span><span class="dc" data-k="3">3</span><span class="dc" data-k="3">3</span><span class="dc" data-k="3">3</span><span class="dc" data-k="4">4</span><span class="dc" data-k="5">5</span><span class="dc" data-k="6">6</span>
+                  <span class="dh">4</span><span class="dc" data-k="4">4</span><span class="dc" data-k="4">4</span><span class="dc" data-k="4">4</span><span class="dc" data-k="4">4</span><span class="dc" data-k="5">5</span><span class="dc" data-k="6">6</span>
+                  <span class="dh">5</span><span class="dc" data-k="5">5</span><span class="dc" data-k="5">5</span><span class="dc" data-k="5">5</span><span class="dc" data-k="5">5</span><span class="dc" data-k="5">5</span><span class="dc" data-k="6">6</span>
+                  <span class="dh">6</span><span class="dc" data-k="6">6</span><span class="dc" data-k="6">6</span><span class="dc" data-k="6">6</span><span class="dc" data-k="6">6</span><span class="dc" data-k="6">6</span><span class="dc" data-k="6">6</span>
+                </div>
+                <p class="dcap">Fila: primer dado. Columna: segundo. En cada casilla, el mayor de los dos.</p>
+              </div>
+              <div>
+                <p class="label">Elige un valor del máximo</p>
+                <div class="drows" role="group" aria-label="Reparto del máximo de dos dados">
+                  <button class="drow" type="button" data-k="1" aria-pressed="false"><span class="dk">máx = 1</span><span class="dbar"><i style="--w:9.09%"></i></span><span class="dn">1/36</span><span class="dcn">1 · 1 = 1</span></button>
+                  <button class="drow" type="button" data-k="2" aria-pressed="false"><span class="dk">máx = 2</span><span class="dbar"><i style="--w:27.27%"></i></span><span class="dn">3/36</span><span class="dcn">2 · 3 = 6</span></button>
+                  <button class="drow" type="button" data-k="3" aria-pressed="false"><span class="dk">máx = 3</span><span class="dbar"><i style="--w:45.45%"></i></span><span class="dn">5/36</span><span class="dcn">3 · 5 = 15</span></button>
+                  <button class="drow" type="button" data-k="4" aria-pressed="true"><span class="dk">máx = 4</span><span class="dbar"><i style="--w:63.64%"></i></span><span class="dn">7/36</span><span class="dcn">4 · 7 = 28</span></button>
+                  <button class="drow" type="button" data-k="5" aria-pressed="false"><span class="dk">máx = 5</span><span class="dbar"><i style="--w:81.82%"></i></span><span class="dn">9/36</span><span class="dcn">5 · 9 = 45</span></button>
+                  <button class="drow" type="button" data-k="6" aria-pressed="false"><span class="dk">máx = 6</span><span class="dbar"><i style="--w:100%"></i></span><span class="dn">11/36</span><span class="dcn">6 · 11 = 66</span></button>
+                </div>
+                <p class="dtxt" id="dtxt" aria-live="polite">Máximo 4: la escuadra tiene 7 casillas de 36. Aporta 4 · 7/36 = 28/36 a la media.</p>
+              </div>
+            </div>
+          </div>
+
+          <p>Sumando lo que aporta cada escuadra:</p>
+          <div class="fbox">\[\begin{aligned}E[\text{máx}] &= \sum_{k=1}^{6} k\,\frac{2k-1}{36} \\[4pt] &= \frac{1+6+15+28+45+66}{36} \\[4pt] &= \frac{161}{36} \approx 4{,}47\end{aligned}\]</div>
+          <p>El mínimo sale gratis: máximo más mínimo es la suma de los dos dados, que vale 7 de media. Así que \(E[\text{mín}] = 7 - \tfrac{161}{36} = \tfrac{91}{36} \approx 2{,}53\).</p>
+          <p>Hay un atajo que vale para cualquier número de dados. Como el máximo toma valores enteros, su esperanza es la suma de las probabilidades de llegar a cada escalón, y «el máximo llega a <span style="white-space:nowrap">\(k\)»</span> es lo contrario de «todos se quedan por debajo»:</p>
+          <div class="fbox">\[\begin{aligned}E[\text{máx}] &= \sum_{k=1}^{6} P(\text{máx} \ge k) \\[4pt] &= \sum_{k=1}^{6}\left[1 - \Big(\frac{k-1}{6}\Big)^{\!n}\right]\end{aligned}\]</div>
+          <p>Con \(n = 2\) vuelve a dar \(\tfrac{161}{36}\). Con tres dados sale \(\tfrac{119}{24} \approx 4{,}96\).</p>
+
+          <h2 id="reglas">Las reglas que más usarás</h2>
+          <p>Toda la lección, en formato de chuleta. Los puntos son uniformes en \([0,1]\) e independientes.</p>
+          <div class="rules">
+            <div class="rule"><div class="nm">Posición media<i>k-th order statistic</i></div><div><div class="fbox">\[E\big[X_{(k)}\big] = \frac{k}{n+1}\]</div><p>\(n\) puntos, \(n+1\) huecos iguales de \(\tfrac{1}{n+1}\). El \(k\)-ésimo está tras \(k\) huecos.</p></div></div>
+            <div class="rule"><div class="nm">Máximo<i>maximum</i></div><div><div class="fbox">\[\begin{aligned}P\big(X_{(n)} \le x\big) &= x^n \\[2pt] E\big[X_{(n)}\big] &= \frac{n}{n+1}\end{aligned}\]</div><p>Densidad \(n\,x^{\,n-1}\). «Todos por debajo de \(x\)».</p></div></div>
+            <div class="rule"><div class="nm">Mínimo<i>minimum</i></div><div><div class="fbox">\[\begin{aligned}P\big(X_{(1)} > x\big) &= (1-x)^n \\[2pt] E\big[X_{(1)}\big] &= \frac{1}{n+1}\end{aligned}\]</div><p>Densidad \(n\,(1-x)^{n-1}\). «Todos por encima de \(x\)».</p></div></div>
+            <div class="rule"><div class="nm">Rango<i>range</i></div><div><div class="fbox">\[E\big[X_{(n)} - X_{(1)}\big] = \frac{n-1}{n+1}\]</div><p>Con dos puntos, \(\tfrac13\): la distancia media entre ellos.</p></div></div>
+            <div class="rule"><div class="nm">k-ésimo<i>Beta distribution</i></div><div><div class="fbox">\[X_{(k)} \sim \text{Beta}(k,\; n+1-k)\]</div><p>Densidad \(\tfrac{n!}{(k-1)!(n-k)!}\,x^{k-1}(1-x)^{n-k}\). Media \(\tfrac{k}{n+1}\).</p></div></div>
+            <div class="rule"><div class="nm">Otra escala<i>scaling</i></div><div><div class="fbox">\[E\big[X_{(k)}\big] = a + (b-a)\,\frac{k}{n+1}\]</div><p>Para puntos uniformes en \([a,b]\). Las fracciones no cambian; solo se estiran.</p></div></div>
+            <div class="rule"><div class="nm">Discreto<i>tail sum</i></div><div><div class="fbox">\[E[\text{máx}] = \sum_{k \ge 1} P(\text{máx} \ge k)\]</div><p>Para dados y similares. \(P(\text{máx} \ge k) = 1 - P(\text{todos} < k)\).</p></div></div>
+          </div>
+
+          <h2 id="trampas">Trampas habituales</h2>
+          <ol class="traps">
+            <li><span class="n">01</span><span><b>Confundir la media del máximo con el máximo de las medias.</b> Dos puntos uniformes: cada uno vale 0,5 de media, pero el mayor de los dos vale \(\tfrac23\). Elegir el mayor después de ver los datos sube la media. Siempre \(E[\max] \ge \max E\).</span></li>
+            <li><span class="n">02</span><span><b>Usar \(\tfrac{k}{n+1}\) fuera de la uniforme.</b> El truco de los huecos necesita que los puntos sean uniformes. Con tres exponenciales de media 1, el máximo vale \(1 + \tfrac12 + \tfrac13 = \tfrac{11}{6}\) de media, y no sale de ninguna fracción de <span style="white-space:nowrap">\(n+1\).</span></span></li>
+            <li><span class="n">03</span><span><b>Olvidar la escala.</b> Cuatro puntos al azar entre 0 y 100: el mayor cae en 80 de media, no en 0,8. Lo que no cambia es la fracción, \(\tfrac45\) del recorrido.</span></li>
+            <li><span class="n">04</span><span><b>Aplicar la regla continua a los dados.</b> Si estiras \(\tfrac23\) sobre el recorrido de 1 a 6 sale \(1 + 5\cdot\tfrac23 \approx 4{,}33\), y el valor real es \(\tfrac{161}{36} \approx 4{,}47\). Los empates y los saltos lo cambian. En lo discreto, se cuenta.</span></li>
+            <li><span class="n">05</span><span><b>Restar mal el rango.</b> El rango es el mayor menos el menor, \(\tfrac{n-1}{n+1}\), y no \(\tfrac{n}{n+1}\). Con dos puntos vale \(\tfrac13\): un tercio del segmento queda entre ellos y dos tercios fuera.</span></li>
+          </ol>
+
+          <h2 id="ejercicios">Ejercicios</h2>
+          <p>Cinco preguntas con el formato de una entrevista. Escribe la respuesta con decimales (0,75) o como fracción (3/4).</p>
+          <div class="exs">
+            <div class="ex">
+              <div class="ex-h"><span class="label">Ejercicio 1</span><span class="meter" data-v="1" role="img" aria-label="Fácil"><i></i><i></i><i></i></span></div>
+              <p>Eliges dos números al azar entre 0 y 1. ¿Cuánto vale, de media, el mayor de los dos?</p>
+              <form class="ex-f" data-ans="0.6666667" novalidate><label class="sr" for="ex1i">Tu respuesta al ejercicio 1</label><input class="input" id="ex1i" type="text" inputmode="decimal" autocomplete="off" placeholder="Decimal o fracción"><button class="btn" type="submit">Comprobar</button></form>
+              <div class="ex-foot"><p class="fb" aria-live="polite"></p><button class="more linkbtn" type="button" data-reveal="ex1s" data-alt="Ocultar solución" aria-expanded="false" aria-controls="ex1s">Ver solución</button></div>
+              <div class="callout" id="ex1s" hidden><span class="label">Solución</span><p>Dos puntos, tres huecos de \(\tfrac13\). El mayor está tras dos huecos: \(E[X_{(2)}] = \tfrac23\).</p><p>Por integración: \(P(\max \le x) = x^2\), densidad \(2x\), y \(\int_0^1 x\cdot 2x\,dx = \tfrac23\).</p></div>
+            </div>
+            <div class="ex">
+              <div class="ex-h"><span class="label">Ejercicio 2</span><span class="meter" data-v="1" role="img" aria-label="Fácil"><i></i><i></i><i></i></span></div>
+              <p>Tres números al azar entre 0 y 1. ¿Cuánto vale, de media, la distancia entre el menor y el mayor?</p>
+              <form class="ex-f" data-ans="0.5" novalidate><label class="sr" for="ex2i">Tu respuesta al ejercicio 2</label><input class="input" id="ex2i" type="text" inputmode="decimal" autocomplete="off" placeholder="Decimal o fracción"><button class="btn" type="submit">Comprobar</button></form>
+              <div class="ex-foot"><p class="fb" aria-live="polite"></p><button class="more linkbtn" type="button" data-reveal="ex2s" data-alt="Ocultar solución" aria-expanded="false" aria-controls="ex2s">Ver solución</button></div>
+              <div class="callout" id="ex2s" hidden><span class="label">Solución</span><p>El mayor cae en \(\tfrac34\) y el menor en \(\tfrac14\). El rango es la resta: \(\tfrac34 - \tfrac14 = \tfrac12\). O directamente \(\tfrac{n-1}{n+1}\) con \(n = 3\).</p></div>
+            </div>
+            <div class="ex">
+              <div class="ex-h"><span class="label">Ejercicio 3</span><span class="meter" data-v="2" role="img" aria-label="Media"><i></i><i></i><i></i></span></div>
+              <p>Diez números al azar entre 0 y 1. ¿Cuánto vale, de media, el segundo más grande?</p>
+              <form class="ex-f" data-ans="0.8181818" novalidate><label class="sr" for="ex3i">Tu respuesta al ejercicio 3</label><input class="input" id="ex3i" type="text" inputmode="decimal" autocomplete="off" placeholder="Decimal o fracción"><button class="btn" type="submit">Comprobar</button></form>
+              <div class="ex-foot"><p class="fb" aria-live="polite"></p><button class="more linkbtn" type="button" data-reveal="ex3s" data-alt="Ocultar solución" aria-expanded="false" aria-controls="ex3s">Ver solución</button></div>
+              <div class="callout" id="ex3s" hidden><span class="label">Solución</span><p>El segundo más grande de diez ocupa el puesto 9 empezando por abajo. Con \(n = 10\): \(E[X_{(9)}] = \tfrac{9}{11} \approx 0{,}82\).</p><p>La trampa está en contar bien el puesto. El mayor es \(X_{(10)}\), en \(\tfrac{10}{11}\).</p></div>
+            </div>
+            <div class="ex">
+              <div class="ex-h"><span class="label">Ejercicio 4</span><span class="meter" data-v="2" role="img" aria-label="Media"><i></i><i></i><i></i></span></div>
+              <p>Tres números al azar entre 0 y 1. ¿Qué probabilidad hay de que el mayor sea menor que \(\tfrac12\)?</p>
+              <form class="ex-f" data-ans="0.125" novalidate><label class="sr" for="ex4i">Tu respuesta al ejercicio 4</label><input class="input" id="ex4i" type="text" inputmode="decimal" autocomplete="off" placeholder="Decimal o fracción"><button class="btn" type="submit">Comprobar</button></form>
+              <div class="ex-foot"><p class="fb" aria-live="polite"></p><button class="more linkbtn" type="button" data-reveal="ex4s" data-alt="Ocultar solución" aria-expanded="false" aria-controls="ex4s">Ver solución</button></div>
+              <div class="callout" id="ex4s" hidden><span class="label">Solución</span><p>El mayor es menor que \(\tfrac12\) solo si los tres lo son. Cada uno lo es con probabilidad \(\tfrac12\), y son independientes: \((\tfrac12)^3 = \tfrac18 = 0{,}125\).</p><p>Es la fórmula \(P(X_{(n)} \le x) = x^n\) con \(n = 3\) y \(x = \tfrac12\). Compruébalo en el histograma de arriba.</p></div>
+            </div>
+            <div class="ex">
+              <div class="ex-h"><span class="label">Ejercicio 5</span><span class="meter" data-v="2" role="img" aria-label="Media"><i></i><i></i><i></i></span></div>
+              <p>Dos personas llegan a una cita en un instante al azar entre las 12:00 y las 13:00, cada una por su cuenta. ¿Cuántos minutos espera, de media, la que llega primero?</p>
+              <form class="ex-f" data-ans="20" novalidate><label class="sr" for="ex5i">Tu respuesta al ejercicio 5, en minutos</label><input class="input" id="ex5i" type="text" inputmode="decimal" autocomplete="off" placeholder="En minutos"><button class="btn" type="submit">Comprobar</button></form>
+              <div class="ex-foot"><p class="fb" aria-live="polite"></p><button class="more linkbtn" type="button" data-reveal="ex5s" data-alt="Ocultar solución" aria-expanded="false" aria-controls="ex5s">Ver solución</button></div>
+              <div class="callout" id="ex5s" hidden><span class="label">Solución</span><p>La espera es la distancia entre dos puntos uniformes, \(|X - Y|\), que es el rango de dos puntos: \(\tfrac{2-1}{2+1} = \tfrac13\) de la hora, es decir, 20 minutos.</p><p>En la lección de <a href="leccion-probabilidad-geometrica.html">probabilidad geométrica</a> se llega al mismo \(\tfrac13\) integrando sobre el cuadrado. Las dos formas son válidas; esta es más rápida.</p></div>
+            </div>
+          </div>
+
+          <h2 id="resumen">Lo que te llevas</h2>
+          <div class="callout">
+            <span class="label">Clave</span>
+            <p>\(n\) puntos uniformes dejan \(n+1\) huecos iguales de \(\tfrac{1}{n+1}\). El \(k\)-ésimo cae, de media, en \(\tfrac{k}{n+1}\).</p>
+            <p>El máximo se trata con una frase: «todos por debajo de \(x\)», que da \(x^n\). El mínimo, con «todos por encima».</p>
+            <p>Con dados u otros valores discretos no hay simetría de huecos. Se cuenta, o se suman las probabilidades de cada escalón.</p>
+          </div>
+        </article>
+
+        <div class="after">
+          <div class="card done">
+            <div><span class="label">¿Terminada?</span><p class="small muted">Márcala y la verás en el temario y en Mi progreso.</p></div>
+            <button class="btn solid" type="button" data-done-toggle="leccion:estadisticos-de-orden" data-alt="Lección completada">Marcar lección como completada</button>
+          </div>
+
+          <h2 class="h3">Practica esto</h2>
+          <div class="list">
+            <a class="item" href="pregunta-juego-del-dado.html"><span><span class="item-t">El juego del dado</span><span class="item-d">Volver a tirar o quedarte: la media del máximo decide.</span></span><span class="item-m"><span class="tag">Pregunta</span><span class="arrow" aria-hidden="true">→</span></span></a>
+            <a class="item" href="leccion-probabilidad-geometrica.html"><span><span class="item-t">Probabilidad geométrica</span><span class="item-d">La distancia entre dos puntos, calculada con áreas.</span></span><span class="item-m"><span class="tag">Lección</span><span class="arrow" aria-hidden="true">→</span></span></a>
+            <a class="item" href="preguntas.html"><span><span class="item-t">Más preguntas de probabilidad</span><span class="item-d">Con la solución explicada paso a paso.</span></span><span class="item-m"><span class="tag">Preguntas</span><span class="arrow" aria-hidden="true">→</span></span></a>
+          </div>
+
+          <nav class="prevnext" aria-label="Lecciones del curso">
+            <a href="leccion-probabilidad-geometrica.html"><span class="label">← Anterior</span><span class="t">Probabilidad geométrica</span></a>
+            <a class="next" href="curso-probabilidad.html"><span class="label">Temario →</span><span class="t">Probabilidad para entrevistas</span></a>
+          </nav>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <div class="cols">
+      <div class="brandcol"><a class="logo" href="index.html"><img src="assets/perfil-128.png" alt="" width="34" height="34"><span>QuantMeraki</span></a><p class="claim">El mundo quant, en español.</p></div>
+      <div><h4>Practica</h4><ul><li><a href="entrenadores.html">Entrenadores</a></li><li><a href="preguntas.html">Preguntas</a></li><li><a href="juegos.html">Juegos de mercado</a></li><li><a href="simulacros.html">Simulacros</a></li><li><a href="codigo.html">Código</a></li></ul></div>
+      <div><h4>Aprende</h4><ul><li><a href="rutas.html">Rutas</a></li><li><a href="cursos.html">Cursos</a></li><li><a href="guias.html">Guías</a></li><li><a href="canal.html">El canal</a></li></ul></div>
+      <div><h4>QuantMeraki</h4><ul><li><a href="firmas.html">Firmas</a></li><li><a href="empleo.html">Empleo</a></li><li><a href="progreso.html">Mi progreso</a></li><li><a href="sobre.html">Sobre el proyecto</a></li></ul></div>
+    </div>
+    <div class="legal"><span>Contenido educativo, nunca asesoramiento financiero.</span><span>© 2026 QuantMeraki</span></div>
+  </div>
+</footer>
+
+<nav class="tabbar" aria-label="Secciones">
+  <a href="index.html" data-tab="inicio"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/><path d="M10 20v-6h4v6"/></svg><span>Inicio</span></a>
+  <a href="practica.html" data-tab="practica"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="4"/><circle class="f" cx="12" cy="12" r="1.4"/></svg><span>Practica</span></a>
+  <a href="aprende.html" data-tab="aprende"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 6c-2-1.5-5-2-8-1.5V19c3-.5 6 0 8 1.5 2-1.5 5-2 8-1.5V4.5c-3-.5-6 0-8 1.5z"/><path d="M12 6v14.5"/></svg><span>Aprende</span></a>
+  <a href="firmas.html" data-tab="firmas"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 21h18M3 9.5l9-5.5 9 5.5M5 10v11M19 10v11M9.5 21v-8M14.5 21v-8"/></svg><span>Firmas</span></a>
+  <a href="canal.html" data-tab="canal"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="3"/><path class="f" d="M10 9v6l5-3z"/></svg><span>Canal</span></a>
+</nav>
+
+<div class="toast" id="toast" role="status" hidden></div>
+<script src="assets/qm.js"></script>
+<script>
+/* Lección: fórmulas, índice en el móvil, tres laboratorios y ejercicios */
+(function(){
+  'use strict';
+  /* ---------- MathJax (solo en esta página) ---------- */
+  window.MathJax={tex:{inlineMath:[['\\(','\\)']]},svg:{fontCache:'global'}};
+  var mj=document.createElement('script');mj.async=true;mj.id='MathJax-script';
+  mj.src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-svg.js';
+  document.head.appendChild(mj);
+  function typeset(el){if(window.MathJax&&MathJax.typesetPromise){if(MathJax.typesetClear)MathJax.typesetClear([el]);MathJax.typesetPromise([el]).catch(function(){});}}
+
+  var reduce=!!(window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+  var DISP='"Barlow Semi Condensed", Barlow, Arial, sans-serif',SANS='Barlow, Arial, sans-serif';
+  function num(v,dec){return v.toFixed(dec).replace('.',',');}
+  function int(n){return n.toLocaleString('es-ES');}
+  function fitCanvas(cv){
+    var w=cv.clientWidth,h=cv.clientHeight;if(!w||!h)return null;
+    var dpr=Math.min(window.devicePixelRatio||1,2);
+    if(cv.width!==Math.round(w*dpr)||cv.height!==Math.round(h*dpr)){cv.width=Math.round(w*dpr);cv.height=Math.round(h*dpr);}
+    var c=cv.getContext('2d');c.setTransform(dpr,0,0,dpr,0,0);c.clearRect(0,0,w,h);
+    return {c:c,w:w,h:h};
+  }
+  function watch(cv,fn){
+    document.addEventListener('qm-theme',fn);
+    if('ResizeObserver' in window)new ResizeObserver(function(){fn();}).observe(cv);else window.addEventListener('resize',fn);
+  }
+
+  /* ---------- índice plegable en el móvil ---------- */
+  var toc=document.querySelector('.toc'),tb=document.getElementById('tocBtn'),body=document.getElementById('tocBody'),cur=document.getElementById('tocCur');
+  function setToc(open){toc.classList.toggle('open',open);tb.setAttribute('aria-expanded',String(open));}
+  tb.addEventListener('click',function(){setToc(!toc.classList.contains('open'));});
+  body.addEventListener('click',function(e){var a=e.target.closest&&e.target.closest('a');if(a&&a.getAttribute('href').charAt(0)==='#')setToc(false);});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape'&&toc.classList.contains('open')){setToc(false);tb.focus();}});
+  if('MutationObserver' in window){
+    new MutationObserver(function(){var a=body.querySelector('a[aria-current="true"]');if(a)cur.textContent=a.textContent;})
+      .observe(body,{subtree:true,attributes:true,attributeFilter:['aria-current']});
+  }
+
+  /* ---------- laboratorio 1: puntos en un segmento ---------- */
+  (function(){
+    var cv=document.getElementById('segCv'),sl=document.getElementById('segN'),nv=document.getElementById('segNv');
+    var el={r:document.getElementById('sgR'),m:document.getElementById('sgM'),e:document.getElementById('sgE'),d:document.getElementById('sgD'),live:document.getElementById('segLive')};
+    var btns=document.querySelectorAll('[data-seg]');
+    var n=3,sums=[],R=0,last=[],pending=0,rate=1,raf=0,MAX=50000;
+    function sample(){var a=[];for(var i=0;i<n;i++)a.push(Math.random());a.sort(function(x,y){return x-y;});return a;}
+    function add(k){for(var i=0;i<k&&R<MAX;i++){last=sample();for(var j=0;j<n;j++)sums[j]+=last[j];R++;}if(R>=MAX)pending=0;}
+    function dev(){var d=0;for(var k=0;k<n;k++)d=Math.max(d,Math.abs(sums[k]/R-(k+1)/(n+1)));return d;}
+    function draw(){
+      var f=fitCanvas(cv);if(!f)return;var c=f.c,w=f.w,h=f.h;
+      var txt=QM.color('txt'),mut=QM.color('muted'),line=QM.color('line'),acc=QM.color('accent'),bg=QM.color('panel');
+      var L=22,Rm=22,pw=w-L-Rm,yA=66,yB=h-50,i,k,x;
+      function X(v){return L+v*pw;}
+      c.lineWidth=1;c.textBaseline='alphabetic';
+      /* fila A: la última tirada, con los huecos coloreados */
+      c.font='700 11px '+DISP;c.textAlign='left';c.fillStyle=mut;c.fillText('ÚLTIMA TIRADA',L,yA-36);
+      var b=[0].concat(last,[1]);
+      c.fillStyle=acc;
+      for(i=0;i<b.length-1;i++){c.globalAlpha=0.16+0.56*(i/n);c.fillRect(X(b[i]),yA-8,X(b[i+1])-X(b[i]),16);}
+      c.globalAlpha=1;
+      c.font='500 11px '+SANS;c.textAlign='center';
+      var lx=-99;
+      for(i=0;i<n;i++){
+        x=X(last[i]);
+        c.fillStyle=bg;c.beginPath();c.arc(x,yA,6.5,0,Math.PI*2);c.fill();
+        c.fillStyle=txt;c.beginPath();c.arc(x,yA,4,0,Math.PI*2);c.fill();
+        if(x-lx>=14){c.fillStyle=mut;c.fillText(String(i+1),x,yA-16);lx=x;}
+      }
+      c.fillStyle=mut;c.textAlign='left';c.fillText('0',L,yA+26);c.textAlign='right';c.fillText('1',w-Rm,yA+26);
+      /* fila B: medias frente a las marcas k/(n+1) */
+      c.font='700 11px '+DISP;c.textAlign='left';c.fillStyle=mut;
+      c.fillText(R?('MEDIA TRAS '+int(R)+(R===1?' TIRADA':' TIRADAS')):'MEDIAS: TODAVÍA SIN TIRADAS',L,yB-30);
+      c.strokeStyle=line;c.beginPath();c.moveTo(L,yB+0.5);c.lineTo(w-Rm,yB+0.5);c.stroke();
+      var sp=pw/(n+1),step=Math.ceil(32/sp);
+      c.strokeStyle=mut;c.setLineDash([3,3]);
+      for(k=1;k<=n;k++){x=Math.round(X(k/(n+1)))+0.5;c.beginPath();c.moveTo(x,yB-12);c.lineTo(x,yB+12);c.stroke();}
+      c.setLineDash([]);
+      c.font='500 10.5px '+SANS;c.textAlign='center';c.fillStyle=mut;
+      for(k=1;k<=n;k++)if((k-1)%step===0)c.fillText(k+'/'+(n+1),X(k/(n+1)),yB+27);
+      if(R){for(k=0;k<n;k++){x=X(sums[k]/R);c.fillStyle=bg;c.beginPath();c.arc(x,yB,7,0,Math.PI*2);c.fill();c.fillStyle=acc;c.beginPath();c.arc(x,yB,5,0,Math.PI*2);c.fill();}}
+    }
+    function paint(){
+      el.r.textContent=int(R);
+      el.m.textContent=R?num(sums[n-1]/R,3):'–';
+      el.e.textContent=num(n/(n+1),3);
+      el.d.textContent=R?num(dev(),3):'–';
+      Array.prototype.forEach.call(btns,function(b){b.disabled=R>=MAX;});
+      cv.setAttribute('aria-label','Un segmento con '+n+(n===1?' punto':' puntos')+' al azar y sus huecos coloreados. Tras '+int(R)+(R===1?' tirada':' tiradas')+', la media del mayor es '+(R?num(sums[n-1]/R,3):'desconocida')+' y el valor exacto, '+num(n/(n+1),3)+'.');
+      draw();
+    }
+    function announce(){if(R)el.live.textContent=int(R)+' tiradas. Media del mayor: '+num(sums[n-1]/R,3)+'. Exacto: '+num(n/(n+1),3)+'. Mayor desvío: '+num(dev(),3)+'.';}
+    function step(){var k=Math.min(pending,rate);add(k);pending-=k;paint();if(pending>0)raf=requestAnimationFrame(step);else{raf=0;announce();}}
+    function play(k){
+      if(R>=MAX)return;
+      pending+=k;
+      if(reduce||pending<=1){add(pending);pending=0;paint();announce();return;}
+      rate=Math.max(1,Math.ceil(pending/36));
+      if(!raf)raf=requestAnimationFrame(step);
+    }
+    function reset(first){
+      if(raf)cancelAnimationFrame(raf);raf=0;pending=0;R=0;sums=[];for(var i=0;i<n;i++)sums.push(0);
+      add(1);el.live.textContent='';paint();
+      if(!first)announce();
+    }
+    sl.addEventListener('input',function(){n=Number(sl.value);nv.textContent=n;reset();});
+    Array.prototype.forEach.call(btns,function(b){b.addEventListener('click',function(){play(Number(b.getAttribute('data-seg')));});});
+    document.getElementById('segReset').addEventListener('click',function(){reset();});
+    watch(cv,draw);
+    if(document.fonts&&document.fonts.ready)document.fonts.ready.then(draw);
+    reset(true);
+  })();
+
+  /* ---------- laboratorio 2: histograma del máximo o del mínimo ---------- */
+  (function(){
+    var cv=document.getElementById('hCv'),sl=document.getElementById('hN'),nv=document.getElementById('hNv');
+    var el={n:document.getElementById('hsN'),m:document.getElementById('hsM'),e:document.getElementById('hsE'),h:document.getElementById('hsH'),note:document.getElementById('hNote'),live:document.getElementById('hLive'),panel:document.getElementById('histPanel')};
+    var btns=document.querySelectorAll('[data-h]');
+    var n=3,mode='max',BINS=25,counts=[],N=0,sum=0,half=0,pending=0,rate=1,raf=0,MAX=200000;
+    function exact(){return mode==='max'?n/(n+1):1/(n+1);}
+    function pHalf(){var p=Math.pow(0.5,n);return mode==='max'?p:1-p;}
+    function dens(x){return mode==='max'?n*Math.pow(x,n-1):n*Math.pow(1-x,n-1);}
+    function one(){var m=Math.random(),u;for(var i=1;i<n;i++){u=Math.random();if(mode==='max'?u>m:u<m)m=u;}return m;}
+    function add(k){for(var i=0;i<k&&N<MAX;i++){var m=one();counts[Math.min(BINS-1,Math.floor(m*BINS))]++;sum+=m;if(m<=0.5)half++;N++;}if(N>=MAX)pending=0;}
+    function draw(){
+      var f=fitCanvas(cv);if(!f)return;var c=f.c,w=f.w,h=f.h;
+      var txt=QM.color('txt'),mut=QM.color('muted'),line=QM.color('line'),acc=QM.color('accent');
+      var L=34,Rm=12,T=18,B=26,pw=w-L-Rm,ph=h-T-B,i,x,y;
+      var peak=Math.max(n,1),ymax=peak*1.15,bw=1/BINS;
+      if(N){for(i=0;i<BINS;i++)ymax=Math.max(ymax,counts[i]/(N*bw)*1.06);}
+      function X(v){return L+v*pw;}
+      function Y(v){return T+ph-(v/ymax)*ph;}
+      c.lineWidth=1;c.font='400 11px '+SANS;c.textBaseline='middle';c.textAlign='right';
+      [0,peak/2,peak].forEach(function(t){y=Math.round(Y(t))+0.5;c.strokeStyle=line;c.beginPath();c.moveTo(L,y);c.lineTo(w-Rm,y);c.stroke();c.fillStyle=mut;c.fillText(num(t,Number.isInteger(t)?0:1),L-7,y);});
+      if(N){c.fillStyle=acc;c.globalAlpha=0.3;for(i=0;i<BINS;i++){var d=counts[i]/(N*bw);c.fillRect(X(i*bw)+0.5,Y(d),pw*bw-1,Y(0)-Y(d));}c.globalAlpha=1;}
+      c.strokeStyle=txt;c.lineWidth=2;c.lineJoin='round';c.beginPath();
+      for(i=0;i<=200;i++){x=i/200;y=Y(Math.min(dens(x),ymax));if(i)c.lineTo(X(x),y);else c.moveTo(X(x),y);}
+      c.stroke();
+      var E=exact(),xe=Math.round(X(E))+0.5;
+      c.strokeStyle=acc;c.lineWidth=1.25;c.setLineDash([5,4]);c.beginPath();c.moveTo(xe,T);c.lineTo(xe,Y(0));c.stroke();c.setLineDash([]);
+      c.font='600 12px '+SANS;c.fillStyle=acc;c.textBaseline='top';
+      if(E>0.5){c.textAlign='right';c.fillText('E = '+num(E,3),xe-6,T);}else{c.textAlign='left';c.fillText('E = '+num(E,3),xe+6,T);}
+      c.font='400 11px '+SANS;c.fillStyle=mut;c.textBaseline='top';
+      c.textAlign='left';c.fillText('0',L,h-B+7);c.textAlign='center';c.fillText('0,5',X(0.5),h-B+7);c.textAlign='right';c.fillText('1',w-Rm,h-B+7);
+    }
+    function paint(){
+      el.n.textContent=int(N);
+      el.m.textContent=N?num(sum/N,3):'–';
+      el.e.textContent=num(exact(),3);
+      el.h.textContent=N?num(half/N,3):'–';
+      Array.prototype.forEach.call(btns,function(b){b.disabled=N>=MAX;});
+      cv.setAttribute('aria-label','Histograma del '+(mode==='max'?'máximo':'mínimo')+' de '+n+(n===1?' punto':' puntos')+' al azar con su densidad encima. Media exacta '+num(exact(),3)+(N?'; media muestral '+num(sum/N,3)+' tras '+int(N)+' muestras.':'.'));
+      draw();
+    }
+    function note(){
+      var p=Math.pow(0.5,n);
+      el.note.innerHTML=mode==='max'
+        ?'La curva es \\(n\\,x^{\\,n-1}\\). La fracción exacta por debajo de 0,5 es \\((\\tfrac12)^n\\): con \\(n = '+n+'\\), '+num(p,n>6?4:3)+'.'
+        :'La curva es \\(n\\,(1-x)^{n-1}\\). La fracción exacta por debajo de 0,5 es \\(1-(\\tfrac12)^n\\): con \\(n = '+n+'\\), '+num(1-p,n>6?4:3)+'.';
+      typeset(el.note);
+    }
+    function announce(){if(N)el.live.textContent=int(N)+' muestras. Media muestral: '+num(sum/N,3)+'. Exacto: '+num(exact(),3)+'. Fracción por debajo de 0,5: '+num(half/N,3)+'.';}
+    function step(){var k=Math.min(pending,rate);add(k);pending-=k;paint();if(pending>0)raf=requestAnimationFrame(step);else{raf=0;announce();}}
+    function play(k){
+      if(N>=MAX)return;
+      pending+=k;
+      if(reduce){add(pending);pending=0;paint();announce();return;}
+      rate=Math.max(1,Math.ceil(pending/36));
+      if(!raf)raf=requestAnimationFrame(step);
+    }
+    function clear(){if(raf)cancelAnimationFrame(raf);raf=0;pending=0;N=0;sum=0;half=0;counts=[];for(var i=0;i<BINS;i++)counts.push(0);el.live.textContent='';}
+    sl.addEventListener('input',function(){n=Number(sl.value);nv.textContent=n;clear();add(2000);paint();note();});
+    Array.prototype.forEach.call(btns,function(b){b.addEventListener('click',function(){play(Number(b.getAttribute('data-h')));});});
+    document.getElementById('hReset').addEventListener('click',function(){clear();paint();});
+    document.querySelector('[aria-label="Qué mirar"]').addEventListener('qm-tab',function(e){
+      var m=e.detail.getAttribute('data-m');if(m===mode)return;mode=m;el.panel.setAttribute('aria-labelledby',e.detail.id);clear();add(2000);paint();note();
+    });
+    watch(cv,draw);
+    if(document.fonts&&document.fonts.ready)document.fonts.ready.then(draw);
+    clear();add(2000);paint();
+  })();
+
+  /* ---------- laboratorio 3: el máximo de dos dados ---------- */
+  (function(){
+    var grid=document.getElementById('dgrid'),rows=document.querySelectorAll('.drow'),txt=document.getElementById('dtxt');
+    var cells=grid.querySelectorAll('.dc');
+    function select(k){
+      Array.prototype.forEach.call(rows,function(r){r.setAttribute('aria-pressed',String(Number(r.getAttribute('data-k'))===k));});
+      Array.prototype.forEach.call(cells,function(c){c.classList.toggle('on',Number(c.getAttribute('data-k'))===k);});
+      var m=2*k-1;
+      txt.textContent='Máximo '+k+': la escuadra tiene '+m+(m===1?' casilla':' casillas')+' de 36. Aporta '+k+' · '+m+'/36 = '+(k*m)+'/36 a la media.';
+      grid.setAttribute('aria-label','Cuadrícula de seis por seis con el máximo de cada pareja de dados. Las casillas con máximo '+k+' forman una escuadra de '+m+(m===1?' casilla.':' casillas.'));
+    }
+    Array.prototype.forEach.call(rows,function(r){r.addEventListener('click',function(){select(Number(r.getAttribute('data-k')));});});
+    select(4);
+  })();
+
+  /* ---------- ejercicios: se corrigen aquí mismo ---------- */
+  function parse(s){
+    s=String(s||'').toLowerCase().replace(/min(utos)?|%|\s/g,'').replace(/−/g,'-').replace(',','.');
+    var m=s.match(/^(-?\d+(?:\.\d+)?)\/(\d+(?:\.\d+)?)$/);
+    if(m)return Number(m[2])?Number(m[1])/Number(m[2]):NaN;
+    return /^[-+]?(\d+\.?\d*|\.\d+)$/.test(s)?Number(s):NaN;
+  }
+  QM.each('.ex-f',function(f){
+    var ans=Number(f.getAttribute('data-ans')),inp=f.querySelector('input'),fb=f.parentNode.querySelector('.fb');
+    f.addEventListener('submit',function(e){
+      e.preventDefault();
+      var v=parse(inp.value);
+      inp.classList.remove('ok','bad');fb.classList.remove('ok','bad');
+      if(isNaN(v)){fb.textContent='Escribe un número, por ejemplo 0,75 o 3/4.';return;}
+      var ok=Math.abs(v-ans)<(ans>=1?0.06:0.006);
+      inp.classList.add(ok?'ok':'bad');fb.classList.add(ok?'ok':'bad');
+      fb.textContent=ok?'Correcto.':'Todavía no. Repasa la cuenta o mira la solución.';
+    });
+    inp.addEventListener('input',function(){inp.classList.remove('ok','bad');fb.classList.remove('ok','bad');fb.textContent='';});
+  });
+})();
+</script>
+</body>
+</html>

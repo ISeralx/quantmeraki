@@ -21,7 +21,8 @@
   .ghead{display:grid;grid-template-columns:minmax(0,7fr) minmax(0,5fr);gap:clamp(28px,5vw,64px);align-items:end;padding-block:clamp(36px,6vw,72px) clamp(28px,4vw,52px)}
   .ghead .h1{font-size:clamp(38px,5.2vw,60px)}
   .ghead .lead{max-width:46ch}
-  .ghead .byline{margin-top:26px}
+  .ghead .byline{margin-top:26px;align-items:center}
+  .ghead .byline .savebtn{margin-left:auto}
   .vcard{display:block}
   .vcard .thumb{transition:border-color .15s}
   .vcard:hover .thumb{border-color:var(--accent-line)}
@@ -193,7 +194,7 @@
         <p class="kicker"><b>Guía</b> / Profesiones</p>
         <h1 class="h1">¿Qué hace realmente un quant trader?</h1>
         <p class="lead">Qué hace en un día normal, cómo nace una estrategia y por qué una ventaja del 52&nbsp;% puede ser suficiente.</p>
-        <p class="byline"><span>QuantMeraki</span><time datetime="2026-10-02">2 de octubre de 2026</time><span>5 min de lectura</span></p>
+        <p class="byline"><span>QuantMeraki</span><time datetime="2026-10-02">2 de octubre de 2026</time><span class="time"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>5 min</span><button class="savebtn" type="button" data-save="guia:que-hace-un-quant-trader" data-save-title="¿Qué hace realmente un quant trader?" data-save-type="Guía" data-save-href="guia-que-hace-un-quant-trader.html" data-save-mins="5"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h12v18l-6-4-6 4z"/></svg><span class="lbl">Guardar</span></button></p>
       </div>
       <a class="vcard" href="video-que-hace-un-quant-trader.html" aria-label="Ver el vídeo: ¿Qué hace realmente un quant trader? (4:27)">
         <span class="thumb"><img src="assets/d01-miniatura.jpg" alt="" width="640" height="360"><span class="badge l vplay">Vídeo</span><span class="badge">4:27</span></span>
