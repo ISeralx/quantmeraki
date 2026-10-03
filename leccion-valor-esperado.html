@@ -4,8 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="robots" content="noindex, nofollow">
-<title>Valor esperado · QuantMeraki</title>
-<meta name="description" content="Lección de valor esperado para entrevistas de trading: la fórmula, un simulador, ejemplos resueltos, trampas habituales y tres ejercicios con solución.">
+<title>Independencia y valor esperado · QuantMeraki</title>
+<meta name="description" content="Lección de 11 minutos: qué es el valor esperado, cuándo hace falta la independencia y cuándo no, un simulador con cuatro juegos, la apuesta justa resuelta y tres ejercicios de entrevista con solución.">
 <link rel="icon" href="assets/perfil-128.png">
 <script>try{var t=localStorage.getItem('qm-theme');document.documentElement.setAttribute('data-theme',t||'light');}catch(e){}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -13,6 +13,11 @@
 <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;500;600;700&family=Barlow+Semi+Condensed:wght@600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/qm.css">
 <style>
+  /* cabecera de la lección: tiempo medio y guardar */
+  .byline.lmeta{align-items:center;gap:6px 18px}
+  .lmeta .time{margin-left:auto}
+  .lmeta .savebtn{min-height:36px;padding:6px 12px}
+
   /* índice lateral: en esta lección + temario del curso */
   .toc-btn{display:none}
   .toc-course{margin-top:30px}
@@ -22,12 +27,16 @@
   .toc-course a b{font-family:var(--disp);font-weight:700;color:var(--faint)}
   .toc a[aria-current="page"]{color:var(--txt);border-left-color:var(--accent)}
   .toc a[aria-current="page"] b{color:var(--acc-txt)}
-  /* tiempo medio y guardar, en la línea de datos de la lección */
-  .byline{align-items:center}
-  .byline .savebtn{margin-left:auto}
   @media (min-width:901px){
     .toc{max-height:calc(100vh - 120px);overflow-y:auto;overscroll-behavior:contain;padding-right:6px;scrollbar-width:thin}
   }
+
+  /* secciones de la lección: número grande y línea de separación */
+  .ls{border-top:1px solid var(--line);margin-top:44px;padding-top:40px}
+  .ls:first-child{border-top:0;margin-top:0;padding-top:0}
+  .ls .kicker{margin-bottom:12px}
+  .prose .ls h2{margin-top:0}
+  .nw{white-space:nowrap}
 
   /* simulador */
   .lab{margin:20px 0 22px}
@@ -43,23 +52,19 @@
   .lab-btns .btn{padding:12px 10px}
   .prose .lab-note{font-size:14px;color:var(--muted);margin:12px 0 0}
 
-  /* formulario de la lección */
-  .rules{border-top:1px solid var(--line2);margin:12px 0 28px}
-  .rule{display:grid;grid-template-columns:150px minmax(0,1fr);gap:20px;padding:14px 0;border-bottom:1px solid var(--line2)}
+  /* chuleta: tres reglas en un recuadro */
+  .rules{border:1px solid var(--line);border-radius:4px;background:var(--bg);padding-inline:20px;margin:16px 0 20px}
+  .rule{display:grid;grid-template-columns:150px minmax(0,1fr);gap:20px;padding:16px 0;border-bottom:1px solid var(--line2)}
+  .rule:last-child{border-bottom:0}
   .rule .nm{font-family:var(--disp);font-weight:800;text-transform:uppercase;font-size:13.5px;letter-spacing:.04em;line-height:1.3;color:var(--txt);padding-top:10px}
   .rule .nm i{display:block;font-family:var(--sans);font-weight:300;font-style:italic;text-transform:none;letter-spacing:0;font-size:12.5px;color:var(--muted);margin-top:3px}
   .rule .fbox{margin:0}
   .prose .rule p{font-size:15px;line-height:1.6;color:var(--muted);margin:8px 0 0}
 
-  /* trampas */
-  .prose .traps{list-style:none;padding:0;margin:12px 0 28px;border-top:1px solid var(--line2)}
-  .prose .traps li{display:grid;grid-template-columns:34px minmax(0,1fr);gap:8px;margin:0;padding:14px 0;border-bottom:1px solid var(--line2);font-size:16px;line-height:1.65}
-  .traps .n{font-family:var(--disp);font-weight:800;color:var(--acc-txt)}
-  .traps b{display:block;color:var(--txt);font-weight:600}
-
-  /* ejercicios */
-  .exs{border-top:1px solid var(--line2);margin:12px 0 28px}
+  /* ejercicios, en un recuadro */
+  .exs{border:1px solid var(--line);border-radius:4px;background:var(--bg);padding-inline:20px;margin:16px 0 8px}
   .ex{padding:22px 0;border-bottom:1px solid var(--line2)}
+  .ex:last-child{border-bottom:0}
   .ex-h{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:8px}
   .ex-h .label{color:var(--acc-txt)}
   .prose .ex>p{margin:0 0 14px}
@@ -94,8 +99,11 @@
   }
   @media (max-width:600px){
     .toc{margin-inline:-16px;padding-inline:16px}
+    .lmeta .time{margin-left:0}
+    .ls{margin-top:36px;padding-top:32px}
     .lab-viz{height:190px}
     .lab-btns{grid-template-columns:repeat(2,minmax(0,1fr))}
+    .rules,.exs{padding-inline:14px}
     .rule{grid-template-columns:minmax(0,1fr);gap:8px}
     .rule .nm{padding-top:0}
     .rule .nm i{display:inline;margin-left:6px}
@@ -103,7 +111,7 @@
   }
 </style>
 </head>
-<body data-section="aprende">
+<body data-section="biblioteca" data-parent="cursos.html">
 <a class="skip" href="#main">Saltar al contenido</a>
 
 <!-- ===================== CABECERA (copiar tal cual en todas las páginas) ===================== -->
@@ -150,11 +158,15 @@
   <div class="wrap">
 
     <section class="phead">
-      <nav class="crumbs" aria-label="Migas de pan"><a href="aprende.html">Aprende</a><span class="sep">/</span><a href="cursos.html">Cursos</a><span class="sep">/</span><a href="curso-probabilidad.html">Probabilidad</a><span class="sep">/</span><span aria-current="page">Valor esperado</span></nav>
-      <p class="kicker"><b>Lección 04</b> / Probabilidad para entrevistas</p>
-      <h1 class="h1">Valor esperado</h1>
-      <p class="lead">Cuánto vale un juego antes de jugarlo. Con esta idea se pone precio a cualquier apuesta.</p>
-      <div class="byline"><span>Lección 4 de 10</span><span class="time"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>16 min</span><span>Nivel básico</span><span>3 ejercicios</span><button class="savebtn" type="button" data-save="leccion:valor-esperado" data-save-title="Valor esperado" data-save-type="Lección" data-save-href="leccion-valor-esperado.html" data-save-mins="16"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h12v18l-6-4-6 4z"/></svg><span class="lbl">Guardar</span></button></div>
+      <nav class="crumbs" aria-label="Migas de pan"><span>Biblioteca</span><span class="sep">/</span><a href="cursos.html">Cursos</a><span class="sep">/</span><a href="curso.html?c=fundamentos">Fundamentos de probabilidad y estadística</a><span class="sep">/</span><span aria-current="page">Independencia y valor esperado</span></nav>
+      <p class="kicker"><b>Lección 2</b> / Fundamentos de probabilidad y estadística</p>
+      <h1 class="h1">Independencia y valor esperado</h1>
+      <p class="lead">Cuánto vale un juego antes de jugarlo, y cuándo puedes multiplicar probabilidades sin miedo. Con estas dos ideas se pone precio a cualquier apuesta.</p>
+      <div class="byline lmeta">
+        <span>Fundamentos de probabilidad</span><span>Nivel básico</span><span>3 ejercicios</span>
+        <span class="time"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>11 min</span>
+        <button class="savebtn" type="button" data-save="leccion:valor-esperado" data-save-title="Independencia y valor esperado" data-save-type="Lección" data-save-href="leccion-valor-esperado.html" data-save-mins="11"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h12v18l-6-4-6 4z"/></svg><span class="lbl">Guardar</span></button>
+      </div>
     </section>
 
     <div class="doc">
@@ -163,24 +175,28 @@
         <div class="toc-body" id="tocBody">
           <span class="label">En esta lección</span>
           <a href="#idea">La idea</a>
+          <a href="#independencia">Independencia</a>
           <a href="#simulador">Míralo en marcha</a>
-          <a href="#ejemplos">Ejemplos resueltos</a>
-          <a href="#reglas">Las reglas</a>
-          <a href="#trampas">Trampas habituales</a>
+          <a href="#ejemplo">Ejemplo resuelto</a>
           <a href="#ejercicios">Ejercicios</a>
           <a href="#resumen">Lo que te llevas</a>
           <div class="toc-course">
-            <a class="tc-h" href="curso-probabilidad.html">Temario del curso</a>
-            <a href="curso-probabilidad.html" data-soon><b>01</b>Contar sin perderse</a>
-            <a href="curso-probabilidad.html" data-soon><b>02</b>El complementario</a>
-            <a href="curso-probabilidad.html" data-soon><b>03</b>Condicionada y Bayes</a>
-            <a href="leccion-valor-esperado.html" aria-current="page"><b>04</b>Valor esperado</a>
-            <a href="curso-probabilidad.html" data-soon><b>05</b>Linealidad e indicadores</a>
-            <a href="curso-probabilidad.html" data-soon><b>06</b>Varianza y riesgo</a>
-            <a href="curso-probabilidad.html" data-soon><b>07</b>Esperanza condicionada</a>
-            <a href="curso-probabilidad.html" data-soon><b>08</b>Juegos con decisiones</a>
-            <a href="curso-probabilidad.html" data-soon><b>09</b>Tiempos de espera</a>
-            <a href="curso-probabilidad.html" data-soon><b>10</b>Paseos aleatorios y ruina</a>
+            <a class="tc-h" href="curso.html?c=fundamentos">Temario del curso</a>
+            <a href="curso.html?c=fundamentos" data-soon><b>01</b>Reglas de la probabilidad</a>
+            <a href="leccion-valor-esperado.html" aria-current="page"><b>02</b>Independencia y valor esperado</a>
+            <a href="curso.html?c=fundamentos" data-soon><b>03</b>Varianza y desviación típica</a>
+            <a href="curso.html?c=fundamentos" data-soon><b>04</b>Métodos de conteo</a>
+            <a href="curso.html?c=fundamentos" data-soon><b>05</b>Técnicas avanzadas de conteo</a>
+            <a href="curso.html?c=fundamentos" data-soon><b>06</b>Probabilidad condicionada</a>
+            <a href="curso.html?c=fundamentos" data-soon><b>07</b>Teorema de Bayes</a>
+            <a href="curso.html?c=fundamentos" data-soon><b>08</b>Bernoulli y binomial</a>
+            <a href="curso.html?c=fundamentos" data-soon><b>09</b>Poisson y geométrica</a>
+            <a href="curso.html?c=fundamentos" data-soon><b>10</b>Uniforme y normal</a>
+            <a href="curso.html?c=fundamentos" data-soon><b>11</b>Teorema central del límite</a>
+            <a href="leccion-probabilidad-geometrica.html"><b>12</b>Probabilidad geométrica</a>
+            <a href="leccion-estadisticos-de-orden.html"><b>13</b>Estadísticos de orden</a>
+            <a href="curso.html?c=fundamentos" data-soon><b>14</b>Binomial negativa e hipergeométrica</a>
+            <a href="curso.html?c=fundamentos" data-soon><b>15</b>Cadenas de Markov</a>
           </div>
         </div>
       </aside>
@@ -188,127 +204,125 @@
       <div>
         <article class="prose">
 
-          <h2 id="idea">La idea</h2>
-          <p>Imagina que repites un juego miles de veces y apuntas lo que cobras en cada partida. La media de todo eso tiene nombre: <strong>valor esperado</strong> (expected value), o esperanza. Y se puede calcular sin jugar: cada resultado por su probabilidad, y todo sumado.</p>
-          <div class="fbox">\[E[X] = \sum_x x\,P(X = x)\]</div>
-          <p class="fnote">\(X\) es lo que cobras en una partida. La suma recorre todos sus valores posibles.</p>
-          <p>Dos cosas conviene tenerlas claras desde el principio:</p>
-          <ul>
-            <li><strong>Es una media, no una predicción.</strong> Un dado vale 3,5 y nunca sale un 3,5.</li>
-            <li><strong>Habla del largo plazo.</strong> En diez partidas puede pasar casi cualquier cosa. En diez mil, la media se queda muy cerca.</li>
-          </ul>
-          <div class="callout">
-            <span class="label">Por qué le importa a un trader</span>
-            <p>En juegos como estos, el precio justo (fair value) de un contrato es su valor esperado. Comprar por debajo de ese precio, o vender por encima, es tener ventaja (edge).</p>
-          </div>
-
-          <h2 id="simulador">Míralo en marcha</h2>
-          <p>Elige un juego y juega. La línea naranja es la media de tus partidas; la discontinua, el valor esperado. Al principio la media va a saltos. Con miles de partidas se pega a la discontinua: es la ley de los grandes números (law of large numbers).</p>
-
-          <div class="card lab">
-            <div class="tabs" role="tablist" aria-label="Juego">
-              <button class="chip" type="button" role="tab" id="g-dado" data-g="dado" aria-selected="true" aria-controls="labPanel">Un dado</button>
-              <button class="chip" type="button" role="tab" id="g-dos" data-g="dos" aria-selected="false" aria-controls="labPanel" tabindex="-1">Dos dados</button>
-              <button class="chip" type="button" role="tab" id="g-ruleta" data-g="ruleta" aria-selected="false" aria-controls="labPanel" tabindex="-1">Ruleta</button>
-              <button class="chip" type="button" role="tab" id="g-ventaja" data-g="ventaja" aria-selected="false" aria-controls="labPanel" tabindex="-1">Ventaja del 52 %</button>
+          <section class="ls" id="idea">
+            <p class="kicker"><b>01</b> / La idea</p>
+            <h2>Una media que se calcula sin jugar</h2>
+            <p>Imagina que repites un juego miles de veces y apuntas lo que cobras en cada partida. La media de todo eso tiene nombre: <strong>valor esperado</strong> (expected value), o esperanza. Y no hace falta jugar para conocerla: cada resultado por su probabilidad, y todo sumado.</p>
+            <div class="fbox">\[E[X] = \sum_x x\,P(X = x)\]</div>
+            <p class="fnote">\(X\) es lo que cobras en una partida. La suma recorre todos sus valores posibles.</p>
+            <p>Con un dado que paga en euros lo que sale, cada cara tiene probabilidad \(\tfrac16\):</p>
+            <div class="fbox">\[\begin{aligned} E[X] &= \frac{1+2+3+4+5+6}{6}\\[4pt] &= \frac{21}{6} = 3{,}5\end{aligned}\]</div>
+            <p>Dos cosas que conviene tener claras desde el principio:</p>
+            <ul>
+              <li><strong>Es una media, no una predicción.</strong> El dado vale 3,5 y nunca sale un 3,5.</li>
+              <li><strong>Habla del largo plazo.</strong> En diez partidas puede pasar casi cualquier cosa. En diez mil, la media se queda muy cerca.</li>
+            </ul>
+            <div class="callout">
+              <span class="label">Por qué le importa a un trader</span>
+              <p>El precio justo (fair value) de un contrato es su valor esperado. Comprar por debajo de ese precio, o vender por encima, es tener ventaja (edge).</p>
             </div>
-            <div id="labPanel" role="tabpanel" aria-labelledby="g-dado">
-              <p class="lab-q" id="labQ">Tiras un dado y cobras, en euros, lo que sale.</p>
-              <div class="fbox" id="labF">\[E[X] = \frac{1+2+3+4+5+6}{6} = \frac{21}{6} = 3{,}5\]</div>
-              <div class="lab-viz"><canvas id="labCv" role="img" aria-label="Gráfica vacía: todavía no has jugado."></canvas></div>
-              <div class="stats">
-                <div class="stat"><span class="v" id="sN">0</span><span class="k">Partidas</span></div>
-                <div class="stat"><span class="v" id="sL">–</span><span class="k">Última</span></div>
-                <div class="stat"><span class="v m" id="sM">–</span><span class="k">Tu media</span></div>
-                <div class="stat"><span class="v" id="sE">3,5</span><span class="k">Valor esperado</span></div>
+          </section>
+
+          <section class="ls" id="independencia">
+            <p class="kicker"><b>02</b> / Independencia</p>
+            <h2>Cuándo hace falta y cuándo no</h2>
+            <p>Dos sucesos son <strong>independientes</strong> (independent) si saber que ha ocurrido uno no cambia la probabilidad del otro. Dos tiradas de un dado lo son. Sacar un 6 y sacar un número par en la misma tirada, no: si sabes que ha salido par, el 6 pasa de \(\tfrac16\) a <span class="nw">\(\tfrac13\).</span></p>
+            <div class="fbox">\[P(A \cap B) = P(A)\,P(B)\]</div>
+            <p class="fnote">Esa igualdad es la definición de independencia. Equivale a \(P(A \mid B) = P(A)\): condicionar a \(B\) no cambia nada.</p>
+            <p>Con esperanzas, la independencia solo importa en un sitio. Esta es la chuleta:</p>
+            <div class="rules">
+              <div class="rule"><div class="nm">Sumas<i>linearity</i></div><div><div class="fbox">\[E[X + Y] = E[X] + E[Y]\]</div><p>Siempre, aunque \(X\) e \(Y\) dependan una de otra. Dos dados: \(3{,}5 + 3{,}5 = 7\), sin listar los 36 casos.</p></div></div>
+              <div class="rule"><div class="nm">Productos<i>product rule</i></div><div><div class="fbox">\[E[XY] = E[X]\,E[Y]\]</div><p>Solo si \(X\) e \(Y\) son independientes. Aquí es donde la independencia se gana el sueldo.</p></div></div>
+              <div class="rule"><div class="nm">Funciones<i>LOTUS</i></div><div><div class="fbox">\[E[g(X)] = \sum_x g(x)\,P(X = x)\]</div><p>Casi nunca coincide con \(g(E[X])\). Si cobras el cuadrado de un dado, el juego vale <span class="nw">\(\tfrac{91}{6} \approx 15{,}17\) €,</span> y no <span class="nw">\(3{,}5^2 = 12{,}25\) €.</span></p></div></div>
+            </div>
+            <p>El cuadrado del dado es el producto \(X \cdot X\), y \(X\) no es independiente de sí misma: por eso ahí la regla del producto falla. Cuando te pidan una esperanza, pregúntate primero si es una suma (sin condiciones), un producto (pide independencia) o una función (ve a la distribución).</p>
+          </section>
+
+          <section class="ls" id="simulador">
+            <p class="kicker"><b>03</b> / Simulación</p>
+            <h2>Míralo en marcha</h2>
+            <p>Elige un juego y juega. La línea naranja es la media de tus partidas; la discontinua, el valor esperado. Al principio la media va a saltos. Con miles de partidas se pega a la discontinua: es la ley de los grandes números (law of large numbers), y funciona porque cada partida es independiente de las anteriores.</p>
+
+            <div class="card lab">
+              <div class="tabs" role="tablist" aria-label="Juego">
+                <button class="chip" type="button" role="tab" id="g-dado" data-g="dado" aria-selected="true" aria-controls="labPanel">Un dado</button>
+                <button class="chip" type="button" role="tab" id="g-dos" data-g="dos" aria-selected="false" aria-controls="labPanel" tabindex="-1">Dos dados</button>
+                <button class="chip" type="button" role="tab" id="g-ruleta" data-g="ruleta" aria-selected="false" aria-controls="labPanel" tabindex="-1">Ruleta</button>
+                <button class="chip" type="button" role="tab" id="g-ventaja" data-g="ventaja" aria-selected="false" aria-controls="labPanel" tabindex="-1">Ventaja del 52 %</button>
               </div>
-              <div class="lab-btns">
-                <button class="btn solid" type="button" data-play="1">Jugar 1</button>
-                <button class="btn" type="button" data-play="100">Jugar 100</button>
-                <button class="btn" type="button" data-play="1000">Jugar 1000</button>
-                <button class="btn ghost" type="button" id="labReset">Borrar</button>
+              <div id="labPanel" role="tabpanel" aria-labelledby="g-dado">
+                <p class="lab-q" id="labQ">Tiras un dado y cobras, en euros, lo que sale.</p>
+                <div class="fbox" id="labF">\[\begin{aligned} E[X] &= \frac{1+2+3+4+5+6}{6}\\[4pt] &= \frac{21}{6} = 3{,}5\end{aligned}\]</div>
+                <div class="lab-viz"><canvas id="labCv" role="img" aria-label="Gráfica vacía: todavía no has jugado."></canvas></div>
+                <div class="stats">
+                  <div class="stat"><span class="v" id="sN">0</span><span class="k">Partidas</span></div>
+                  <div class="stat"><span class="v" id="sL">–</span><span class="k">Última</span></div>
+                  <div class="stat"><span class="v m" id="sM">–</span><span class="k">Tu media</span></div>
+                  <div class="stat"><span class="v" id="sE">3,5</span><span class="k">Valor esperado</span></div>
+                </div>
+                <div class="lab-btns">
+                  <button class="btn solid" type="button" data-play="1">Jugar 1</button>
+                  <button class="btn" type="button" data-play="100">Jugar 100</button>
+                  <button class="btn" type="button" data-play="1000">Jugar 1000</button>
+                  <button class="btn ghost" type="button" id="labReset">Borrar</button>
+                </div>
+                <p class="lab-note" id="labNote" hidden>Has llegado a 20.000 partidas. Borra para empezar otra vez.</p>
+                <p class="sr" id="labLive" aria-live="polite"></p>
               </div>
-              <p class="lab-note" id="labNote" hidden>Has llegado a 20.000 partidas. Borra para empezar otra vez.</p>
-              <p class="sr" id="labLive" aria-live="polite"></p>
             </div>
-          </div>
 
-          <p>Compara la ruleta con la ventaja del 52 %. Las dos rondan el cero, una por debajo y otra por encima. En cien partidas no las distingues; en diez mil, sí. Una ventaja pequeña solo se nota con muchas repeticiones.</p>
+            <p>Dos cosas que ver. Compara la ruleta con la ventaja del 52 %: las dos rondan el cero, una por debajo y otra por encima. En cien partidas no las distingues; en diez mil, sí. Una ventaja pequeña solo se nota con muchas repeticiones.</p>
+            <p>Y fíjate en que una racha mala no «se compensa» después. Las partidas nuevas no saben nada de las viejas: la media se acerca al valor esperado porque las nuevas diluyen a las antiguas, no porque la suerte devuelva nada. Creer lo contrario es la falacia del jugador (gambler's fallacy).</p>
+          </section>
 
-          <h2 id="ejemplos">Tres ejemplos resueltos</h2>
+          <section class="ls" id="ejemplo">
+            <p class="kicker"><b>04</b> / Ejemplo resuelto</p>
+            <h2>La apuesta justa y el precio justo</h2>
+            <p>Una apuesta es justa (fair bet) si su valor esperado es cero: a la larga, nadie gana. Pagas 1 € por tirar un dado y, si sale un 6, cobras \(x\) euros. ¿Qué \(x\) la hace justa?</p>
+            <div class="fbox">\[\begin{aligned} E[\text{ganancia}] &= x\cdot\tfrac16 - 1 = 0\\[4pt] \Longrightarrow\; x &= 6\end{aligned}\]</div>
+            <p>Si solo te pagan 5 €, pierdes de media \(\tfrac16\) de euro por partida, unos 17 céntimos. Ese es el margen de la casa. Cuenta siempre la ganancia neta: lo que cobras menos lo que pagas. Un premio de 5 € por sacar un 6 parece generoso hasta que restas el euro de cada partida.</p>
+            <p>Con un precio pasa lo mismo. Si un contrato paga lo que salga en un dado, su precio justo es 3,5 €. Quien compra a 3,3 € y vende a 3,7 € gana de media 20 céntimos por operación, siempre que el otro no sepa más que él. Lo puedes practicar en <a href="juego-hazme-un-mercado.html">Hazme un mercado</a>.</p>
+          </section>
 
-          <h3>1 · Un dado</h3>
-          <p>Tiras un dado y cobras, en euros, lo que sale. Cada cara tiene probabilidad \(\tfrac16\):</p>
-          <div class="fbox">\[E[X] = 1\cdot\tfrac16 + 2\cdot\tfrac16 + \dots + 6\cdot\tfrac16 = \frac{21}{6} = 3{,}5\]</div>
-          <p>Si jugar cuesta menos de 3,5 €, el juego te favorece. Si cuesta más, favorece a quien lo organiza.</p>
-
-          <h3>2 · Linealidad: sin hacer la tabla</h3>
-          <p>Con dos dados, cobrando la suma, podrías escribir los 36 casos. No hace falta: la esperanza de una suma es la suma de las esperanzas. Es la linealidad de la esperanza (linearity of expectation).</p>
-          <div class="fbox">\[E[X+Y] = E[X] + E[Y] = 3{,}5 + 3{,}5 = 7\]</div>
-          <p>Se cumple siempre, aunque las variables dependan unas de otras, y eso la hace muy útil. Un ejemplo: lanzas 10 monedas en fila. ¿Cuántas veces salen, de media, dos caras seguidas?</p>
-          <p>Llama \(I_k\) a un indicador que vale 1 si las monedas \(k\) y \(k+1\) salen cara, y 0 si no. Hay nueve parejas de monedas vecinas, y cada una sale «cara, cara» con probabilidad \(\tfrac14\). El número de parejas \(N\) es la suma de los nueve indicadores:</p>
-          <div class="fbox">\[E[N] = \sum_{k=1}^{9} P(I_k = 1) = 9\cdot\tfrac14 = 2{,}25\]</div>
-          <p>Las parejas se solapan y dependen unas de otras: si la 1 y la 2 son cara, es más fácil que también lo sean la 2 y la 3. Da igual. Para sumar esperanzas no hace falta independencia.</p>
-
-          <h3>3 · La apuesta justa</h3>
-          <p>Una apuesta es justa (fair bet) si su valor esperado es cero: a la larga, nadie gana. Pagas 1 € por tirar un dado y, si sale un 6, cobras \(x\) euros. ¿Qué \(x\) la hace justa?</p>
-          <div class="fbox">\[E[\text{ganancia}] = x\cdot\tfrac16 - 1 = 0 \quad\Longrightarrow\quad x = 6\]</div>
-          <p>Si solo te pagan 5 €, pierdes de media \(\tfrac16\) de euro por partida, unos 17 céntimos. Ese es el margen de la casa.</p>
-          <p>Con un precio pasa lo mismo. Si un contrato paga lo que salga en un dado, su precio justo es 3,5 €. Quien compra a 3,3 € y vende a 3,7 € gana de media 20 céntimos por operación, siempre que el otro no sepa más que él. Lo puedes practicar en <a href="juego-hazme-un-mercado.html">Hazme un mercado</a>.</p>
-
-          <h2 id="reglas">Las reglas que más usarás</h2>
-          <p>Toda la lección, en formato de chuleta.</p>
-          <div class="rules">
-            <div class="rule"><div class="nm">Definición<i>expected value</i></div><div><div class="fbox">\[E[X] = \sum_x x\,P(X = x)\]</div><p>Si \(X\) es continua, la suma pasa a ser una integral: \(E[X] = \int x\,f(x)\,dx\).</p></div></div>
-            <div class="rule"><div class="nm">Linealidad<i>linearity</i></div><div><div class="fbox">\[E[aX + bY + c] = a\,E[X] + b\,E[Y] + c\]</div><p>Siempre, aunque \(X\) e \(Y\) dependan una de otra.</p></div></div>
-            <div class="rule"><div class="nm">Indicadores<i>indicator variables</i></div><div><div class="fbox">\[E[N] = \sum_i P(A_i)\]</div><p>\(N\) cuenta cuántos de los sucesos \(A_i\) ocurren. Es lo que has usado con las monedas.</p></div></div>
-            <div class="rule"><div class="nm">Función de X<i>LOTUS</i></div><div><div class="fbox">\[E[g(X)] = \sum_x g(x)\,P(X = x)\]</div><p>Basta con la distribución de \(X\). Casi nunca coincide con \(g(E[X])\).</p></div></div>
-            <div class="rule"><div class="nm">Producto<i>product</i></div><div><div class="fbox">\[E[XY] = E[X]\,E[Y]\]</div><p>Solo si \(X\) e \(Y\) son independientes.</p></div></div>
-            <div class="rule"><div class="nm">Precio justo<i>fair value</i></div><div><div class="fbox">\[\text{precio justo} = E[\text{lo que cobras}]\]</div><p>Una apuesta es justa cuando \(E[\text{ganancia}] = 0\).</p></div></div>
-          </div>
-
-          <h2 id="trampas">Trampas habituales</h2>
-          <ol class="traps">
-            <li><span class="n">01</span><span><b>Confundirlo con lo más probable.</b> El valor esperado es una media. Con un dado, 3,5 ni siquiera puede salir; en una lotería, lo más probable es no ganar nada.</span></li>
-            <li><span class="n">02</span><span><b>Aplicar la función a la media.</b> En general, \(E[g(X)] \ne g(E[X])\). Si cobras el cuadrado de lo que saca un dado, el juego vale \(\tfrac{91}{6} \approx 15{,}17\) €, y no \(3{,}5^2 = 12{,}25\) €.</span></li>
-            <li><span class="n">03</span><span><b>Olvidar lo que cuesta jugar.</b> Cuenta la ganancia neta: lo que cobras menos lo que pagas. Un premio de 5 € por sacar un 6 parece generoso hasta que restas el euro de cada partida.</span></li>
-            <li><span class="n">04</span><span><b>Creer que la suerte se compensa.</b> Tras cinco rojos seguidos, el rojo no «debe» salir menos, porque cada giro es independiente. Es la falacia del jugador (gambler's fallacy). La media se acerca al valor esperado porque las partidas nuevas diluyen a las antiguas, que siguen ahí.</span></li>
-            <li><span class="n">05</span><span><b>Mirar solo la media.</b> Dos apuestas con el mismo valor esperado pueden arriesgar cosas muy distintas. Eso lo mide la varianza, en la <a href="curso-probabilidad.html" data-soon>lección 6</a>.</span></li>
-          </ol>
-
-          <h2 id="ejercicios">Ejercicios</h2>
-          <p>Tres para comprobar que lo tienes. Escribe la respuesta con decimales (2,5) o como fracción (5/2).</p>
-          <div class="exs">
-            <div class="ex">
-              <div class="ex-h"><span class="label">Ejercicio 1</span><span class="meter" data-v="1" role="img" aria-label="Fácil"><i></i><i></i><i></i></span></div>
-              <p>Tiras un dado. Si sale par, cobras en euros lo que marca. Si sale impar, pagas 1 €. ¿Cuánto vale el juego?</p>
-              <form class="ex-f" data-ans="1.5" novalidate><label class="sr" for="ex1i">Tu respuesta al ejercicio 1, en euros</label><input class="input" id="ex1i" type="text" inputmode="decimal" autocomplete="off" placeholder="En euros, p. ej. 2,5"><button class="btn" type="submit">Comprobar</button></form>
-              <div class="ex-foot"><p class="fb" aria-live="polite"></p><button class="more linkbtn" type="button" data-reveal="ex1s" data-alt="Ocultar solución" aria-expanded="false" aria-controls="ex1s">Ver solución</button></div>
-              <div class="callout" id="ex1s" hidden><span class="label">Solución</span><p>Los pares aportan \((2+4+6)\cdot\tfrac16 = 2\). Los impares, \(-1\cdot\tfrac36 = -0{,}5\). En total, \(E = 2 - 0{,}5 = 1{,}5\) €.</p></div>
+          <section class="ls" id="ejercicios">
+            <p class="kicker"><b>05</b> / Ejercicios</p>
+            <h2>Tres de entrevista</h2>
+            <p>Escribe la respuesta con decimales (2,5) o como fracción (5/2). Las soluciones están escondidas: intenta la cuenta antes de mirarlas.</p>
+            <div class="exs">
+              <div class="ex">
+                <div class="ex-h"><span class="label">Ejercicio 1</span><span class="meter" data-v="1" role="img" aria-label="Fácil"><i></i><i></i><i></i></span></div>
+                <p>Tiras un dado. Si sale par, cobras en euros lo que marca. Si sale impar, pagas 1 €. ¿Cuánto vale el juego?</p>
+                <form class="ex-f" data-ans="1.5" novalidate><label class="sr" for="ex1i">Tu respuesta al ejercicio 1, en euros</label><input class="input" id="ex1i" type="text" inputmode="decimal" autocomplete="off" placeholder="En euros, p. ej. 2,5"><button class="btn" type="submit">Comprobar</button></form>
+                <div class="ex-foot"><p class="fb" aria-live="polite"></p><button class="more linkbtn" type="button" data-reveal="ex1s" data-alt="Ocultar solución" aria-expanded="false" aria-controls="ex1s">Ver solución</button></div>
+                <div class="callout" id="ex1s" hidden><span class="label">Solución</span><p>Los pares aportan \((2+4+6)\cdot\tfrac16 = 2\). Los impares, \(-1\cdot\tfrac36 = -0{,}5\). En total, \(E = 2 - 0{,}5 = 1{,}5\) €.</p></div>
+              </div>
+              <div class="ex">
+                <div class="ex-h"><span class="label">Ejercicio 2</span><span class="meter" data-v="2" role="img" aria-label="Media"><i></i><i></i><i></i></span></div>
+                <p>Tiras dos dados y cobras, en euros, el producto de los dos números. ¿Cuánto vale el juego?</p>
+                <form class="ex-f" data-ans="12.25" novalidate><label class="sr" for="ex2i">Tu respuesta al ejercicio 2, en euros</label><input class="input" id="ex2i" type="text" inputmode="decimal" autocomplete="off" placeholder="En euros, p. ej. 12,5"><button class="btn" type="submit">Comprobar</button></form>
+                <div class="ex-foot"><p class="fb" aria-live="polite"></p><button class="more linkbtn" type="button" data-reveal="ex2s" data-alt="Ocultar solución" aria-expanded="false" aria-controls="ex2s">Ver solución</button></div>
+                <div class="callout" id="ex2s" hidden><span class="label">Solución</span><p>Las dos tiradas son independientes, así que la regla del producto vale: <span class="nw">\(E[XY] = E[X]\,E[Y] = 3{,}5 \cdot 3{,}5 = 12{,}25\) €.</span> Si lo haces a lo largo, sumando los 36 productos, sale <span class="nw">\(\tfrac{441}{36} = 12{,}25\).</span></p><p>Compáralo con cobrar el cuadrado de un solo dado: \(\tfrac{91}{6} \approx 15{,}17\) €. Un dado no es independiente de sí mismo, y la cuenta cambia.</p></div>
+              </div>
+              <div class="ex">
+                <div class="ex-h"><span class="label">Ejercicio 3</span><span class="meter" data-v="2" role="img" aria-label="Media"><i></i><i></i><i></i></span></div>
+                <p>Tiras dos dados. Si la suma es 7 o más, un amigo te paga 5 €. Si es menos de 7, le pagas tú \(x\) euros. ¿Qué \(x\) hace la apuesta justa?</p>
+                <form class="ex-f" data-ans="7" novalidate><label class="sr" for="ex3i">Tu respuesta al ejercicio 3, en euros</label><input class="input" id="ex3i" type="text" inputmode="decimal" autocomplete="off" placeholder="En euros"><button class="btn" type="submit">Comprobar</button></form>
+                <div class="ex-foot"><p class="fb" aria-live="polite"></p><button class="more linkbtn" type="button" data-reveal="ex3s" data-alt="Ocultar solución" aria-expanded="false" aria-controls="ex3s">Ver solución</button></div>
+                <div class="callout" id="ex3s" hidden><span class="label">Solución</span><p>La suma es 7 o más en 21 de los 36 casos, y menos de 7 en 15. La apuesta es justa si \(5\cdot\tfrac{21}{36} = x\cdot\tfrac{15}{36}\), es decir, \(x = \tfrac{105}{15} = 7\) €.</p></div>
+              </div>
             </div>
-            <div class="ex">
-              <div class="ex-h"><span class="label">Ejercicio 2</span><span class="meter" data-v="2" role="img" aria-label="Media"><i></i><i></i><i></i></span></div>
-              <p>Tiras un dado 12 veces seguidas. ¿Cuántas veces esperas que una tirada sea mayor que la anterior?</p>
-              <form class="ex-f" data-ans="4.5833333" novalidate><label class="sr" for="ex2i">Tu respuesta al ejercicio 2</label><input class="input" id="ex2i" type="text" inputmode="decimal" autocomplete="off" placeholder="Con dos decimales o en fracción"><button class="btn" type="submit">Comprobar</button></form>
-              <div class="ex-foot"><p class="fb" aria-live="polite"></p><button class="more linkbtn" type="button" data-reveal="ex2s" data-alt="Ocultar solución" aria-expanded="false" aria-controls="ex2s">Ver solución</button></div>
-              <div class="callout" id="ex2s" hidden><span class="label">Solución</span><p>Hay 11 parejas de tiradas seguidas. En cada pareja, de los 36 casos, 6 son empates y los otros 30 se reparten a partes iguales: la segunda es mayor en 15, con probabilidad \(\tfrac{15}{36} = \tfrac{5}{12}\).</p><p>Las parejas se solapan, pero la linealidad no necesita independencia: \(E = 11\cdot\tfrac{5}{12} = \tfrac{55}{12} \approx 4{,}58\).</p></div>
-            </div>
-            <div class="ex">
-              <div class="ex-h"><span class="label">Ejercicio 3</span><span class="meter" data-v="2" role="img" aria-label="Media"><i></i><i></i><i></i></span></div>
-              <p>Tiras dos dados. Si la suma es 7 o más, un amigo te paga 5 €. Si es menos de 7, le pagas tú \(x\) euros. ¿Qué \(x\) hace la apuesta justa?</p>
-              <form class="ex-f" data-ans="7" novalidate><label class="sr" for="ex3i">Tu respuesta al ejercicio 3, en euros</label><input class="input" id="ex3i" type="text" inputmode="decimal" autocomplete="off" placeholder="En euros"><button class="btn" type="submit">Comprobar</button></form>
-              <div class="ex-foot"><p class="fb" aria-live="polite"></p><button class="more linkbtn" type="button" data-reveal="ex3s" data-alt="Ocultar solución" aria-expanded="false" aria-controls="ex3s">Ver solución</button></div>
-              <div class="callout" id="ex3s" hidden><span class="label">Solución</span><p>La suma es 7 o más en 21 de los 36 casos, y menos de 7 en 15. La apuesta es justa si \(5\cdot\tfrac{21}{36} = x\cdot\tfrac{15}{36}\), es decir, \(x = \tfrac{105}{15} = 7\) €.</p></div>
-            </div>
-          </div>
+          </section>
 
-          <h2 id="resumen">Lo que te llevas</h2>
-          <div class="callout">
-            <span class="label">Clave</span>
-            <p>El valor esperado es la media a la larga: cada resultado por su probabilidad, y todo sumado.</p>
-            <p>La linealidad funciona siempre. Úsala para partir un problema difícil en trozos fáciles.</p>
-            <p>En un juego, el precio justo es el valor esperado. Tu ventaja es la distancia entre ese valor y el precio al que compras o vendes.</p>
-          </div>
+          <section class="ls" id="resumen">
+            <p class="kicker"><b>06</b> / Resumen</p>
+            <h2>Lo que te llevas</h2>
+            <div class="callout">
+              <span class="label">Clave</span>
+              <p>El valor esperado es la media a la larga: cada resultado por su probabilidad, y todo sumado.</p>
+              <p>Las esperanzas se suman siempre. Se multiplican solo con independencia.</p>
+              <p>En un juego, el precio justo es el valor esperado. Tu ventaja es la distancia entre ese valor y el precio al que compras o vendes.</p>
+            </div>
+          </section>
         </article>
 
         <div class="after">
@@ -325,8 +339,8 @@
           </div>
 
           <nav class="prevnext" aria-label="Lecciones del curso">
-            <a href="curso-probabilidad.html" data-soon><span class="label">← Anterior</span><span class="t">Condicionada y Bayes</span></a>
-            <a class="next" href="curso-probabilidad.html" data-soon><span class="label">Siguiente →</span><span class="t">Linealidad e indicadores</span></a>
+            <a href="curso.html?c=fundamentos" data-soon><span class="label">← Anterior</span><span class="t">Reglas de la probabilidad</span></a>
+            <a class="next" href="curso.html?c=fundamentos" data-soon><span class="label">Siguiente →</span><span class="t">Varianza y desviación típica</span></a>
           </nav>
         </div>
       </div>
@@ -379,19 +393,19 @@
       .observe(body,{subtree:true,attributes:true,attributeFilter:['aria-current']});
   }
 
-  /* ---------- simulador ---------- */
+  /* ---------- simulador: la media de tus partidas frente al valor esperado ---------- */
   var cv=document.getElementById('labCv');
   var reduce=!!(window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches);
   var MAX=20000;
   function die(){return 1+Math.floor(Math.random()*6);}
   var G={
-    dado:{q:'Tiras un dado y cobras, en euros, lo que sale.',tex:'E[X] = \\frac{1+2+3+4+5+6}{6} = \\frac{21}{6} = 3{,}5',
+    dado:{q:'Tiras un dado y cobras, en euros, lo que sale.',tex:'\\begin{aligned} E[X] &= \\frac{1+2+3+4+5+6}{6}\\\\[4pt] &= \\frac{21}{6} = 3{,}5\\end{aligned}',
       ev:3.5,evs:'3,5',lo:1,hi:6,ticks:[1,2,3,4,5,6],dec:2,pm:false,draw:die},
-    dos:{q:'Tiras dos dados y cobras la suma.',tex:'E[S] = \\sum_{s=2}^{12} s\\,P(S = s) = \\frac{252}{36} = 7',
+    dos:{q:'Tiras dos dados y cobras la suma.',tex:'\\begin{aligned} E[S] &= \\sum_{s=2}^{12} s\\,P(S = s)\\\\[4pt] &= \\frac{252}{36} = 7\\end{aligned}',
       ev:7,evs:'7',lo:2,hi:12,ticks:[2,4,6,8,10,12],dec:2,pm:false,draw:function(){return die()+die();}},
-    ruleta:{q:'Ruleta europea: 37 casillas, 18 rojas. Apuestas 1 € al rojo y ganas 1 € o lo pierdes.',tex:'E = (+1)\\cdot\\tfrac{18}{37} + (-1)\\cdot\\tfrac{19}{37} = -\\tfrac{1}{37} \\approx -0{,}027',
+    ruleta:{q:'Ruleta europea: 37 casillas, 18 rojas. Apuestas 1 € al rojo y ganas 1 € o lo pierdes.',tex:'\\begin{aligned} E &= (+1)\\cdot\\tfrac{18}{37} + (-1)\\cdot\\tfrac{19}{37}\\\\[4pt] &= -\\tfrac{1}{37} \\approx -0{,}027\\end{aligned}',
       ev:-1/37,evs:'−0,027',lo:-0.3,hi:0.3,ticks:[-0.2,0,0.2],dec:3,pm:true,draw:function(){return Math.random()*37<18?1:-1;}},
-    ventaja:{q:'Apuestas 1 € y ganas el 52 % de las veces. Es la ventaja pequeña del vídeo del canal.',tex:'E = (+1)\\cdot 0{,}52 + (-1)\\cdot 0{,}48 = +0{,}04',
+    ventaja:{q:'Apuestas 1 € y ganas el 52 % de las veces. Es la ventaja pequeña del vídeo del canal.',tex:'\\begin{aligned} E &= (+1)\\cdot 0{,}52 + (-1)\\cdot 0{,}48\\\\[4pt] &= +0{,}04\\end{aligned}',
       ev:0.04,evs:'+0,04',lo:-0.3,hi:0.3,ticks:[-0.2,0,0.2],dec:3,pm:true,draw:function(){return Math.random()<0.52?1:-1;}}
   };
   var g='dado',means=[],sum=0,last=null,pending=0,rate=1,raf=0;
