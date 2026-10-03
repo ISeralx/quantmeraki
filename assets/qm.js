@@ -175,6 +175,39 @@
     b.addEventListener('click',function(){QM.setDone(id,!QM.isDone(id));paint();});paint();
   });
 
+
+  /* ---------- biblioteca personal ----------
+     QM.store es la ÚNICA puerta al almacenamiento. Hoy guarda en el navegador; cuando haya
+     cuentas (login con Google), se cambia QM.store por una sincronización con el servidor
+     y ninguna página tiene que tocarse.
+     <button class="savebtn" type="button" data-save="leccion:valor-esperado" data-save-title="Valor esperado"
+             data-save-type="Lección" data-save-href="leccion-valor-esperado.html" data-save-mins="15">
+       <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h12v18l-6-4-6 4z"/></svg><span class="lbl">Guardar</span></button> */
+  function libEmit(){document.dispatchEvent(new CustomEvent('qm-lib'));}
+  QM.lib={
+    list:function(){return QM.store.get('lib',[]);},
+    has:function(id){return QM.lib.list().some(function(x){return x.id===id;});},
+    save:function(item){var l=QM.lib.list().filter(function(x){return x.id!==item.id;});item.at=Date.now();l.unshift(item);QM.store.set('lib',l);libEmit();},
+    remove:function(id){QM.store.set('lib',QM.lib.list().filter(function(x){return x.id!==id;}));libEmit();},
+    toggle:function(item){if(QM.lib.has(item.id))QM.lib.remove(item.id);else QM.lib.save(item);return QM.lib.has(item.id);}
+  };
+  each('[data-save]',function(b){
+    var item={id:b.getAttribute('data-save'),title:b.getAttribute('data-save-title')||document.title.split(' · ')[0],
+      type:b.getAttribute('data-save-type')||'',href:b.getAttribute('data-save-href')||file,mins:+(b.getAttribute('data-save-mins')||0)};
+    function paint(){
+      var on=QM.lib.has(item.id),l=b.querySelector('.lbl');
+      b.setAttribute('aria-pressed',String(on));b.classList.toggle('on',on);
+      if(l)l.textContent=on?'Guardado':'Guardar';
+      b.setAttribute('aria-label',on?'Quitar de mi biblioteca':'Guardar en mi biblioteca');
+    }
+    b.addEventListener('click',function(e){e.preventDefault();var on=QM.lib.toggle(item);QM.toast(on?'Guardado en tu biblioteca.':'Quitado de tu biblioteca.');});
+    document.addEventListener('qm-lib',paint);paint();
+  });
+
+
+  /* ---------- números de sección grandes: <p class="kicker"><b>02</b> / Tus marcas</p> ---------- */
+  each('.kicker b',function(b){if(/^\s*\d{1,2}\s*$/.test(b.textContent)){b.classList.add('kn');b.parentNode.classList.add('kn-on');}});
+
   /* ---------- índice lateral que sigue la lectura ---------- */
   var toc=document.querySelector('.toc');
   if(toc&&'IntersectionObserver' in window){
