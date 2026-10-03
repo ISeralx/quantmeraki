@@ -15,6 +15,7 @@
 <style>
   .col{max-width:720px;margin-inline:auto}
   .qmeta{display:flex;flex-wrap:wrap;align-items:center;gap:8px 14px;margin:0 0 18px}
+  .qmeta .savebtn{margin-left:auto}
   .lvl{display:inline-flex;align-items:center;gap:8px;font-family:var(--disp);font-weight:700;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
 
   /* enunciado */
@@ -162,7 +163,9 @@
         <div class="qmeta">
           <span class="tag">Esperanza</span>
           <span class="lvl"><span class="meter" data-v="2" aria-hidden="true"><i></i><i></i><i></i></span>Media</span>
+          <span class="time"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>10 min</span>
           <span class="tag acc">Reto de la semana</span>
+          <button class="savebtn" type="button" data-save="pregunta:juego-del-dado" data-save-title="El juego del dado" data-save-type="Pregunta" data-save-href="pregunta-juego-del-dado.html" data-save-mins="10"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h12v18l-6-4-6 4z"/></svg><span class="lbl">Guardar</span></button>
         </div>
         <h1 class="h1">El juego del dado</h1>
       </section>

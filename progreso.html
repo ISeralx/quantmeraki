@@ -41,6 +41,17 @@
   .sample-btn{background:none;border:0;padding:10px 0;min-height:40px;font-size:14px;color:var(--muted);text-decoration:underline;text-underline-offset:3px;cursor:pointer}
   .sample-btn:hover{color:var(--txt)}
   .data-note{font-size:14.5px;color:var(--muted);margin:14px 0 0;max-width:52ch}
+  /* biblioteca: lo guardado con el botón Guardar */
+  .lib .item{padding:14px 0}
+  .lib .item-t{font-size:16px}
+  .lib a.item-t:hover{color:var(--acc-txt)}
+  .lib .rm{width:36px;height:36px;color:var(--muted)}
+  .lib .rm:hover{color:var(--bad);border-color:var(--bad-line)}
+  .lib .rm .ico{width:16px;height:16px}
+  .lib-n{font-size:14.5px;color:var(--muted);margin:14px 0 0}
+  .lib-chips{margin-top:20px}
+  .lib-chips .cn{margin-left:6px;opacity:.65;font-variant-numeric:tabular-nums}
+  .lib-empty{margin:0}
   @media (max-width:600px){
     .steps .item{grid-template-columns:28px minmax(0,1fr) auto}
     .start .item{grid-template-columns:36px minmax(0,1fr)}
@@ -101,7 +112,7 @@
         <h1 class="h1">Mi progreso</h1>
         <span class="tag ex" id="sampleTag" hidden>Datos de ejemplo</span>
       </div>
-      <p class="lead">Lo que has hecho, tus marcas y el siguiente paso. Sin cuenta: todo se guarda en este navegador.</p>
+      <p class="lead">Lo que has hecho, tus marcas, tu biblioteca y el siguiente paso. Sin cuenta: todo se guarda en este navegador.</p>
     </section>
 
     <!-- ===================== VACÍO: EMPIEZA AQUÍ ===================== -->
@@ -192,20 +203,37 @@
       </section>
     </div>
 
+    <!-- ===================== BIBLIOTECA ===================== -->
+    <section class="sec tight" aria-labelledby="lib-h">
+      <div class="split">
+        <div class="side">
+          <p class="kicker"><b>04</b> / Mi biblioteca</p>
+          <h2 class="h2" id="lib-h" tabindex="-1">Guardado para después</h2>
+          <p class="lead">Lo que has guardado con el botón Guardar: lecciones, guías, preguntas, vídeos, firmas y problemas de código.</p>
+          <p class="lib-n" id="libN" aria-live="polite"></p>
+          <div class="chips lib-chips" role="group" aria-label="Tipo" id="libChips" hidden></div>
+        </div>
+        <div>
+          <div class="list lib" id="lib"></div>
+          <p class="empty lib-empty" id="libEmpty">Guarda lecciones, guías y preguntas con el botón Guardar.</p>
+        </div>
+      </div>
+    </section>
+
     <!-- ===================== DATOS ===================== -->
     <section class="sec">
       <div class="split">
         <div class="side">
-          <p class="kicker"><b>04</b> / Tus datos</p>
+          <p class="kicker"><b>05</b> / Tus datos</p>
           <h2 class="h2">Solo en este navegador</h2>
-          <p class="lead">Tu progreso vive en el almacenamiento local de este navegador. No se envía a ningún sitio, no pasa a otro dispositivo y se pierde si borras los datos del sitio.</p>
+          <p class="lead">Tu progreso y tu biblioteca viven, de momento, en el almacenamiento local de este navegador: no se envían a ningún sitio, no pasan a otro dispositivo y se pierden si borras los datos del sitio. Cuando llegue el inicio de sesión, se sincronizarán con tu cuenta.</p>
         </div>
         <div>
           <div class="btns">
             <button class="btn danger" type="button" id="resetBtn" aria-expanded="false" aria-controls="confirmBox">Borrar mi progreso</button>
           </div>
           <div class="confirm" id="confirmBox" hidden>
-            <p>Se borran tus preguntas hechas, marcas, historial y la ruta. No se puede deshacer.</p>
+            <p>Se borran tus preguntas hechas, marcas, historial, la ruta y tu biblioteca. No se puede deshacer.</p>
             <div class="btns"><button class="btn danger sm" type="button" id="resetYes">Sí, borrar todo</button><button class="btn ghost sm" type="button" id="resetNo">Cancelar</button></div>
           </div>
           <p class="data-note" id="resetMsg" role="status"></p>
@@ -391,9 +419,10 @@
   rb.addEventListener('click',function(){openC(cb.hidden);});
   $('resetNo').addEventListener('click',function(){openC(false);rb.focus();});
   $('resetYes').addEventListener('click',function(){
-    QM.store.set('done',{});QM.store.set('best',{});QM.store.set('hist',{});QM.store.set('sample',false);
-    openC(false);$('resetMsg').textContent='Progreso borrado.';
+    QM.store.set('done',{});QM.store.set('best',{});QM.store.set('hist',{});QM.store.set('sample',false);QM.store.remove('lib');
+    openC(false);$('resetMsg').textContent='Progreso y biblioteca borrados.';
     document.dispatchEvent(new CustomEvent('qm-progress',{detail:{id:'*',on:false}}));
+    document.dispatchEvent(new CustomEvent('qm-lib'));
     render();window.scrollTo({top:0,behavior:'smooth'});
   });
 
@@ -418,11 +447,61 @@
     QM.store.set('done',done);
     QM.store.set('best',{'calculo-60':25,'calculo-120':39,'calculo-300':91,'simulacro-calculo':53,'juego-mercado-dados':11});
     QM.store.set('hist',hist);QM.store.set('sample',true);
+    /* biblioteca de ejemplo: se añade a lo que ya tengas guardado, sin pisarlo */
+    var lib=QM.lib.list(),add=[
+      {id:'guia:que-hace-un-quant-trader',title:'¿Qué hace realmente un quant trader?',type:'Guía',href:'guia-que-hace-un-quant-trader.html',mins:5,at:now-23*DAY-H},
+      {id:'leccion:valor-esperado',title:'Valor esperado',type:'Lección',href:'leccion-valor-esperado.html',mins:16,at:now-21*DAY-2*H},
+      {id:'pregunta:juego-del-dado',title:'El juego del dado',type:'Pregunta',href:'pregunta-juego-del-dado.html',mins:10,at:now-19*DAY-5*H},
+      {id:'firma:optiver',title:'Optiver',type:'Firma',href:'firma-optiver.html',mins:3,at:now-4*DAY},
+      {id:'codigo:libro-de-ordenes',title:'Libro de órdenes: mejor precio',type:'Código',href:'codigo-libro-de-ordenes.html',mins:30,at:now-DAY-6*H}
+    ];
+    add.forEach(function(x){if(!lib.some(function(y){return y&&y.id===x.id;}))lib.push(x);});
+    lib.sort(function(a,b){return (b.at||0)-(a.at||0);});
+    QM.store.set('lib',lib);
+    document.dispatchEvent(new CustomEvent('qm-lib'));
     $('resetMsg').textContent='Datos de ejemplo cargados. Bórralos con «Borrar mi progreso».';
     render();window.scrollTo({top:0,behavior:'smooth'});
   }
   $('sampleBtn').addEventListener('click',sample);
   $('sampleBtn2').addEventListener('click',sample);
+
+  /* ---------- biblioteca: lo guardado con [data-save] en cada ficha ---------- */
+  var ORDER=['Lección','Guía','Pregunta','Vídeo','Firma','Código','Juego','Simulacro'],libType='all';
+  var CLOCK='<svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>';
+  function savedWhen(t){var w=when(t);return 'Guardado '+(/^\d/.test(w)?'el '+w:w);}
+  function renderLib(){
+    var all=QM.lib.list().filter(function(x){return x&&x.id;});
+    var types=[];all.forEach(function(x){if(x.type&&types.indexOf(x.type)<0)types.push(x.type);});
+    types.sort(function(a,b){var i=ORDER.indexOf(a),j=ORDER.indexOf(b);return ((i<0?99:i)-(j<0?99:j))||a.localeCompare(b);});
+    if(libType!=='all'&&types.indexOf(libType)<0)libType='all';
+    var chips=$('libChips');
+    chips.hidden=types.length<2;
+    chips.innerHTML=[['all','Todo']].concat(types.map(function(t){return [t,t];})).map(function(c){
+      var n=c[0]==='all'?all.length:all.filter(function(x){return x.type===c[0];}).length;
+      return '<button class="chip" type="button" data-lt="'+esc(c[0])+'" aria-pressed="'+(libType===c[0])+'">'+esc(c[1])+'<span class="cn">'+n+'</span></button>';
+    }).join('');
+    var items=libType==='all'?all:all.filter(function(x){return x.type===libType;});
+    $('lib').innerHTML=items.map(function(x){
+      var t=x.title||x.id,m=+x.mins;
+      return '<div class="item"><span><a class="item-t" href="'+esc(x.href||'#')+'">'+esc(t)+'</a><span class="item-d">'+savedWhen(x.at||Date.now())+'</span></span>'+
+        '<span class="item-m">'+(x.type?'<span class="tag">'+esc(x.type)+'</span>':'')+(m>0?'<span class="time">'+CLOCK+m+' min</span>':'')+
+        '<button class="iconbtn rm" type="button" data-rm="'+esc(x.id)+'" aria-label="Quitar «'+esc(t)+'» de mi biblioteca" title="Quitar de mi biblioteca"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button></span></div>';
+    }).join('');
+    $('libEmpty').hidden=all.length>0;
+    var mins=all.reduce(function(a,x){return a+(+x.mins>0?+x.mins:0);},0);
+    $('libN').textContent=all.length?all.length+(all.length===1?' elemento guardado':' elementos guardados')+(mins?' · '+mins+' min en total':''):'';
+  }
+  $('libChips').addEventListener('click',function(e){
+    var b=e.target.closest&&e.target.closest('[data-lt]');if(!b)return;
+    libType=b.getAttribute('data-lt');renderLib();
+  });
+  $('lib').addEventListener('click',function(e){
+    var b=e.target.closest&&e.target.closest('[data-rm]');if(!b)return;
+    QM.lib.remove(b.getAttribute('data-rm'));QM.toast('Quitado de tu biblioteca.');
+    $('lib-h').focus({preventScroll:true});
+  });
+  document.addEventListener('qm-lib',renderLib);
+  renderLib();
 
   render();
 })();

@@ -19,7 +19,8 @@
 
   /* tarjeta foco */
   .fermi{max-width:600px;margin-inline:auto;padding:clamp(22px,4.5vw,36px);text-align:center}
-  .f-top{display:flex;justify-content:space-between;align-items:center;gap:12px;text-align:left}
+  .f-top{display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px;text-align:left}
+  .f-top-r{display:inline-flex;align-items:center;gap:14px;margin-left:auto}
   .f-top .meter{gap:4px}
   .fq{font-family:var(--disp);font-weight:800;text-transform:uppercase;font-size:clamp(26px,4.2vw,38px);line-height:1;letter-spacing:.005em;margin:26px 0 30px;text-wrap:balance}
   .f-unit{display:block;color:var(--acc-txt);margin-bottom:10px}
@@ -160,7 +161,8 @@
     <section class="card fermi" aria-labelledby="q">
       <div class="f-top">
         <span class="label">Estimación · Consumo</span>
-        <span class="meter" data-v="1" role="img" aria-label="Dificultad fácil"><i></i><i></i><i></i></span>
+        <span class="time"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>6 min</span>
+        <span class="f-top-r"><span class="meter" data-v="1" role="img" aria-label="Dificultad fácil"><i></i><i></i><i></i></span><button class="savebtn" type="button" data-save="pregunta:cafe-en-madrid" data-save-title="Cafés en Madrid" data-save-type="Pregunta" data-save-href="estimacion-cafe-en-madrid.html" data-save-mins="6"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h12v18l-6-4-6 4z"/></svg><span class="lbl">Guardar</span></button></span>
       </div>
       <h1 class="fq" id="q">¿Cuántos cafés se toman al día en la ciudad de Madrid?</h1>
       <form id="fForm" novalidate>

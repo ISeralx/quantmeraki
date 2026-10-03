@@ -22,6 +22,9 @@
   .toc-course a b{font-family:var(--disp);font-weight:700;color:var(--faint)}
   .toc a[aria-current="page"]{color:var(--txt);border-left-color:var(--accent)}
   .toc a[aria-current="page"] b{color:var(--acc-txt)}
+  /* tiempo medio y guardar, en la línea de datos de la lección */
+  .byline{align-items:center}
+  .byline .savebtn{margin-left:auto}
   @media (min-width:901px){
     .toc{max-height:calc(100vh - 120px);overflow-y:auto;overscroll-behavior:contain;padding-right:6px;scrollbar-width:thin}
   }
@@ -151,7 +154,7 @@
       <p class="kicker"><b>Lección 04</b> / Probabilidad para entrevistas</p>
       <h1 class="h1">Valor esperado</h1>
       <p class="lead">Cuánto vale un juego antes de jugarlo. Con esta idea se pone precio a cualquier apuesta.</p>
-      <div class="byline"><span>Lección 4 de 10</span><span>16 min</span><span>Nivel básico</span><span>3 ejercicios</span></div>
+      <div class="byline"><span>Lección 4 de 10</span><span class="time"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>16 min</span><span>Nivel básico</span><span>3 ejercicios</span><button class="savebtn" type="button" data-save="leccion:valor-esperado" data-save-title="Valor esperado" data-save-type="Lección" data-save-href="leccion-valor-esperado.html" data-save-mins="16"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h12v18l-6-4-6 4z"/></svg><span class="lbl">Guardar</span></button></div>
     </section>
 
     <div class="doc">
