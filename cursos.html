@@ -25,6 +25,7 @@
   .cm{font-size:14px;color:var(--muted);white-space:nowrap}
 
   /* catálogo: grupos por área, cada uno con su listado en recuadro */
+  .tb1{flex-wrap:nowrap} /* la barra de chips va sola: en columna (móvil) toma el ancho del contenedor, no el de los chips */
   .tb2 .search{max-width:none}
   .grp{margin-top:40px}
   .grp.first-v{margin-top:0}
@@ -123,7 +124,7 @@
       <h2 class="h2" id="cat-h">Los ocho cursos</h2>
       <p class="lead">Agrupados por área. Pulsa un área para quedarte solo con sus cursos, o busca un tema.</p>
 
-      <div class="toolbar" style="margin-top:28px">
+      <div class="toolbar tb1" style="margin-top:28px">
         <div class="chips scroll" role="group" aria-label="Área" id="areaChips"></div>
       </div>
       <div class="toolbar tb2">
@@ -192,7 +193,7 @@
   <div class="wrap">
     <div class="cols">
       <div class="brandcol"><a class="logo" href="index.html"><img src="assets/perfil-128.png" alt="" width="34" height="34"><span>QuantMeraki</span></a><p class="claim">El mundo quant, en español.</p></div>
-      <div><h4>Practica</h4><ul><li><a href="entrenadores.html">Entrenadores</a></li><li><a href="preguntas.html">Preguntas</a></li><li><a href="juegos.html">Juegos de mercado</a></li><li><a href="simulacros.html">Simulacros</a></li><li><a href="codigo.html">Código</a></li></ul></div>
+      <div><h4>Practica</h4><ul><li><a href="entrenadores.html">Entrenadores</a></li><li><a href="preguntas.html">Preguntas</a></li><li><a href="juegos.html">Juegos de mercado</a></li><li><a href="simulacros.html">Pruebas</a></li><li><a href="codigo.html">Código</a></li></ul></div>
       <div><h4>Aprende</h4><ul><li><a href="rutas.html">Rutas</a></li><li><a href="cursos.html">Cursos</a></li><li><a href="guias.html">Guías</a></li><li><a href="canal.html">El canal</a></li></ul></div>
       <div><h4>QuantMeraki</h4><ul><li><a href="firmas.html">Firmas</a></li><li><a href="empleo.html">Empleo</a></li><li><a href="progreso.html">Mi progreso</a></li><li><a href="sobre.html">Sobre el proyecto</a></li></ul></div>
     </div>
@@ -274,7 +275,7 @@
       html+='<a class="item lead-num" href="'+esc(c.href)+'" data-row="'+esc(c.id)+'" data-area-of="'+a.id+'">'
         +'<span class="item-n">'+pad(n)+'</span>'
         +'<span><span class="item-t">'+esc(c.titulo)+'</span><span class="item-d">'+esc(c.descripcion)+'</span>'
-        +'<span class="cline"><span class="lv"><span class="meter" data-v="'+lv+'" role="img" aria-label="'+esc(nivelTxt(c.nivel))+'"><i></i><i></i><i></i></span>'+esc(nivelTxt(c.nivel))+'</span><span class="sep">·</span><span>'+c.secciones.length+' secciones · '+c.nLecciones+' lecciones · '+esc(CAT.fmt(c.min))+'</span></span></span>'
+        +'<span class="cline"><span class="lv"><span class="meter" data-v="'+lv+'" role="img" aria-label="'+esc(nivelTxt(c.nivel))+'"><i></i><i></i><i></i></span>'+esc(nivelTxt(c.nivel))+'</span><span class="sep">·</span><span>'+c.secciones.length+(c.secciones.length===1?' sección':' secciones')+' · '+c.nLecciones+' lecciones · '+esc(CAT.fmt(c.min))+'</span></span></span>'
         +'<span class="item-m">'+dispTag+'<span class="mini" data-prog="'+esc(c.id)+'"><span class="bar-p" style="--p:0%"><i></i></span><span>0/'+c.nLecciones+'</span></span><span class="arrow" aria-hidden="true">→</span></span>'
         +'</a>';
       rows.push({id:c.id,area:a.id,txt:textoBusqueda(c)});

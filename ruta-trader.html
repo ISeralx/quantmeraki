@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="robots" content="noindex, nofollow">
 <title>Ruta Trader · QuantMeraki</title>
-<meta name="description" content="La ruta de quant trader en QuantMeraki: 19 pasos en orden, de la base numérica al proceso de selección, con tu progreso guardado en el navegador.">
+<meta name="description" content="La ruta de quant trader en QuantMeraki: ocho secciones en el orden en que te lo van a pedir, de la velocidad de cálculo a las pruebas de cada firma, con tu avance guardado en el navegador.">
 <link rel="icon" href="assets/perfil-128.png">
 <script>try{var t=localStorage.getItem('qm-theme');document.documentElement.setAttribute('data-theme',t||'light');}catch(e){}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -13,296 +13,371 @@
 <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;500;600;700&family=Barlow+Semi+Condensed:wght@600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/qm.css">
 <style>
+  /* ---------- cabecera ---------- */
   .rt-meta{display:flex;flex-wrap:wrap;gap:6px 22px;margin:22px 0 0;padding:0;list-style:none;font-size:14px;color:var(--muted)}
   .rt-meta b{font-family:var(--disp);font-weight:700;color:var(--txt);letter-spacing:.02em}
-  .rt{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:clamp(28px,5vw,64px);align-items:start}
-  .rt-aside{position:sticky;top:92px;display:grid;gap:14px}
-  .nx .label{display:block;color:var(--acc-txt)}
-  .nx-k{margin:14px 0 4px;font-family:var(--mono);font-size:12.5px;color:var(--muted)}
-  .nx .h3{font-size:22px;line-height:1.15}
-  .nx-d{margin:8px 0 0;font-size:15px;color:var(--muted)}
-  .nx .btns{margin-top:18px;display:flex;flex-wrap:wrap;gap:10px}
-  .nx .btn{min-height:42px}
-  .pg{padding:18px 20px}
-  .pg-row{display:flex;justify-content:space-between;align-items:baseline;gap:12px}
-  .pg-v{font-family:var(--disp);font-weight:800;font-size:28px;line-height:1;font-variant-numeric:tabular-nums}
-  .pg-v small{font-size:15px;font-weight:700;color:var(--muted);margin-left:4px}
-  .pg-l{font-size:13.5px;color:var(--muted)}
-  .pg .bar-p{margin-top:14px}
-  .reset{margin-top:14px;font-size:14px;color:var(--muted)}
-  .linkbtn{background:none;border:0;padding:0;min-height:40px;font:inherit;color:var(--acc-txt);cursor:pointer;text-decoration:underline;text-underline-offset:3px;text-decoration-thickness:1px}
-  .linkbtn:hover{color:var(--txt)}
-  .confirm{margin-top:6px}
-  .confirm p{margin:0 0 10px}
-  .confirm .btns{display:flex;flex-wrap:wrap;gap:10px}
 
-  .stage{scroll-margin-top:84px}
-  .stage+.stage{margin-top:clamp(40px,6vw,64px)}
-  .stage-h{display:flex;align-items:flex-end;justify-content:space-between;gap:10px 20px;flex-wrap:wrap;padding-bottom:12px}
-  .stage-h .h2{margin-top:4px}
-  .stage-c{font-family:var(--mono);font-size:13px;color:var(--muted);white-space:nowrap}
-  .stage-c.full{color:var(--acc-txt)}
-  .stage-d{margin:0 0 18px;color:var(--muted);max-width:56ch}
-  .steps{list-style:none;margin:0;padding:0;border-top:1px solid var(--line2)}
-  .step{display:grid;grid-template-columns:40px minmax(0,1fr) auto 44px;align-items:center;gap:6px 18px;padding:16px 0;border-bottom:1px solid var(--line2)}
-  .step-n{font-family:var(--disp);font-weight:800;font-size:15px;color:var(--faint);font-variant-numeric:tabular-nums}
-  .step.next .step-n{color:var(--acc-txt)}
-  .step-t{display:inline-block;font-family:var(--disp);font-weight:700;font-size:18px;letter-spacing:.02em;text-transform:uppercase;line-height:1.2;padding-block:4px;transition:color .15s}
-  .step-t:hover{color:var(--acc-txt)}
-  .step.is-done .step-t{color:var(--muted)}
-  .step-d{display:block;font-size:14.5px;color:var(--muted)}
-  .step-m{display:flex;align-items:center;justify-content:flex-end;gap:8px 14px;flex-wrap:wrap}
-  .mins{font-family:var(--mono);font-size:13px;color:var(--muted);white-space:nowrap;min-width:52px;text-align:right}
-  .tag.soon{border-style:dashed;color:var(--faint)}
-  .tick{display:inline-grid;place-items:center;width:44px;height:44px;background:none;border:0;border-radius:3px;cursor:pointer;color:inherit}
+  /* ---------- tu avance ---------- */
+  .pcard{border:1px solid var(--line);border-radius:4px;background:var(--bg);overflow:hidden}
+  .pcard .stats{border:0;border-radius:0;border-bottom:1px solid var(--line)}
+  .pcard .stat .v{font-size:28px}
+  .stat .v small{font-size:14px;font-weight:700;color:var(--muted);margin-left:4px}
+  .stat .x{display:block;font-size:14px;color:var(--dim);margin-top:6px;line-height:1.35}
+  .stat .bar-p{margin-top:12px}
+  .pfoot{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:14px 28px;padding:20px 22px;background:var(--panel)}
+  .pfoot .label{display:block;color:var(--acc-txt)}
+  .nx-k{margin:8px 0 0;font-family:var(--mono);font-size:12.5px;color:var(--muted)}
+  .nx-t{margin:4px 0 0;font-family:var(--disp);font-weight:800;font-size:22px;line-height:1.1;text-transform:uppercase;letter-spacing:.01em}
+  .pfoot .btn{white-space:normal;text-align:center;max-width:360px}
+  .how{margin-top:20px}
+  .how .acc-btn{padding-block:16px}
+  .how .acc-btn .item-t{font-size:16px}
+  .how-steps{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+  .how-steps li{border:1px solid var(--line2);border-radius:3px;background:var(--panel);padding:16px 16px 14px}
+  .how-steps b{display:block;font-family:var(--disp);font-weight:800;font-size:20px;color:var(--acc-txt);margin-bottom:6px}
+  .how-steps strong{display:block;font-family:var(--disp);font-weight:700;font-size:15px;text-transform:uppercase;letter-spacing:.03em;margin-bottom:4px}
+  .how-steps p{margin:0;font-size:14.5px;color:var(--muted)}
+  .how-ritmo{margin:14px 0 0;font-size:14.5px;color:var(--dim)}
+
+  /* ---------- tarjetas de sección ---------- */
+  .scards{display:grid;gap:14px}
+  .scard{border:1px solid var(--line);border-radius:4px;background:var(--bg);scroll-margin-top:84px;transition:border-color .15s}
+  .scard.open{border-color:var(--faint)}
+  .scard.full{border-color:var(--good-line)}
+  .sc-h{display:grid;grid-template-columns:64px minmax(0,1fr) auto;gap:14px 22px;align-items:start;padding:22px 22px 20px;cursor:pointer}
+  .sc-h:hover .sc-t{color:var(--acc-txt)}
+  .ring{position:relative;display:block;width:64px;height:64px;flex:none}
+  .ring svg{display:block;width:100%;height:100%;transform:rotate(-90deg)}
+  .ring circle{fill:none;stroke-width:3}
+  .ring .bg{stroke:var(--line)}
+  .ring .fg{stroke:var(--accent);stroke-linecap:round;stroke-dasharray:182.2;stroke-dashoffset:182.2;transition:stroke-dashoffset .35s}
+  .scard.full .ring .fg{stroke:var(--good)}
+  .ring b{position:absolute;inset:0;display:grid;place-items:center;font-family:var(--disp);font-weight:800;font-size:21px;line-height:1;color:var(--txt);font-variant-numeric:tabular-nums}
+  .sc-main{min-width:0}
+  .sc-t{display:flex;flex-wrap:wrap;align-items:center;gap:6px 12px;margin:0;font-family:var(--disp);font-weight:800;font-size:23px;line-height:1.1;text-transform:uppercase;letter-spacing:.01em;transition:color .15s}
+  .sc-f{margin:6px 0 0;font-family:var(--mono);font-size:13px;color:var(--muted)}
+  .sc-f .sc-n2{display:none}
+  .sc-d{margin:10px 0 0;font-size:15px;color:var(--dim);max-width:64ch}
+  .sc-prep{display:flex;flex-wrap:wrap;align-items:center;gap:6px 8px;margin:12px 0 0}
+  .sc-prep .label{margin-right:4px}
+  .pref,.sref{display:inline-flex;align-items:center;font-family:var(--disp);font-weight:700;font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--acc-txt);border-bottom:1px solid var(--accent-line);line-height:1.5;transition:color .15s,border-color .15s}
+  .pref:hover,.sref:hover{color:var(--txt);border-color:var(--txt)}
+  .sc-chips{display:flex;flex-wrap:wrap;gap:6px;margin:14px 0 0}
+  .sc-r{display:flex;align-items:center;gap:14px;justify-self:end}
+  .sc-n{font-family:var(--mono);font-size:13px;color:var(--muted);white-space:nowrap}
+  .sc-n.full{color:var(--good)}
+  .chev{width:20px;height:20px;transition:transform .2s}
+  [aria-expanded="true"]>.chev{transform:rotate(180deg)}
+  .sc-b{border-top:1px solid var(--line);padding:4px 22px 20px}
+  .sc-note{margin:16px 0 0;font-size:13.5px;color:var(--muted)}
+
+  /* ---------- línea de tiempo de los elementos ---------- */
+  .tl{list-style:none;margin:0;padding:0;position:relative}
+  .tl::before{content:"";position:absolute;left:11.5px;top:28px;bottom:28px;width:1px;background:var(--line)}
+  .tl-i{display:grid;grid-template-columns:24px minmax(0,1fr) auto;gap:6px 16px;align-items:start;padding:16px 0;border-bottom:1px solid var(--line2);position:relative}
+  .tl-i:last-child{border-bottom:0}
+  .tl-c{display:grid;place-items:center;width:24px;height:24px;margin-top:1px}
+  .tl .check{background:var(--bg);position:relative;z-index:1}
+  .tl .check.on{background:var(--accent)}
+  .tl .check.half{border-color:var(--accent);background:conic-gradient(var(--accent) var(--p,0%),var(--bg) 0)}
+  .tick{display:grid;place-items:center;width:24px;height:24px;padding:0;background:none;border:0;border-radius:50%;cursor:pointer;color:inherit}
   .tick:hover .check{border-color:var(--accent)}
-  .tick[aria-disabled="true"]{cursor:default}
-  .own{display:block;margin-top:4px;font-size:12.5px;color:var(--acc-txt)}
-  .after{margin-top:clamp(40px,6vw,64px);padding-top:28px;border-top:1px solid var(--line2)}
-  .after .h3+p{margin:8px 0 0;color:var(--muted)}
+  .tl-main{min-width:0}
+  .tl-k{display:flex;flex-wrap:wrap;align-items:center;gap:4px 10px;font-family:var(--disp);font-weight:700;font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);line-height:1.4}
+  .tl-k .ico{width:16px;height:16px;color:var(--muted)}
+  .tl-k .tl-sub{color:var(--faint)}
+  .tl-t{display:inline-block;margin-top:4px;font-family:var(--disp);font-weight:700;font-size:17.5px;letter-spacing:.02em;text-transform:uppercase;line-height:1.2;transition:color .15s}
+  a.tl-t:hover{color:var(--acc-txt)}
+  .tl-i.is-done .tl-t{color:var(--muted)}
+  .tl-m{display:block;margin-top:4px;font-size:14.5px;color:var(--muted)}
+  .tl-m b{font-weight:600;color:var(--dim)}
+  .tl-note{display:block;margin-top:4px;font-size:13.5px;color:var(--acc-txt)}
+  .tl-r{display:flex;align-items:center;gap:10px;padding-top:3px}
+  .mins{font-family:var(--mono);font-size:13px;color:var(--muted);white-space:nowrap}
+  .tag.soon{border-style:dashed;color:var(--faint)}
+
+  /* ---------- lecciones de un curso ---------- */
+  .cl-btn{display:inline-flex;align-items:center;gap:10px;margin-top:10px;min-height:36px;padding:0;background:none;border:0;cursor:pointer;font-family:var(--disp);font-weight:700;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--acc-txt)}
+  .cl-btn:hover{color:var(--txt)}
+  .cl-btn .cl-btn-n{font-family:var(--mono);font-weight:400;font-size:12.5px;letter-spacing:0;text-transform:none;color:var(--muted)}
+  .cl-btn .chev{width:16px;height:16px}
+  .cl{margin-top:12px;border:1px solid var(--line);border-radius:4px;background:var(--panel);padding:2px 16px 6px}
+  .cl-g+.cl-g{border-top:1px solid var(--line)}
+  .cl-s{display:flex;align-items:center;gap:10px;margin:0;padding:14px 0 6px;font-family:var(--disp);font-weight:700;font-size:11.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--dim)}
+  .cl-s b{display:inline-grid;place-items:center;min-width:26px;height:24px;padding:0 5px;border:1px solid var(--accent-line);border-radius:2px;background:var(--accent-dim);color:var(--acc-txt);font-size:12px;letter-spacing:.02em}
+  .cl-l{display:grid;grid-template-columns:16px minmax(0,1fr) auto;gap:4px 12px;align-items:center;padding:10px 0;border-bottom:1px solid var(--line2)}
+  .cl-g .cl-l:last-child{border-bottom:0}
+  .cl-l .check{width:16px;height:16px;background:var(--bg)}
+  .cl-l .check.on{background:var(--accent)}
+  .cl-l .check.on::after{width:6px;height:3px}
+  .cl-t{display:inline-block;font-size:15.5px;font-weight:500;color:var(--txt);line-height:1.3;transition:color .15s}
+  a.cl-t:hover{color:var(--acc-txt)}
+  .cl-l.is-done .cl-t{color:var(--muted)}
+  .cl-k{display:flex;flex-wrap:wrap;align-items:center;gap:3px 8px;margin-top:2px;font-size:13px;color:var(--muted)}
+  .cl-k .ico{width:14px;height:14px;color:var(--faint)}
+  .cl-k .tp{font-family:var(--disp);font-weight:700;font-size:11px;letter-spacing:.14em;text-transform:uppercase}
+  .cl-r{display:flex;align-items:center;gap:8px}
+
+  /* ---------- hito ---------- */
+  .hito{display:grid;grid-template-columns:56px minmax(0,1fr) auto;gap:14px 20px;align-items:center;margin-top:28px;padding:22px 24px;border:1px dashed var(--accent-line);border-radius:4px;background:var(--accent-dim)}
+  .hito.on{border-style:solid;border-color:var(--good-line);background:var(--good-dim)}
+  .hito-i{display:grid;place-items:center;width:56px;height:56px;border-radius:50%;border:1.5px solid var(--accent-line);background:var(--bg);color:var(--acc-txt)}
+  .hito.on .hito-i{border-color:var(--good-line);color:var(--good)}
+  .hito-i .ico{width:26px;height:26px}
+  .hito .h3{font-size:22px}
+  .hito p{margin:6px 0 0;font-size:15px;color:var(--dim)}
+  .hito-s{font-family:var(--mono);font-size:13px;color:var(--muted);white-space:nowrap}
+  .hito.on .hito-s{color:var(--good)}
+  .opc-note{margin:0 0 22px;font-size:15px;color:var(--muted);max-width:64ch}
+
+  /* ---------- el proceso: pasos horizontales ---------- */
+  .stepper{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));margin:0;padding:0;border:1px solid var(--line);border-radius:4px;background:var(--bg);overflow:hidden}
+  .st-b{position:relative;display:grid;justify-items:center;align-content:start;gap:10px;min-height:96px;padding:18px 8px 16px;background:none;border:0;border-right:1px solid var(--line2);cursor:pointer;text-align:center;font-family:var(--disp);font-weight:700;font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;line-height:1.25;color:var(--muted);transition:color .15s,background .15s}
+  .st-b:last-child{border-right:0}
+  .st-b::before{content:"";position:absolute;left:0;right:0;top:35px;height:1px;background:var(--line)}
+  .st-b:first-child::before{left:50%}
+  .st-b:last-child::before{right:50%}
+  .st-b i{position:relative;z-index:1;display:grid;place-items:center;width:34px;height:34px;border-radius:50%;border:1.5px solid var(--line);background:var(--bg);font-style:normal;font-size:14px;color:var(--dim);transition:background .15s,border-color .15s,color .15s}
+  .st-b:hover{color:var(--txt)}
+  .st-b:hover i{border-color:var(--faint)}
+  .st-b[aria-selected="true"]{color:var(--txt);background:var(--panel)}
+  .st-b[aria-selected="true"] i{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+  .stage{margin-top:22px}
+  .stage-k{margin:0 0 6px;font-family:var(--mono);font-size:12.5px;color:var(--muted)}
+  .stage .h3{font-size:24px}
+  .stage-d{margin:10px 0 0;font-size:16px;color:var(--dim);max-width:66ch}
+  .rounds-l{display:block;margin:24px 0 10px}
+  .round .prep{display:flex;flex-wrap:wrap;align-items:center;justify-content:flex-end;gap:6px 10px;max-width:320px}
+  .round .prep .label{margin-right:2px}
+
+  /* ---------- firmas ---------- */
+  .firms{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+  .fcard{display:grid;grid-template-columns:42px minmax(0,1fr);gap:12px;align-items:center;padding:16px;border:1px solid var(--line);border-radius:4px;background:var(--bg);transition:border-color .15s}
+  .fcard:hover{border-color:var(--accent-line)}
+  .mg{display:inline-grid;place-items:center;width:42px;height:42px;border:1px solid var(--line);border-radius:3px;background:var(--panel);font-family:var(--disp);font-weight:800;font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--dim);flex:none;transition:border-color .15s,color .15s}
+  .fcard:hover .mg{border-color:var(--accent-line);color:var(--acc-txt)}
+  .fcard .ft{display:block;font-family:var(--disp);font-weight:700;font-size:15.5px;letter-spacing:.02em;text-transform:uppercase;line-height:1.15}
+  .fcard .fs{display:block;margin-top:3px;font-size:13px;color:var(--muted)}
+  .fcard .tag{margin-top:5px}
+  .fcard.all{grid-template-columns:minmax(0,1fr);justify-items:center;text-align:center;border-style:dashed;min-height:76px;align-content:center}
+
+  /* ---------- dudas ---------- */
+  .faq{max-width:820px}
 
   @media (max-width:900px){
-    .rt{grid-template-columns:minmax(0,1fr)}
-    .rt-aside{position:static;order:-1}
+    .how-steps{grid-template-columns:minmax(0,1fr)}
+    .firms{grid-template-columns:repeat(2,minmax(0,1fr))}
+    .stepper{grid-template-columns:repeat(3,minmax(0,1fr))}
+    .st-b{border-bottom:1px solid var(--line2)}
+    .st-b:nth-child(3n){border-right:0}
+    .st-b:nth-child(n+4){border-bottom:0}
+    .st-b::before{display:none}
+    .round .prep{justify-content:flex-start;max-width:none}
   }
   @media (max-width:600px){
-    .step{grid-template-columns:30px minmax(0,1fr) 44px;align-items:start}
-    .step>div:first-of-type{grid-column:2;grid-row:1}
-    .step-m{grid-column:2;grid-row:2;justify-content:flex-start}
-    .tickcell{grid-column:3;grid-row:1/span 2;align-self:center}
-    .mins{min-width:0;text-align:left}
-    .step-n{padding-top:6px}
-    .nx .btn{flex:1 1 auto}
+    .pfoot{grid-template-columns:minmax(0,1fr)}
+    .pfoot .btn{max-width:none;width:100%}
+    .sc-h{grid-template-columns:48px minmax(0,1fr) 40px;gap:12px 14px;padding:18px 16px 16px}
+    .ring{width:48px;height:48px}
+    .ring b{font-size:17px}
+    .sc-t{font-size:20px}
+    .sc-r .sc-n{display:none}
+    .sc-f .sc-n2{display:inline}
+    .sc-b{padding-inline:16px}
+    .tl-i{grid-template-columns:24px minmax(0,1fr)}
+    .tl-r{display:none}
+    .tl-t{font-size:16px}
+    .cl{padding-inline:12px}
+    .cl-r .mins{display:none}
+    .hito{grid-template-columns:44px minmax(0,1fr)}
+    .hito-i{width:44px;height:44px}
+    .hito-i .ico{width:22px;height:22px}
+    .hito-s{grid-column:2}
+    .stepper{grid-template-columns:repeat(2,minmax(0,1fr))}
+    .st-b{min-height:0;padding:14px 6px 12px}
+    .st-b:nth-child(3n){border-right:1px solid var(--line2)}
+    .st-b:nth-child(2n){border-right:0}
+    .st-b:nth-child(n+4){border-bottom:1px solid var(--line2)}
+    .st-b:nth-child(n+5){border-bottom:0}
+    .firms{grid-template-columns:minmax(0,1fr)}
+    .fcard.all{min-height:0}
   }
 </style>
 </head>
-<body data-section="aprende">
+<body data-section="rutas" data-parent="rutas.html">
 <a class="skip" href="#main">Saltar al contenido</a>
 
+<!-- MENU:INICIO -->
+<nav class="sb" aria-label="Principal">
+  <a class="sb-logo" href="index.html" aria-label="QuantMeraki, inicio"><img src="assets/perfil-128.png" alt="" width="32" height="32"><span>QuantMeraki</span></a>
+  <div class="sb-scroll">
+    <a class="sb-a" href="index.html"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/><path d="M10 20v-6h4v6"/></svg>Inicio</a>
+    <a class="sb-a" href="progreso.html"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 20v-8M12 20V5M19 20v-9"/></svg>Mi progreso</a>
+    <p class="sb-g">Practica</p>
+    <a class="sb-a" href="rutas.html"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="6" cy="18" r="2.5"/><circle cx="18" cy="6" r="2.5"/><path d="M8.3 16.3C12.5 15.5 11.5 8.5 15.7 7.7"/></svg>Rutas</a>
+    <a class="sb-a" href="preparar-firma.html"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3.5"/><path d="M12 4v2.5M12 17.5V20M4 12h2.5M17.5 12H20"/></svg>Preparar una firma</a>
+    <p class="sb-g">Biblioteca</p>
+    <a class="sb-a" href="preguntas.html"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9.6 9.6a2.4 2.4 0 1 1 3.5 2.1c-.8.4-1.1.9-1.1 1.8"/><circle class="f" cx="12" cy="16.8" r="1"/></svg>Preguntas</a>
+    <a class="sb-a" href="cursos.html"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 6c-2-1.5-5-2-8-1.5V19c3-.5 6 0 8 1.5 2-1.5 5-2 8-1.5V4.5c-3-.5-6 0-8 1.5z"/><path d="M12 6v14.5"/></svg>Cursos</a>
+    <a class="sb-a" href="guias.html"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3h7l5 5v13H7z"/><path d="M14 3v5h5M10 13h5M10 17h5"/></svg>Guías</a>
+    <a class="sb-a" href="juegos.html"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="3"/><circle class="f" cx="9" cy="9" r="1.3"/><circle class="f" cx="15" cy="9" r="1.3"/><circle class="f" cx="9" cy="15" r="1.3"/><circle class="f" cx="15" cy="15" r="1.3"/></svg>Juegos de mercado</a>
+    <a class="sb-a" href="entrenadores.html"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="13.5" r="7.5"/><path d="M12 10v3.5l2.5 1.5M9.5 3h5M12 3v3"/></svg>Entrenadores</a>
+    <a class="sb-a" href="codigo.html"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 8l-4 4 4 4M16 8l4 4-4 4M13.5 5l-3 14"/></svg>Código</a>
+    <a class="sb-a" href="simulacros.html"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 4V3h6v1M9 13l2 2 4-4"/></svg>Pruebas</a>
+    <p class="sb-g">Explora</p>
+    <a class="sb-a" href="firmas.html"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 21h18M3 9.5l9-5.5 9 5.5M5 10v11M19 10v11M9.5 21v-8M14.5 21v-8"/></svg>Firmas</a>
+    <a class="sb-a" href="empleo.html"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M9 7V5h6v2M3 12h18"/></svg>Empleo</a>
+    <a class="sb-a" href="canal.html"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="3"/><path class="f" d="M10 9v6l5-3z"/></svg>Canal</a>
+  </div>
+  <div class="sb-foot">
+    <button class="sb-a" type="button" data-theme-toggle aria-label="Cambiar a modo oscuro"><svg class="ico i-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg><svg class="ico i-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg><span data-theme-label>Modo oscuro</span></button>
+    <a class="sb-a" href="sobre.html"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v5"/><circle class="f" cx="12" cy="8" r="1"/></svg>Sobre el proyecto</a>
+  </div>
+</nav>
 <header class="top">
   <div class="wrap bar">
     <a class="logo" href="index.html" aria-label="QuantMeraki, inicio"><img src="assets/perfil-128.png" alt="" width="34" height="34"><span>QuantMeraki</span></a>
-    <nav class="nav" aria-label="Principal">
-      <div class="dd">
-        <button class="dd-btn" type="button" aria-expanded="false" data-nav="practica">Practica</button>
-        <div class="menu" hidden>
-          <a href="entrenadores.html">Entrenadores<small>Cálculo mental y series, contra el reloj</small></a>
-          <a href="preguntas.html">Preguntas<small>Probabilidad, acertijos y series</small></a>
-          <a href="juegos.html">Juegos de mercado<small>Cotiza y ajusta tus precios</small></a>
-          <a href="simulacros.html">Simulacros<small>Pruebas cronometradas, como las de verdad</small></a>
-          <a href="codigo.html">Código<small>Problemas para developers</small></a>
-        </div>
-      </div>
-      <div class="dd">
-        <button class="dd-btn" type="button" aria-expanded="false" data-nav="aprende">Aprende</button>
-        <div class="menu" hidden>
-          <a href="rutas.html">Rutas<small>Trader, researcher o developer, paso a paso</small></a>
-          <a href="cursos.html">Cursos<small>Probabilidad, mercados y opciones</small></a>
-          <a href="guias.html">Guías<small>El sector y los procesos, explicados</small></a>
-        </div>
-      </div>
-      <div class="dd">
-        <button class="dd-btn" type="button" aria-expanded="false" data-nav="firmas">Firmas</button>
-        <div class="menu" hidden>
-          <a href="firmas.html">Directorio<small>Qué hace cada firma y cómo contrata</small></a>
-          <a href="empleo.html">Empleo<small>Prácticas y puestos para graduados</small></a>
-        </div>
-      </div>
-      <a href="canal.html" data-nav="canal">Canal</a>
-    </nav>
     <div class="tools">
       <a class="iconbtn" href="progreso.html" data-nav="progreso" aria-label="Mi progreso" title="Mi progreso"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 20v-8M12 20V5M19 20v-9"/></svg></a>
       <button class="iconbtn" type="button" data-theme-toggle aria-label="Cambiar a modo oscuro"><svg class="ico i-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg><svg class="ico i-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg></button>
-      <a class="btn solid sm cta" href="entrenador-calculo-mental.html">Empieza</a>
     </div>
   </div>
 </header>
+<!-- MENU:FIN -->
 
 <main id="main">
   <div class="wrap">
 
+    <!-- ===================== CABECERA ===================== -->
     <section class="phead">
-      <nav class="crumbs" aria-label="Migas de pan"><a href="aprende.html">Aprende</a><span class="sep">/</span><a href="rutas.html">Rutas</a><span class="sep">/</span><span aria-current="page">Trader</span></nav>
-      <p class="kicker"><b>Ruta</b> / Trader</p>
+      <nav class="crumbs" aria-label="Migas de pan"><span>Practica</span><span class="sep">/</span><a href="rutas.html">Rutas</a><span class="sep">/</span><span aria-current="page">Trader</span></nav>
+      <p class="kicker"><b>Practica</b> / Rutas</p>
       <h1 class="h1">Ruta Trader</h1>
-      <p class="lead">Diecinueve pasos en orden, de las cuentas de cabeza al proceso de selección. Haz uno, márcalo y pasa al siguiente.</p>
+      <p class="lead">Todo lo que pide una selección de quant trader, en el orden en que te lo van a pedir: velocidad, probabilidad, acertijos, mercados, hacer precios, juegos y las pruebas de cada firma. Haz cada elemento, márcalo y pasa al siguiente.</p>
       <ul class="rt-meta">
-        <li><b>19</b> pasos</li>
-        <li><b>4</b> etapas</li>
-        <li><b data-total-time>4 h 14 min</b> de trabajo</li>
-        <li><b>3 semanas</b> a 20 minutos al día</li>
+        <li><b data-n-items>62</b> elementos</li>
+        <li><b data-n-main>8</b> secciones y <b data-n-opc>3</b> opcionales</li>
+        <li><b data-total-h>31 h 26 min</b> en total</li>
+        <li><b>4 a 6 semanas</b> a 1 hora al día</li>
       </ul>
     </section>
 
-    <section class="sec first">
-      <div class="rt">
-        <div class="rt-main">
-
-          <section class="stage" id="e1" aria-labelledby="e1-h">
-            <div class="stage-h">
-              <div><p class="kicker"><b>01</b> / Etapa</p><h2 class="h2" id="e1-h">Base numérica</h2></div>
-              <span class="stage-c" data-stage-count>0 de 5</span>
-            </div>
-            <p class="stage-d">Qué hace un trader y las cuentas que tiene que sacar sin papel.</p>
-            <ol class="steps">
-              <li class="step" data-n="1" data-min="12" data-own="guia:que-hace-un-quant-trader">
-                <span class="step-n">01</span>
-                <div><a class="step-t" href="guia-que-hace-un-quant-trader.html">¿Qué hace realmente un quant trader?</a><span class="step-d">El trabajo de un día, sin mitos. Para saber a qué vas.</span></div>
-                <div class="step-m"><span class="tag">Guía</span><span class="mins">12 min</span></div>
-              </li>
-              <li class="step" data-n="2" data-min="5" data-own="video:que-hace-un-quant-trader">
-                <span class="step-n">02</span>
-                <div><a class="step-t" href="video-que-hace-un-quant-trader.html">El mismo tema, en vídeo</a><span class="step-d">La versión corta del canal, por si prefieres verlo.</span></div>
-                <div class="step-m"><span class="tag">Vídeo</span><span class="mins">5 min</span></div>
-              </li>
-              <li class="step" data-n="3" data-min="10" data-own="hist:calculo">
-                <span class="step-n">03</span>
-                <div><a class="step-t" href="entrenador-calculo-mental.html">Cálculo mental</a><span class="step-d">Una sesión de 60 segundos. Apunta tu primera marca.</span></div>
-                <div class="step-m"><span class="tag">Entrenador</span><span class="mins">10 min</span></div>
-              </li>
-              <li class="step" data-n="4" data-min="10">
-                <span class="step-n">04</span>
-                <div><a class="step-t" href="entrenadores.html" data-soon>Fracciones y decimales</a><span class="step-d">Pasar de 3/8 a 0,375 sin pensarlo.</span></div>
-                <div class="step-m"><span class="tag soon">Entrenador</span><span class="mins">10 min</span></div>
-              </li>
-              <li class="step" data-n="5" data-min="10" data-own="pregunta:cafe-en-madrid">
-                <span class="step-n">05</span>
-                <div><a class="step-t" href="estimacion-cafe-en-madrid.html">Cafés en Madrid</a><span class="step-d">Una estimación de Fermi: un número razonable con pocos datos.</span></div>
-                <div class="step-m"><span class="tag">Pregunta</span><span class="mins">10 min</span></div>
-              </li>
+    <!-- ===================== 01 · TU AVANCE ===================== -->
+    <section class="sec first" aria-labelledby="av-h">
+      <p class="kicker"><b>01</b> / Tu avance</p>
+      <h2 class="h2" id="av-h">Dónde estás</h2>
+      <div class="pcard" style="margin-top:24px">
+        <div class="stats">
+          <div class="stat"><span class="v"><span data-pg-n>0</span><small>de <span data-pg-t>62</span></small></span><span class="k">Elementos hechos</span><div class="bar-p" data-pg-bar role="progressbar" aria-label="Progreso de la ruta" aria-valuemin="0" aria-valuemax="62" aria-valuenow="0"><i></i></div></div>
+          <div class="stat"><span class="v" data-cur-n>01</span><span class="k">Sección actual</span><span class="x" data-cur-t>Velocidad en la prueba online</span></div>
+          <div class="stat"><span class="v" data-secs>0 de 8</span><span class="k">Secciones completadas</span></div>
+          <div class="stat"><span class="v" data-left>31 h</span><span class="k">Tiempo restante</span></div>
+        </div>
+        <div class="pfoot" aria-live="polite">
+          <div>
+            <span class="label" data-nx-l>Siguiente elemento</span>
+            <p class="nx-k" data-nx-k>Sección 01 · Guía · 5 min</p>
+            <p class="nx-t" data-nx-t>¿Qué hace realmente un quant trader?</p>
+          </div>
+          <a class="btn solid" href="guia-que-hace-un-quant-trader.html" data-nx-go>Continuar</a>
+        </div>
+      </div>
+      <div class="how">
+        <div class="acc-row">
+          <button class="acc-btn" type="button" aria-expanded="false" aria-controls="how-b"><span class="item-t">Cómo funciona esta ruta</span><span class="item-m"><span class="tag">3 pasos</span></span><span class="plus" aria-hidden="true">+</span></button>
+          <div class="acc-body" id="how-b" hidden>
+            <ol class="how-steps">
+              <li><b>1</b><strong>Sigue las secciones en orden</strong><p>Cada una usa algo de la anterior. Si una ya la dominas, márcala y sigue.</p></li>
+              <li><b>2</b><strong>Haz cada elemento y márcalo</strong><p>Lo que hagas en su página (una lección, una sesión del entrenador, una partida) se marca solo aquí.</p></li>
+              <li><b>3</b><strong>Con las ocho hechas, prepara una firma</strong><p>Llegas al hito «listo para la entrevista». Después, céntrate en el proceso de la firma que te interese.</p></li>
             </ol>
-          </section>
-
-          <section class="stage" id="e2" aria-labelledby="e2-h">
-            <div class="stage-h">
-              <div><p class="kicker"><b>02</b> / Etapa</p><h2 class="h2" id="e2-h">Probabilidad</h2></div>
-              <span class="stage-c" data-stage-count>0 de 5</span>
-            </div>
-            <p class="stage-d">El idioma de las entrevistas. Todo se reduce a calcular cuánto vale una apuesta.</p>
-            <ol class="steps">
-              <li class="step" data-n="6" data-min="20" data-own="leccion:valor-esperado">
-                <span class="step-n">06</span>
-                <div><a class="step-t" href="leccion-valor-esperado.html">Valor esperado</a><span class="step-d">La idea que está detrás de cada precio.</span></div>
-                <div class="step-m"><span class="tag">Lección</span><span class="mins">20 min</span></div>
-              </li>
-              <li class="step" data-n="7" data-min="15" data-own="pregunta:juego-del-dado">
-                <span class="step-n">07</span>
-                <div><a class="step-t" href="pregunta-juego-del-dado.html">El juego del dado</a><span class="step-d">Cuánto pagarías por jugar, y por qué.</span></div>
-                <div class="step-m"><span class="tag">Pregunta</span><span class="mins">15 min</span></div>
-              </li>
-              <li class="step" data-n="8" data-min="20">
-                <span class="step-n">08</span>
-                <div><a class="step-t" href="curso-probabilidad.html" data-soon>Probabilidad condicionada</a><span class="step-d">Cómo cambia una probabilidad cuando sabes algo más.</span></div>
-                <div class="step-m"><span class="tag soon">Lección</span><span class="mins">20 min</span></div>
-              </li>
-              <li class="step" data-n="9" data-min="10">
-                <span class="step-n">09</span>
-                <div><a class="step-t" href="entrenadores.html" data-soon>Probabilidad rápida</a><span class="step-d">Dados, cartas y monedas, contra el reloj.</span></div>
-                <div class="step-m"><span class="tag soon">Entrenador</span><span class="mins">10 min</span></div>
-              </li>
-              <li class="step" data-n="10" data-min="20">
-                <span class="step-n">10</span>
-                <div><a class="step-t" href="curso-probabilidad.html" data-soon>Varianza y riesgo</a><span class="step-d">Dos apuestas con el mismo valor esperado no valen lo mismo.</span></div>
-                <div class="step-m"><span class="tag soon">Lección</span><span class="mins">20 min</span></div>
-              </li>
-            </ol>
-          </section>
-
-          <section class="stage" id="e3" aria-labelledby="e3-h">
-            <div class="stage-h">
-              <div><p class="kicker"><b>03</b> / Etapa</p><h2 class="h2" id="e3-h">Mercados</h2></div>
-              <span class="stage-c" data-stage-count>0 de 5</span>
-            </div>
-            <p class="stage-d">Poner un precio de compra y otro de venta, y ajustarlos cuando alguien opera contigo.</p>
-            <ol class="steps">
-              <li class="step" data-n="11" data-min="12">
-                <span class="step-n">11</span>
-                <div><a class="step-t" href="guias.html" data-soon>Qué es un market maker y cómo gana dinero</a><span class="step-d">El negocio de cotizar a los dos lados.</span></div>
-                <div class="step-m"><span class="tag soon">Guía</span><span class="mins">12 min</span></div>
-              </li>
-              <li class="step" data-n="12" data-min="20">
-                <span class="step-n">12</span>
-                <div><a class="step-t" href="cursos.html" data-soon>Precio, diferencial y ventaja</a><span class="step-d">Diferencial (spread), ventaja (edge) y por qué no se cotiza en el centro.</span></div>
-                <div class="step-m"><span class="tag soon">Lección</span><span class="mins">20 min</span></div>
-              </li>
-              <li class="step" data-n="13" data-min="10">
-                <span class="step-n">13</span>
-                <div><a class="step-t" href="guias.html" data-soon>Hazme un mercado: cómo responder</a><span class="step-d">Qué buscan cuando te piden un precio en una entrevista.</span></div>
-                <div class="step-m"><span class="tag soon">Guía</span><span class="mins">10 min</span></div>
-              </li>
-              <li class="step" data-n="14" data-min="15" data-own="juego:hazme-un-mercado">
-                <span class="step-n">14</span>
-                <div><a class="step-t" href="juego-hazme-un-mercado.html">Hazme un mercado: dados</a><span class="step-d">Cotiza la suma de unos dados y gestiona tu posición.</span></div>
-                <div class="step-m"><span class="tag">Juego</span><span class="mins">15 min</span></div>
-              </li>
-              <li class="step" data-n="15" data-min="15">
-                <span class="step-n">15</span>
-                <div><a class="step-t" href="juegos.html" data-soon>Hazme un mercado: cartas</a><span class="step-d">Lo mismo, con información que va saliendo carta a carta.</span></div>
-                <div class="step-m"><span class="tag soon">Juego</span><span class="mins">15 min</span></div>
-              </li>
-            </ol>
-          </section>
-
-          <section class="stage" id="e4" aria-labelledby="e4-h">
-            <div class="stage-h">
-              <div><p class="kicker"><b>04</b> / Etapa</p><h2 class="h2" id="e4-h">El proceso</h2></div>
-              <span class="stage-c" data-stage-count>0 de 4</span>
-            </div>
-            <p class="stage-d">Cómo es una selección de principio a fin, y una prueba como las de verdad.</p>
-            <ol class="steps">
-              <li class="step" data-n="16" data-min="15">
-                <span class="step-n">16</span>
-                <div><a class="step-t" href="guias.html" data-soon>Un proceso de selección quant</a><span class="step-d">De la solicitud a la oferta, fase a fase.</span></div>
-                <div class="step-m"><span class="tag soon">Guía</span><span class="mins">15 min</span></div>
-              </li>
-              <li class="step" data-n="17" data-min="10" data-own="simulacro:calculo">
-                <span class="step-n">17</span>
-                <div><a class="step-t" href="simulacro-calculo.html">Cálculo mental 8 minutos</a><span class="step-d">Ochenta cuentas cronometradas. Compárate con tu marca del paso 3.</span></div>
-                <div class="step-m"><span class="tag">Simulacro</span><span class="mins">10 min</span></div>
-              </li>
-              <li class="step" data-n="18" data-min="15">
-                <span class="step-n">18</span>
-                <div><a class="step-t" href="simulacros.html" data-soon>Probabilidad en 15 minutos</a><span class="step-d">Lo de la etapa 2, con reloj y sin pistas.</span></div>
-                <div class="step-m"><span class="tag soon">Simulacro</span><span class="mins">15 min</span></div>
-              </li>
-              <li class="step" data-n="19" data-min="10">
-                <span class="step-n">19</span>
-                <div><a class="step-t" href="guias.html" data-soon>Cuándo y dónde aplicar desde España</a><span class="step-d">Plazos, oficinas y qué preparar antes de enviar nada.</span></div>
-                <div class="step-m"><span class="tag soon">Guía</span><span class="mins">10 min</span></div>
-              </li>
-            </ol>
-          </section>
-
-          <div class="after">
-            <h2 class="h3">¿Y después?</h2>
-            <p>Repite los entrenadores unos minutos al día y mira las firmas que contratan traders.</p>
-            <div class="btns" style="margin-top:18px;display:flex;flex-wrap:wrap;gap:10px"><a class="btn ghost" href="firmas.html">Ver las firmas</a><a class="btn ghost" href="progreso.html">Mi progreso</a></div>
+            <p class="how-ritmo">Ritmo recomendado: <b>de 4 a 6 semanas a 1 hora al día</b>. Las tres secciones opcionales van aparte y no cuentan para el avance.</p>
           </div>
         </div>
+      </div>
+    </section>
 
-        <aside class="rt-aside" aria-label="Tu avance">
-          <div class="card nx" aria-live="polite">
-            <span class="label" data-nx-label>Siguiente paso</span>
-            <p class="nx-k" data-nx-k>Paso 01 · Guía · 12 min</p>
-            <h2 class="h3" data-nx-t>¿Qué hace realmente un quant trader?</h2>
-            <p class="nx-d" data-nx-d>El trabajo de un día, sin mitos. Para saber a qué vas.</p>
-            <div class="btns">
-              <a class="btn solid" href="guia-que-hace-un-quant-trader.html" data-nx-go>Empezar</a>
-              <button class="btn ghost" type="button" data-nx-done>Marcar como hecho</button>
-            </div>
-          </div>
-          <div class="card pg">
-            <div class="pg-row"><span class="pg-v"><span data-pg-n>0</span><small>de 19</small></span><span class="pg-l" data-pg-l>Sin empezar</span></div>
-            <div class="bar-p" style="--p:0%" data-pg-bar role="progressbar" aria-label="Progreso de la ruta" aria-valuemin="0" aria-valuemax="19" aria-valuenow="0"><i></i></div>
-            <div class="reset">
-              <button class="linkbtn" type="button" data-reset aria-expanded="false" aria-controls="confirm">Reiniciar la ruta</button>
-              <div class="confirm" id="confirm" hidden>
-                <p>Se borran las marcas de esta ruta. Lo que hayas hecho en cada página se queda.</p>
-                <div class="btns"><button class="btn solid sm" type="button" data-reset-yes>Sí, reiniciar</button><button class="btn ghost sm" type="button" data-reset-no>Cancelar</button></div>
-              </div>
-            </div>
-          </div>
-        </aside>
+    <!-- ===================== 02 · LAS SECCIONES ===================== -->
+    <section class="sec" aria-labelledby="sx-h">
+      <p class="kicker"><b>02</b> / Las secciones</p>
+      <h2 class="h2" id="sx-h">Ocho secciones, en orden</h2>
+      <p class="lead">Pulsa una sección para ver sus elementos. El anillo del número enseña cuánto llevas de cada una.</p>
+      <div class="scards" id="scards" style="margin-top:28px"></div>
+
+      <div class="hito" id="hito">
+        <span class="hito-i" aria-hidden="true"><svg class="ico" viewBox="0 0 24 24"><path d="M5 21V4h11l-1.5 3.5L16 11H5"/></svg></span>
+        <div><p class="label">Hito</p><h3 class="h3">Listo para la entrevista</h3><p>Cuando las ocho secciones estén hechas, tienes cubierto lo que pide una selección de quant trader. A partir de ahí toca repasar y preparar la firma.</p></div>
+        <span class="hito-s" data-hito-s>0 de 8 secciones</span>
+      </div>
+    </section>
+
+    <!-- ===================== 03 · OPCIONALES ===================== -->
+    <section class="sec" aria-labelledby="op-h">
+      <p class="kicker"><b>03</b> / Opcional</p>
+      <h2 class="h2" id="op-h">Si te sobra tiempo</h2>
+      <p class="lead">Tres secciones para las firmas que piden código, para la mesa de tipos y divisas, y para seguir las demostraciones. No cuentan para el avance de la ruta.</p>
+      <div class="scards" id="scards-opc" style="margin-top:28px"></div>
+    </section>
+
+    <!-- ===================== 04 · EL PROCESO ===================== -->
+    <section class="sec" aria-labelledby="pr-h" id="proceso">
+      <p class="kicker"><b>04</b> / El proceso</p>
+      <h2 class="h2" id="pr-h">Cómo son las entrevistas de quant trader</h2>
+      <p class="lead">Seis etapas, de la solicitud a la oferta. Cada firma cambia los detalles, pero el orden es casi siempre este. En cada ronda verás qué secciones de la ruta la preparan.</p>
+      <div class="stepper" id="stepper" role="tablist" aria-label="Etapas del proceso" style="margin-top:28px"></div>
+      <div id="stages"></div>
+    </section>
+
+    <!-- ===================== 05 · FIRMAS ===================== -->
+    <section class="sec" aria-labelledby="fi-h">
+      <p class="kicker"><b>05</b> / Firmas</p>
+      <h2 class="h2" id="fi-h">Luego, céntrate en una firma</h2>
+      <p class="lead">Cada firma tiene su prueba, sus rondas y su manera de preguntar. Cuando la ruta esté hecha, prepara la que te interese.</p>
+      <div class="firms" style="margin-top:28px">
+        <a class="fcard" href="firma-optiver.html"><span class="mg" aria-hidden="true">OP</span><span><span class="ft">Optiver</span><span class="fs">Ámsterdam · creador de mercado (market maker)</span></span></a>
+        <a class="fcard" href="firmas.html" data-soon="Borrador: la ficha de Flow Traders todavía no está montada."><span class="mg" aria-hidden="true">FT</span><span><span class="ft">Flow Traders</span><span class="tag soon">Próximamente</span></span></a>
+        <a class="fcard" href="firmas.html" data-soon="Borrador: la ficha de IMC todavía no está montada."><span class="mg" aria-hidden="true">IMC</span><span><span class="ft">IMC Trading</span><span class="tag soon">Próximamente</span></span></a>
+        <a class="fcard" href="firmas.html" data-soon="Borrador: la ficha de SIG todavía no está montada."><span class="mg" aria-hidden="true">SIG</span><span><span class="ft">SIG (Susquehanna)</span><span class="tag soon">Próximamente</span></span></a>
+        <a class="fcard" href="firmas.html" data-soon="Borrador: la ficha de Jane Street todavía no está montada."><span class="mg" aria-hidden="true">JS</span><span><span class="ft">Jane Street</span><span class="tag soon">Próximamente</span></span></a>
+        <a class="fcard" href="firmas.html" data-soon="Borrador: la ficha de Citadel Securities todavía no está montada."><span class="mg" aria-hidden="true">CS</span><span><span class="ft">Citadel Securities</span><span class="tag soon">Próximamente</span></span></a>
+        <a class="fcard" href="firmas.html" data-soon="Borrador: la ficha de Maven todavía no está montada."><span class="mg" aria-hidden="true">MV</span><span><span class="ft">Maven Securities</span><span class="tag soon">Próximamente</span></span></a>
+        <a class="fcard all" href="firmas.html"><span class="more">Ver todas las firmas →</span></a>
+      </div>
+    </section>
+
+    <!-- ===================== 06 · DUDAS ===================== -->
+    <section class="sec" aria-labelledby="faq-h">
+      <p class="kicker"><b>06</b> / Dudas</p>
+      <h2 class="h2" id="faq-h">Preguntas frecuentes</h2>
+      <div class="faq" style="margin-top:28px">
+        <div class="acc-row">
+          <button class="acc-btn" type="button" aria-expanded="false" aria-controls="f1"><span class="item-t">¿Cuánto tiempo lleva?</span><span class="plus" aria-hidden="true">+</span></button>
+          <div class="acc-body" id="f1" hidden><p>Las ocho secciones suman <b data-total-h>31 h 26 min</b>. A una hora al día son entre 4 y 6 semanas, según cuántos acertijos y pruebas repitas. Las opcionales añaden <b data-opc-h>7 h</b> más.</p></div>
+        </div>
+        <div class="acc-row">
+          <button class="acc-btn" type="button" aria-expanded="false" aria-controls="f2"><span class="item-t">¿Tengo que seguir el orden?</span><span class="plus" aria-hidden="true">+</span></button>
+          <div class="acc-body" id="f2" hidden><p>No es obligatorio, pero está pensado así: la probabilidad va antes que los acertijos y los mercados antes que hacer precios. Si algo ya lo sabes, márcalo como hecho y sigue.</p></div>
+        </div>
+        <div class="acc-row">
+          <button class="acc-btn" type="button" aria-expanded="false" aria-controls="f3"><span class="item-t">¿Qué cuenta como hecho?</span><span class="plus" aria-hidden="true">+</span></button>
+          <div class="acc-body" id="f3" hidden><p>Una lección, cuando la marcas al final. Un entrenador, en cuanto haces una sesión. Un juego o una pregunta, cuando los terminas en su página. Un curso cuenta cuando todas sus lecciones están hechas. También puedes marcar cualquier elemento a mano, con el círculo de su fila.</p></div>
+        </div>
+        <div class="acc-row">
+          <button class="acc-btn" type="button" aria-expanded="false" aria-controls="f4"><span class="item-t">¿Las secciones opcionales cuentan?</span><span class="plus" aria-hidden="true">+</span></button>
+          <div class="acc-body" id="f4" hidden><p>No. El avance y el hito se calculan solo con las ocho secciones principales. Las opcionales son para quien tiene tiempo o va a una firma que pide código, tipos o divisas.</p></div>
+        </div>
+        <div class="acc-row">
+          <button class="acc-btn" type="button" aria-expanded="false" aria-controls="f5"><span class="item-t">¿Las pruebas de las firmas son las de verdad?</span><span class="plus" aria-hidden="true">+</span></button>
+          <div class="acc-body" id="f5" hidden><p>No. Imitamos el formato que se conoce públicamente (número de preguntas, tiempo, tipo de ejercicio) y lo decimos en cada una. El contenido de una prueba real nunca se publica aquí.</p></div>
+        </div>
+        <div class="acc-row">
+          <button class="acc-btn" type="button" aria-expanded="false" aria-controls="f6"><span class="item-t">¿Qué es lo que pone «Próximamente»?</span><span class="plus" aria-hidden="true">+</span></button>
+          <div class="acc-body" id="f6" hidden><p>Elementos que ya tienen su sitio en la ruta pero todavía no están construidos. El orden y los tiempos son los definitivos; las páginas van llegando.</p></div>
+        </div>
+        <div class="acc-row">
+          <button class="acc-btn" type="button" aria-expanded="false" aria-controls="f7"><span class="item-t">¿Dónde se guarda mi avance?</span><span class="plus" aria-hidden="true">+</span></button>
+          <div class="acc-body" id="f7" hidden><p>En este navegador. Si cambias de dispositivo o borras los datos del sitio, empiezas de cero. Más adelante habrá cuentas para llevarlo contigo.</p></div>
+        </div>
       </div>
     </section>
 
@@ -313,7 +388,7 @@
   <div class="wrap">
     <div class="cols">
       <div class="brandcol"><a class="logo" href="index.html"><img src="assets/perfil-128.png" alt="" width="34" height="34"><span>QuantMeraki</span></a><p class="claim">El mundo quant, en español.</p></div>
-      <div><h4>Practica</h4><ul><li><a href="entrenadores.html">Entrenadores</a></li><li><a href="preguntas.html">Preguntas</a></li><li><a href="juegos.html">Juegos de mercado</a></li><li><a href="simulacros.html">Simulacros</a></li><li><a href="codigo.html">Código</a></li></ul></div>
+      <div><h4>Practica</h4><ul><li><a href="entrenadores.html">Entrenadores</a></li><li><a href="preguntas.html">Preguntas</a></li><li><a href="juegos.html">Juegos de mercado</a></li><li><a href="simulacros.html">Pruebas</a></li><li><a href="codigo.html">Código</a></li></ul></div>
       <div><h4>Aprende</h4><ul><li><a href="rutas.html">Rutas</a></li><li><a href="cursos.html">Cursos</a></li><li><a href="guias.html">Guías</a></li><li><a href="canal.html">El canal</a></li></ul></div>
       <div><h4>QuantMeraki</h4><ul><li><a href="firmas.html">Firmas</a></li><li><a href="empleo.html">Empleo</a></li><li><a href="progreso.html">Mi progreso</a></li><li><a href="sobre.html">Sobre el proyecto</a></li></ul></div>
     </div>
@@ -321,111 +396,273 @@
   </div>
 </footer>
 
+<!-- BARRA:INICIO -->
 <nav class="tabbar" aria-label="Secciones">
   <a href="index.html" data-tab="inicio"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/><path d="M10 20v-6h4v6"/></svg><span>Inicio</span></a>
-  <a href="practica.html" data-tab="practica"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="4"/><circle class="f" cx="12" cy="12" r="1.4"/></svg><span>Practica</span></a>
-  <a href="aprende.html" data-tab="aprende"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 6c-2-1.5-5-2-8-1.5V19c3-.5 6 0 8 1.5 2-1.5 5-2 8-1.5V4.5c-3-.5-6 0-8 1.5z"/><path d="M12 6v14.5"/></svg><span>Aprende</span></a>
+  <a href="rutas.html" data-tab="rutas"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="6" cy="18" r="2.5"/><circle cx="18" cy="6" r="2.5"/><path d="M8.3 16.3C12.5 15.5 11.5 8.5 15.7 7.7"/></svg><span>Rutas</span></a>
+  <a href="biblioteca.html" data-tab="biblioteca"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h4v16H4zM9.5 4h4v16h-4z"/><path d="M15.2 5.2l3.6-.9 3.5 14.8-3.6.9z"/></svg><span>Biblioteca</span></a>
   <a href="firmas.html" data-tab="firmas"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 21h18M3 9.5l9-5.5 9 5.5M5 10v11M19 10v11M9.5 21v-8M14.5 21v-8"/></svg><span>Firmas</span></a>
   <a href="canal.html" data-tab="canal"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="3"/><path class="f" d="M10 9v6l5-3z"/></svg><span>Canal</span></a>
 </nav>
+<!-- BARRA:FIN -->
 
 <div class="toast" id="toast" role="status" hidden></div>
 <script src="assets/qm.js"></script>
+<script src="assets/catalogo.js"></script>
 <script>
-/* Ruta Trader: marcas por paso (ruta:trader:n) + lo hecho en cada página */
+/* Ruta Trader: todo sale del catálogo (assets/catalogo.js). El avance se lee con QM.* y los
+   ids compartidos (leccion:<slug>, juego:<slug>...): lo hecho en cada página cuenta aquí. */
 (function(){
-  var steps=[].slice.call(document.querySelectorAll('.step'));
-  var N=steps.length;
-  function ownDone(id){
-    if(!id)return false;
-    if(id==='hist:calculo')return (QM.history('calculo')||[]).length>0;
-    return QM.isDone(id);
+  'use strict';
+  var CAT=window.QM_CAT,DATA=window.QM_CATALOGO,QM=window.QM;
+  if(!CAT||!QM)return;
+  var R=CAT.ruta('trader'),ET=DATA.etapas;
+  var MAIN=R.secciones.filter(function(s){return !s.opcional;}),OPC=R.secciones.filter(function(s){return s.opcional;});
+  var C=2*Math.PI*29;  /* perímetro del anillo (r = 29 en un viewBox de 64) */
+
+  function $(s,c){return (c||document).querySelector(s);}
+  function $$(s,c){return Array.prototype.slice.call((c||document).querySelectorAll(s));}
+  function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
+  function nn(n){return (n<10?'0':'')+n;}
+  function secById(n){for(var i=0;i<R.secciones.length;i++)if(R.secciones[i].n===n)return R.secciones[i];return null;}
+
+  /* ---------- tipos: etiqueta, plural e icono ---------- */
+  var TIPO=CAT.tipos;
+  var PLUR={curso:'cursos',leccion:'lecciones',articulo:'guías',video:'vídeos',entrenador:'entrenadores',juego:'juegos',pregunta:'preguntas',preguntas:'bloques de preguntas',prueba:'pruebas',codigo:'problemas de código'};
+  var SING={curso:'curso',leccion:'lección',articulo:'guía',video:'vídeo',entrenador:'entrenador',juego:'juego',pregunta:'pregunta',preguntas:'bloque de preguntas',prueba:'prueba',codigo:'problema de código'};
+  function tipoN(t,n){return n===1?(SING[t]||TIPO[t]||t):(PLUR[t]||t);}
+  function elems(n){return n+(n===1?' elemento':' elementos');}
+  function hechos(h,t){return h+' de '+t+(t===1?' hecho':' hechos');}
+  var ICO={
+    curso:'<path d="M12 6c-2-1.5-5-2-8-1.5V19c3-.5 6 0 8 1.5 2-1.5 5-2 8-1.5V4.5c-3-.5-6 0-8 1.5z"/><path d="M12 6v14.5"/>',
+    leccion:'<path d="M5 4h11a3 3 0 0 1 3 3v13H8a3 3 0 0 1-3-3z"/><path d="M5 17a3 3 0 0 1 3-3h11M9 8h6"/>',
+    articulo:'<path d="M7 3h7l5 5v13H7z"/><path d="M14 3v5h5M10 13h5M10 17h5"/>',
+    video:'<rect x="3" y="5" width="18" height="14" rx="3"/><path class="f" d="M10 9v6l5-3z"/>',
+    entrenador:'<circle cx="12" cy="13.5" r="7.5"/><path d="M12 10v3.5l2.5 1.5M9.5 3h5M12 3v3"/>',
+    juego:'<rect x="4" y="4" width="16" height="16" rx="3"/><circle class="f" cx="9" cy="9" r="1.3"/><circle class="f" cx="15" cy="9" r="1.3"/><circle class="f" cx="9" cy="15" r="1.3"/><circle class="f" cx="15" cy="15" r="1.3"/>',
+    pregunta:'<circle cx="12" cy="12" r="9"/><path d="M9.6 9.6a2.4 2.4 0 1 1 3.5 2.1c-.8.4-1.1.9-1.1 1.8"/><circle class="f" cx="12" cy="16.8" r="1"/>',
+    preguntas:'<circle cx="12" cy="12" r="9"/><path d="M9.6 9.6a2.4 2.4 0 1 1 3.5 2.1c-.8.4-1.1.9-1.1 1.8"/><circle class="f" cx="12" cy="16.8" r="1"/>',
+    prueba:'<rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 4V3h6v1M9 13l2 2 4-4"/>',
+    codigo:'<path d="M8 8l-4 4 4 4M16 8l4 4-4 4M13.5 5l-3 14"/>'
+  };
+  function ico(t){return '<svg class="ico" viewBox="0 0 24 24" aria-hidden="true">'+(ICO[t]||ICO.leccion)+'</svg>';}
+  var CHEV='<svg class="ico chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>';
+
+  /* ---------- hecho o no ----------
+     - curso: todas sus lecciones hechas (CAT.isDone)
+     - entrenador: su id de hecho, o una sesión guardada en QM.history(<ref>) (el de cálculo guarda en 'calculo' y lo fija el catálogo)
+     - el resto: QM.isDone(<id compartido>) */
+  function isDone(x){
+    if(x.tipo==='entrenador'&&x.done.indexOf('hist:')!==0){var h=QM.history(x.ref);if(h&&h.length)return true;}
+    return CAT.isDone(x);
   }
-  function isOn(li){return QM.isDone('ruta:trader:'+li.dataset.n)||ownDone(li.dataset.own);}
-  function fmt(m){var h=Math.floor(m/60),r=m%60;return h?(h+' h'+(r?' '+r+' min':'')):(r+' min');}
+  function lessonDone(l){return QM.isDone(l.done);}
+  function itemLeft(x){
+    if(x.tipo==='curso')return CAT.lecciones(x).filter(function(l){return !lessonDone(l);}).reduce(function(a,l){return a+l.min;},0);
+    return isDone(x)?0:(x.min||0);
+  }
+  function secProg(s){var h=0;s.items.forEach(function(x){if(isDone(x))h++;});return {h:h,t:s.items.length};}
+  function soon(t){return ' data-soon="Borrador: «'+esc(t)+'» todavía no está montado."';}
 
-  /* lo hecho en su propia página cuenta como paso hecho */
-  steps.forEach(function(li){
-    var id='ruta:trader:'+li.dataset.n;
-    if(ownDone(li.dataset.own)&&!QM.isDone(id))QM.setDone(id,true);
-  });
-
-  /* botón de marca en cada paso */
-  steps.forEach(function(li){
-    var cell=document.createElement('span');cell.className='tickcell';
-    var b=document.createElement('button');b.type='button';b.className='tick';
-    b.innerHTML='<span class="check" aria-hidden="true"></span>';
-    cell.appendChild(b);li.appendChild(cell);
-    b.addEventListener('click',function(){
-      if(ownDone(li.dataset.own)){QM.toast('Este paso está hecho en su página. Se queda marcado.');return;}
-      var id='ruta:trader:'+li.dataset.n;QM.setDone(id,!QM.isDone(id));
+  /* ---------- lecciones de un curso, por bloque ---------- */
+  function lessonsHTML(x,id){
+    var groups=[],last=null;
+    CAT.lecciones(x).forEach(function(l){
+      if(!last||last.n!==l.seccionN){last={n:l.seccionN,t:l.seccion,ls:[]};groups.push(last);}
+      last.ls.push(l);
     });
-    li._b=b;
+    var h='<div class="cl" id="'+id+'" hidden>';
+    groups.forEach(function(g){
+      h+='<div class="cl-g"><p class="cl-s"><b>'+nn(g.n)+'</b>'+esc(g.t)+'</p>';
+      g.ls.forEach(function(l){
+        h+='<div class="cl-l" data-lec="'+esc(l.slug)+'"><span class="check" aria-hidden="true"></span>'+
+          '<div><a class="cl-t" href="'+esc(l.href||x.href)+'"'+(l.href?'':soon(l.titulo))+'>'+esc(l.titulo)+'</a>'+
+          '<span class="cl-k">'+ico('leccion')+'<span class="tp">Lección</span><span>'+esc(l.resumen)+'</span></span></div>'+
+          '<span class="cl-r"><span class="mins">'+l.min+' min</span>'+(l.href?'':'<span class="tag soon">Próximamente</span>')+'</span></div>';
+      });
+      h+='</div>';
+    });
+    return h+'</div>';
+  }
+
+  /* ---------- un elemento de la línea de tiempo ---------- */
+  function itemHTML(x){
+    var id='s'+x.seccion+'-i'+x.i,built=CAT.isBuilt(x),curso=x.tipo==='curso';
+    var toggle=!curso&&x.done.indexOf('hist:')!==0;
+    var h='<li class="tl-i" data-item="'+id+'">';
+    h+='<span class="tl-c">'+(toggle?'<button class="tick" type="button" aria-pressed="false"><span class="check" aria-hidden="true"></span></button>':'<span class="check" aria-hidden="true"></span>')+'</span>';
+    h+='<div class="tl-main"><span class="tl-k">'+ico(x.tipo)+'<span>'+esc(TIPO[x.tipo]||x.tipo)+'</span>'+
+      (curso?'<span class="tl-sub">'+x.nLecciones+' lecciones</span>':'')+(built?'':'<span class="tag soon">Próximamente</span>')+'</span>';
+    h+='<a class="tl-t" href="'+esc(x.href||'#s'+x.seccion)+'"'+(built?'':soon(x.titulo))+'>'+esc(x.titulo)+'</a>';
+    if(curso&&x.descripcion)h+='<span class="tl-m">'+esc(x.descripcion)+'</span>';
+    if(!curso&&x.meta)h+='<span class="tl-m"><b>Meta:</b> '+esc(x.meta)+'</span>';
+    if(x.nota)h+='<span class="tl-note">'+esc(x.nota)+'</span>';
+    if(curso)h+='<button class="cl-btn" type="button" aria-expanded="false" aria-controls="'+id+'-l"><span>Ver las lecciones</span><span class="cl-btn-n" data-cl-n>0 de '+x.nLecciones+' hechas</span>'+CHEV+'</button>'+lessonsHTML(x,id+'-l');
+    h+='</div>';
+    h+='<span class="tl-r"><span class="mins">'+CAT.fmt(x.min)+'</span></span>';
+    return h+'</li>';
+  }
+
+  /* ---------- tarjeta de sección ---------- */
+  function cardHTML(s){
+    var counts=[],pos={};
+    s.items.forEach(function(x){if(pos[x.tipo]==null){pos[x.tipo]=counts.length;counts.push({t:x.tipo,n:0});}counts[pos[x.tipo]].n++;});
+    var chips=counts.map(function(c){return '<span class="tag">'+c.n+' '+esc(tipoN(c.t,c.n))+'</span>';}).join('');
+    var prep=(s.preparaPara||[]).map(function(id){var e=CAT.etapa(id);return e?'<a class="pref" href="#proceso" data-etapa="'+id+'">'+esc(e.titulo)+'</a>':'';}).join('');
+    var pruebas=s.items.some(function(x){return x.tipo==='prueba';});
+    var id='s'+s.n;
+    return '<article class="scard'+(s.opcional?' opc':'')+'" id="'+id+'" data-sec="'+s.n+'">'+
+      '<div class="sc-h">'+
+        '<span class="ring" aria-hidden="true"><svg viewBox="0 0 64 64"><circle class="bg" cx="32" cy="32" r="29"/><circle class="fg" cx="32" cy="32" r="29" data-ring/></svg><b>'+nn(s.n)+'</b></span>'+
+        '<div class="sc-main">'+
+          '<h3 class="sc-t"><span>'+esc(s.titulo)+'</span>'+(s.opcional?'<span class="tag ex">Opcional</span>':'')+'</h3>'+
+          '<p class="sc-f">'+elems(s.nItems)+' · '+CAT.fmt(s.min)+'<span class="sc-n2"> · <span data-sec-n>'+hechos(0,s.nItems)+'</span></span></p>'+
+          '<p class="sc-d">'+esc(s.descripcion)+'</p>'+
+          (prep?'<p class="sc-prep"><span class="label">Prepara para</span>'+prep+'</p>':'')+
+          '<p class="sc-chips">'+chips+'</p>'+
+        '</div>'+
+        '<div class="sc-r"><span class="sc-n" data-sec-n>'+hechos(0,s.nItems)+'</span><button class="iconbtn sc-x" type="button" aria-expanded="false" aria-controls="'+id+'-b" aria-label="Ver los elementos de la sección '+nn(s.n)+'">'+CHEV+'</button></div>'+
+      '</div>'+
+      '<div class="sc-b" id="'+id+'-b" hidden><ol class="tl">'+s.items.map(itemHTML).join('')+'</ol>'+
+        (pruebas?'<p class="sc-note">'+esc(DATA.avisoPruebas)+' Las cifras de formato salen de sitios de preparación, no de las firmas.</p>':'')+
+      '</div>'+
+    '</article>';
+  }
+
+  $('#scards').innerHTML=MAIN.map(cardHTML).join('');
+  $('#scards-opc').innerHTML=OPC.map(cardHTML).join('');
+
+  /* ---------- el proceso: pasos y paneles ---------- */
+  function procesoHTML(){
+    var tabs='',panels='';
+    ET.forEach(function(e,i){
+      tabs+='<button class="st-b" type="button" role="tab" id="st-'+e.id+'" aria-selected="'+(i===0)+'" aria-controls="sp-'+e.id+'" tabindex="'+(i===0?0:-1)+'"><i>'+(i+1)+'</i><span>'+esc(e.titulo)+'</span></button>';
+      panels+='<div class="stage" id="sp-'+e.id+'" role="tabpanel" aria-labelledby="st-'+e.id+'"'+(i?' hidden':'')+'>'+
+        '<p class="stage-k">Etapa '+(i+1)+' de '+ET.length+'</p><h3 class="h3">'+esc(e.titulo)+'</h3><p class="stage-d">'+esc(e.descripcion)+'</p>'+
+        '<span class="label rounds-l">'+(e.rondas.length===1?'Qué pasa':e.rondas.length+' rondas')+'</span>'+
+        '<div class="list">'+e.rondas.map(function(r){
+          return '<div class="item round"><span><span class="item-t">'+esc(r.titulo)+'</span><span class="item-d">'+esc(r.descripcion)+'</span></span>'+
+            '<span class="prep"><span class="label">Lo preparan</span>'+(r.preparadoPor||[]).map(function(n){var s=secById(n);return s?'<a class="sref" href="#s'+n+'" data-open="'+n+'">'+nn(n)+' '+esc(s.titulo)+'</a>':'';}).join('')+'</span></div>';
+        }).join('')+'</div>'+
+      '</div>';
+    });
+    $('#stepper').innerHTML=tabs;$('#stages').innerHTML=panels;
+  }
+  procesoHTML();
+  var tabs=$$('#stepper [role="tab"]');
+  function selectTab(t){
+    tabs.forEach(function(x){var on=x===t;x.setAttribute('aria-selected',String(on));x.tabIndex=on?0:-1;var p=document.getElementById(x.getAttribute('aria-controls'));if(p)p.hidden=!on;});
+  }
+  tabs.forEach(function(t,i){
+    t.addEventListener('click',function(){selectTab(t);});
+    t.addEventListener('keydown',function(e){var k=e.key==='ArrowRight'?1:e.key==='ArrowLeft'?-1:0;if(!k)return;e.preventDefault();var n=tabs[(i+k+tabs.length)%tabs.length];selectTab(n);n.focus();});
   });
 
-  var total=steps.reduce(function(s,li){return s+(+li.dataset.min||0);},0);
-  QM.each('[data-total-time]',function(e){e.textContent=fmt(total);});
+  /* ---------- abrir y cerrar ---------- */
+  function setOpen(card,on){var b=$('.sc-x',card),body=$('.sc-b',card);if(!b||!body)return;b.setAttribute('aria-expanded',String(on));body.hidden=!on;card.classList.toggle('open',on);}
+  function isOpen(card){return $('.sc-x',card).getAttribute('aria-expanded')==='true';}
+  function openSec(n){var card=document.getElementById('s'+n);if(card)setOpen(card,true);return card;}
 
-  var nx={label:q('[data-nx-label]'),k:q('[data-nx-k]'),t:q('[data-nx-t]'),d:q('[data-nx-d]'),go:q('[data-nx-go]'),done:q('[data-nx-done]')},cur=null;
-  function q(s){return document.querySelector(s);}
+  document.addEventListener('click',function(e){
+    var t=e.target.closest?e.target:null;if(!t)return;
+    var a;
+    /* enlaces de borrador creados aquí (qm.js solo engancha los que ya estaban en la página) */
+    a=t.closest('[data-soon]');
+    if(a&&(a.closest('#scards')||a.closest('#scards-opc'))){e.preventDefault();QM.toast(a.getAttribute('data-soon'));return;}
+    /* marcar a mano */
+    a=t.closest('.tick');
+    if(a){var li=a.closest('.tl-i'),x=li&&li._x;if(x){QM.setDone(x.done,!isDone(x));}return;}
+    /* lecciones de un curso */
+    a=t.closest('.cl-btn');
+    if(a){var on=a.getAttribute('aria-expanded')!=='true',p=document.getElementById(a.getAttribute('aria-controls'));a.setAttribute('aria-expanded',String(on));if(p)p.hidden=!on;return;}
+    /* "prepara para": ir a la etapa */
+    a=t.closest('[data-etapa]');
+    if(a){var tb=document.getElementById('st-'+a.getAttribute('data-etapa'));if(tb)selectTab(tb);return;}
+    /* "lo preparan": abrir la sección y, si viene del siguiente elemento, también */
+    a=t.closest('[data-open]');
+    if(a){openSec(+a.getAttribute('data-open'));return;}
+    /* cabecera de tarjeta: toda la cabecera abre, salvo los enlaces */
+    var h=t.closest('.sc-h');
+    if(h&&!t.closest('a')){var card=h.closest('.scard');setOpen(card,!isOpen(card));}
+  });
 
+  /* ---------- registro de elementos para pintar sin volver a montar ---------- */
+  R.secciones.forEach(function(s){s.items.forEach(function(x){var li=$('[data-item="s'+s.n+'-i'+x.i+'"]');if(li)li._x=x;});});
+
+  /* ---------- pintar el estado ---------- */
   function paint(){
-    var n=0,left=0;cur=null;
-    steps.forEach(function(li){
-      var on=isOn(li),own=ownDone(li.dataset.own),t=li.querySelector('.step-t').textContent;
-      li.classList.toggle('is-done',on);li.classList.remove('next');
-      li._b.setAttribute('aria-pressed',String(on));
-      li._b.setAttribute('aria-label',(on?'Paso hecho: ':'Marcar como hecho: ')+t);
-      li._b.setAttribute('aria-disabled',String(own));
-      li._b.firstChild.classList.toggle('on',on);
-      if(on)n++;else{left+=+li.dataset.min||0;if(!cur)cur=li;}
+    var done=0,left=0,secsDone=0,cur=null,next=null;
+    R.secciones.forEach(function(s){
+      var p=secProg(s),card=document.getElementById('s'+s.n);
+      if(!s.opcional){done+=p.h;if(p.h===p.t)secsDone++;else if(!cur)cur=s;}
+      s.items.forEach(function(x){
+        var on=isDone(x);
+        if(!s.opcional){left+=itemLeft(x);if(!next&&!on)next=x;}
+        var li=$('[data-item="s'+s.n+'-i'+x.i+'"]',card);if(!li)return;
+        li.classList.toggle('is-done',on);
+        var ck=$('.tl-c .check',li);
+        if(x.tipo==='curso'){
+          var pc=CAT.progreso(x);
+          ck.classList.toggle('on',on);ck.classList.toggle('half',!on&&pc.hechos>0);
+          ck.style.setProperty('--p',Math.round(100*pc.hechos/(pc.total||1))+'%');
+          var cn=$('[data-cl-n]',li);if(cn)cn.textContent=pc.hechos+' de '+pc.total+' hechas';
+          CAT.lecciones(x).forEach(function(l){var r=$('[data-lec="'+l.slug+'"]',li);if(!r)return;var d=lessonDone(l);r.classList.toggle('is-done',d);$('.check',r).classList.toggle('on',d);});
+        }else{
+          ck.classList.toggle('on',on);
+          var tb=$('.tick',li);if(tb){tb.setAttribute('aria-pressed',String(on));tb.setAttribute('aria-label',(on?'Hecho, pulsa para desmarcar: ':'Marcar como hecho: ')+x.titulo);}
+        }
+      });
+      var fg=$('[data-ring]',card);if(fg)fg.style.strokeDashoffset=(C*(1-(p.t?p.h/p.t:0))).toFixed(1);
+      $$('[data-sec-n]',card).forEach(function(c){c.textContent=hechos(p.h,p.t);c.classList.toggle('full',p.h===p.t);});
+      card.classList.toggle('full',p.h===p.t);
     });
-    QM.each('.stage',function(s){
-      var ls=s.querySelectorAll('.step'),k=0;
-      Array.prototype.forEach.call(ls,function(li){if(isOn(li))k++;});
-      var c=s.querySelector('[data-stage-count]');c.textContent=k+' de '+ls.length;c.classList.toggle('full',k===ls.length);
-    });
-    q('[data-pg-n]').textContent=n;
-    var bar=q('[data-pg-bar]');bar.style.setProperty('--p',Math.round(100*n/N)+'%');bar.setAttribute('aria-valuenow',n);
-    q('[data-pg-l]').textContent=n===0?'Sin empezar':n===N?'Ruta completada':'Quedan '+fmt(left);
 
-    if(cur){
-      cur.classList.add('next');
-      var a=cur.querySelector('.step-t'),soon=a.hasAttribute('data-soon');
-      nx.label.textContent=n?'Siguiente paso':'Primer paso';
-      nx.k.textContent='Paso '+('0'+cur.dataset.n).slice(-2)+' · '+cur.querySelector('.tag').textContent+' · '+cur.dataset.min+' min';
-      nx.t.textContent=a.textContent;
-      nx.d.textContent=cur.querySelector('.step-d').textContent;
-      nx.go.href=a.getAttribute('href');nx.go.textContent=soon?'Ver (borrador)':'Empezar';
-      nx.go.toggleAttribute('data-soon-dyn',soon);
-      nx.done.hidden=!!ownDone(cur.dataset.own);
+    /* cabecera de avance */
+    $('[data-pg-n]').textContent=done;
+    var bar=$('[data-pg-bar]');bar.style.setProperty('--p',Math.round(100*done/(R.nItems||1))+'%');bar.setAttribute('aria-valuenow',done);
+    $('[data-cur-n]').textContent=cur?nn(cur.n):'8/8';
+    $('[data-cur-t]').textContent=cur?cur.titulo:'Las ocho secciones hechas';
+    $('[data-secs]').textContent=secsDone+' de '+MAIN.length;
+    $('[data-left]').textContent=left?CAT.fmt(left):'0 min';
+
+    var go=$('[data-nx-go]');
+    if(next){
+      var built=CAT.isBuilt(next);
+      $('[data-nx-l]').textContent=done?'Siguiente elemento':'Primer elemento';
+      $('[data-nx-k]').textContent='Sección '+nn(next.seccion)+' · '+(TIPO[next.tipo]||next.tipo)+' · '+CAT.fmt(next.min);
+      $('[data-nx-t]').textContent=next.titulo;
+      go.href=built?next.href:'#s'+next.seccion;
+      go.textContent=built?'Continuar: '+next.titulo:'Ver en su sección';
+      if(built)go.removeAttribute('data-open');else go.setAttribute('data-open',next.seccion);
     }else{
-      nx.label.textContent='Ruta completada';
-      nx.k.textContent='19 de 19 pasos';
-      nx.t.textContent='Has terminado la ruta';
-      nx.d.textContent='Mantén el ritmo con los entrenadores y repite los simulacros cada pocos días.';
-      nx.go.href='progreso.html';nx.go.textContent='Ver mi progreso';nx.go.removeAttribute('data-soon-dyn');
-      nx.done.hidden=true;
+      $('[data-nx-l]').textContent='Ruta completada';
+      $('[data-nx-k]').textContent=R.nItems+' de '+R.nItems+' elementos';
+      $('[data-nx-t]').textContent='Listo para la entrevista';
+      go.href='firmas.html';go.textContent='Preparar una firma';go.removeAttribute('data-open');
     }
+    var hito=$('#hito');hito.classList.toggle('on',secsDone===MAIN.length);
+    $('[data-hito-s]').textContent=secsDone===MAIN.length?'Conseguido':secsDone+' de '+MAIN.length+' secciones';
   }
-  nx.go.addEventListener('click',function(e){if(nx.go.hasAttribute('data-soon-dyn')){e.preventDefault();QM.toast('Borrador: esta página todavía no está montada.');}});
-  nx.done.addEventListener('click',function(){if(cur)QM.setDone('ruta:trader:'+cur.dataset.n,true);});
 
-  /* reiniciar con confirmación dentro de la página */
-  var rb=q('[data-reset]'),box=document.getElementById('confirm');
-  function showConfirm(on){box.hidden=!on;rb.setAttribute('aria-expanded',String(on));}
-  rb.addEventListener('click',function(){showConfirm(box.hidden);});
-  q('[data-reset-no]').addEventListener('click',function(){showConfirm(false);rb.focus();});
-  q('[data-reset-yes]').addEventListener('click',function(){
-    var d=QM.doneList();
-    Object.keys(d).forEach(function(k){if(k.indexOf('ruta:trader:')===0)delete d[k];});
-    QM.store.set('done',d);showConfirm(false);paint();
-    var kept=steps.filter(function(li){return ownDone(li.dataset.own);}).length;
-    QM.toast(kept?'Ruta reiniciada. Siguen marcados '+kept+' pasos hechos en su página.':'Ruta reiniciada.');
-  });
+  /* totales fijos de la cabecera y las dudas */
+  $$('[data-n-items]').forEach(function(e){e.textContent=R.nItems;});
+  $$('[data-n-main]').forEach(function(e){e.textContent=MAIN.length;});
+  $$('[data-n-opc]').forEach(function(e){e.textContent=OPC.length;});
+  $$('[data-pg-t]').forEach(function(e){e.textContent=R.nItems;});
+  $('[data-pg-bar]').setAttribute('aria-valuemax',R.nItems);
+  $$('[data-total-h]').forEach(function(e){e.textContent=CAT.fmt(R.min);});
+  $$('[data-opc-h]').forEach(function(e){e.textContent=CAT.fmt(R.minOpcionales);});
 
   document.addEventListener('qm-progress',paint);
   paint();
+
+  /* la sección actual empieza abierta; si la URL trae #s<n>, esa */
+  var m=/^#s(\d+)$/.exec(location.hash);
+  var first=m?openSec(+m[1]):null;
+  if(!first){
+    var curN=+($('[data-cur-n]').textContent);
+    if(curN)openSec(curN);
+  }
 })();
 </script>
 </body>
