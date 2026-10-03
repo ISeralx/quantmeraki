@@ -1,0 +1,795 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>Libro de órdenes: mejor precio · QuantMeraki</title>
+<meta name="description" content="Problema de código en Python: un libro de órdenes que da la mejor compra y la mejor venta mientras llegan y se cancelan órdenes. Con pistas, pruebas en el navegador y solución explicada.">
+<link rel="icon" href="assets/perfil-128.png">
+<script>try{var t=localStorage.getItem('qm-theme');document.documentElement.setAttribute('data-theme',t||'light');}catch(e){}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;500;600;700&family=Barlow+Semi+Condensed:wght@600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/qm.css">
+<style>
+  .prob{padding-bottom:clamp(18px,2.6vw,30px)}
+  .prob .h1{font-size:clamp(34px,4.8vw,56px)}
+  .pmeta{display:flex;flex-wrap:wrap;align-items:center;gap:10px 20px;margin-top:22px;font-size:14px;color:var(--muted)}
+  .pmeta .mono{font-size:13px}
+  .pmeta .duo{display:inline-flex;align-items:center;gap:8px}
+  .only-m{display:none;min-height:40px;align-items:center}
+  .work{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.12fr);gap:clamp(28px,4vw,52px);align-items:start}
+  .stmt .tabs{margin-bottom:26px}
+  .stmt .prose{max-width:none}
+  .stmt .prose p,.stmt .prose li{font-size:16.5px}
+  .stmt .prose h3:first-child{margin-top:0}
+  .prose code{font-family:var(--mono);font-size:.84em;color:var(--txt);background:var(--panel2);border:1px solid var(--line2);border-radius:3px;padding:1px 5px}
+  .prose pre code{font-size:inherit;color:inherit;background:none;border:0;padding:0}
+  .api{margin:6px 0 22px;border-top:1px solid var(--line2)}
+  .api div{padding:12px 0;border-bottom:1px solid var(--line2)}
+  .api dt{font-family:var(--mono);font-size:14px;color:var(--txt);overflow-wrap:anywhere}
+  .api dd{margin:5px 0 0;font-size:16px;line-height:1.65;color:var(--dim)}
+  .prose sup{font-size:.7em;line-height:0}
+  .hints-intro{margin-bottom:18px!important}
+  .hint{background:var(--panel);border:1px solid var(--line2);border-radius:3px;padding:14px 16px;margin:0 0 12px}
+  .hint:focus{outline:none;border-color:var(--accent-line)}
+  .hint .label{display:block;color:var(--acc-txt);margin-bottom:6px}
+  .hint p{margin:0!important;font-size:16px!important}
+  .tbl{overflow-x:auto;margin:6px 0 22px;border-top:1px solid var(--line2)}
+  .cx{width:100%;min-width:420px;border-collapse:collapse;font-size:15px}
+  .cx th,.cx td{text-align:left;vertical-align:top;padding:11px 14px 11px 0;border-bottom:1px solid var(--line2)}
+  .cx th{font-family:var(--disp);font-weight:700;font-size:11.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+  .cx td{color:var(--dim);line-height:1.5}
+  .cx td:first-child{font-family:var(--mono);font-size:13.5px;color:var(--txt);white-space:nowrap}
+  .cx td:nth-child(2){font-family:var(--mono);font-size:13.5px;color:var(--acc-txt);white-space:nowrap}
+  .sol-gate p{margin-bottom:14px}
+
+  .ws{background:var(--panel);border:1px solid var(--line);border-radius:4px;scroll-margin-top:84px}
+  .ws-bar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 12px 10px 16px;border-bottom:1px solid var(--line2)}
+  .ws-file{display:flex;align-items:baseline;gap:10px;min-width:0;font-family:var(--mono);font-size:13px;color:var(--muted)}
+  .ws-file .label{color:var(--dim)}
+  .ed{--fs:13.5px;--lh:21px;display:grid;grid-template-columns:auto minmax(0,1fr);height:clamp(360px,58vh,520px);background:var(--code-bg);border-bottom:1px solid var(--line2);overflow:hidden}
+  .ed:focus-within{box-shadow:inset 0 0 0 1px var(--accent)}
+  .ed-gut{position:relative;overflow:hidden;min-width:42px;padding:12px 10px 12px 12px;border-right:1px solid var(--line2);font:400 var(--fs)/var(--lh) var(--mono);color:var(--faint);text-align:right;user-select:none;-webkit-user-select:none}
+  .ed-gut-in{white-space:pre}
+  .ed-area{position:relative;overflow:hidden}
+  .ed-hl,.ed-ta{margin:0;padding:12px 16px;border:0;font:400 var(--fs)/var(--lh) var(--mono);letter-spacing:0;tab-size:4;-moz-tab-size:4;white-space:pre;overflow-wrap:normal;font-variant-ligatures:none;font-kerning:none}
+  .ed-hl{position:absolute;top:0;left:0;min-width:100%;color:var(--dim);pointer-events:none}
+  .ed-hl span{font-weight:400;font-style:normal}
+  .ed-ta{position:absolute;inset:0;width:100%;height:100%;display:block;outline:none;resize:none;background:transparent;color:transparent;-webkit-text-fill-color:transparent;caret-color:var(--txt);overflow:auto}
+  .ed-ta::selection{background:var(--accent-dim)}
+  .ws-run{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px 16px;padding:14px 16px}
+  .ws-run p{margin:0;flex:1 1 220px;font-size:13px;color:var(--muted)}
+  .ws-status{margin:0 16px 16px;padding:10px 12px;border-left:2px solid var(--line);font-size:14px;line-height:1.55;color:var(--dim)}
+  .ws-status[data-tone="good"]{border-left-color:var(--good);background:var(--good-dim)}
+  .ws-status[data-tone="bad"]{border-left-color:var(--bad);background:var(--bad-dim)}
+  .ws-status[data-tone="warn"]{border-left-color:var(--accent);background:var(--accent-dim)}
+  .ws-status a{color:var(--acc-txt);border-bottom:1px solid var(--accent-line)}
+  .ws-tabs{padding:0 16px 14px;border-bottom:1px solid var(--line2)}
+  .ws-pane{padding:0 16px 16px}
+  .tsum{display:flex;align-items:center;gap:14px;padding:14px 0 6px}
+  .tsum .bar-p{flex:1}
+  .tsum .num{min-width:40px;font-size:16px}
+  .trow .acc-btn{grid-template-columns:minmax(0,1fr) auto 20px;min-height:48px;padding:12px 0}
+  .tname{display:flex;align-items:center;gap:11px;min-width:0}
+  .trow .item-t{font-size:15px;letter-spacing:.04em}
+  .tdot{width:10px;height:10px;border-radius:50%;border:1.5px solid var(--faint);flex:none}
+  .trow[data-state="run"] .tdot{border-color:var(--accent);animation:qmBlink 1s ease-in-out infinite}
+  .trow[data-state="ok"] .tdot{background:var(--good);border-color:var(--good)}
+  .trow[data-state="fail"] .tdot{background:var(--bad);border-color:var(--bad)}
+  @keyframes qmBlink{50%{opacity:.25}}
+  .tst{font-family:var(--disp);font-weight:700;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);white-space:nowrap}
+  .trow[data-state="ok"] .tst{color:var(--good)}
+  .trow[data-state="fail"] .tst{color:var(--bad)}
+  .tmsg{margin:-2px 0 12px 21px;padding-left:10px;border-left:2px solid var(--bad-line);font-size:14px;line-height:1.5;color:var(--dim);overflow-wrap:anywhere}
+  .trow .acc-body{padding:0 0 14px 21px}
+  .trow .acc-body p{margin:0 0 8px;font-size:14.5px}
+  .trow .tms{font-size:13px;color:var(--muted)}
+  .tms:empty{display:none}
+  .trow pre.code{margin:8px 0 0;font-size:12.5px}
+  .scratch{min-height:150px;resize:vertical;font-family:var(--mono);font-size:13.5px;line-height:1.6;background:var(--code-bg);white-space:pre;overflow:auto;tab-size:4}
+  .mano-help{margin:14px 0 10px;font-size:14px;color:var(--muted)}
+  .mano-run{display:flex;justify-content:flex-end;margin-top:10px}
+  .ws-pane pre.code{margin:12px 0 0;max-height:260px;overflow:auto;white-space:pre-wrap;overflow-wrap:anywhere}
+  .ws-out{padding:0 16px 16px}
+  .ws-out .label{display:block;margin-bottom:2px}
+  .ws-out pre.code{max-height:220px;overflow:auto;white-space:pre-wrap;overflow-wrap:anywhere;margin-top:8px}
+  @media (max-width:900px){
+    .work{grid-template-columns:minmax(0,1fr)}
+    .only-m{display:inline-flex}
+  }
+  @media (max-width:600px){
+    .chip,.btn.sm{min-height:40px}
+    .ed{--fs:16px;--lh:24px;height:380px}
+    .ed-hl,.ed-ta{padding:12px}
+    .ed-gut{min-width:36px;padding-left:8px;padding-right:8px}
+    .scratch{font-size:16px}
+    .ws-bar{padding-left:12px}
+    .ws-run,.ws-pane,.ws-out{padding-inline:12px}
+    .ws-tabs{padding-inline:12px}
+    .ws-status{margin-inline:12px}
+    .ws-run .btn{width:100%}
+    .trow .acc-btn{grid-template-columns:minmax(0,1fr) auto 20px}
+    .trow .acc-btn>.item-m{grid-column:2;grid-row:1}
+    .trow .acc-btn>.plus{grid-column:3;grid-row:1}
+    .tmsg,.trow .acc-body{margin-left:0;padding-left:10px}
+    .trow .acc-body{padding-left:0}
+  }
+</style>
+</head>
+<body data-section="practica">
+<a class="skip" href="#main">Saltar al contenido</a>
+
+<header class="top">
+  <div class="wrap bar">
+    <a class="logo" href="index.html" aria-label="QuantMeraki, inicio"><img src="assets/perfil-128.png" alt="" width="34" height="34"><span>QuantMeraki</span></a>
+    <nav class="nav" aria-label="Principal">
+      <div class="dd">
+        <button class="dd-btn" type="button" aria-expanded="false" data-nav="practica">Practica</button>
+        <div class="menu" hidden>
+          <a href="entrenadores.html">Entrenadores<small>Cálculo mental y series, contra el reloj</small></a>
+          <a href="preguntas.html">Preguntas<small>Probabilidad, acertijos y series</small></a>
+          <a href="juegos.html">Juegos de mercado<small>Cotiza y ajusta tus precios</small></a>
+          <a href="simulacros.html">Simulacros<small>Pruebas cronometradas, como las de verdad</small></a>
+          <a href="codigo.html">Código<small>Problemas para developers</small></a>
+        </div>
+      </div>
+      <div class="dd">
+        <button class="dd-btn" type="button" aria-expanded="false" data-nav="aprende">Aprende</button>
+        <div class="menu" hidden>
+          <a href="rutas.html">Rutas<small>Trader, researcher o developer, paso a paso</small></a>
+          <a href="cursos.html">Cursos<small>Probabilidad, mercados y opciones</small></a>
+          <a href="guias.html">Guías<small>El sector y los procesos, explicados</small></a>
+        </div>
+      </div>
+      <div class="dd">
+        <button class="dd-btn" type="button" aria-expanded="false" data-nav="firmas">Firmas</button>
+        <div class="menu" hidden>
+          <a href="firmas.html">Directorio<small>Qué hace cada firma y cómo contrata</small></a>
+          <a href="empleo.html">Empleo<small>Prácticas y puestos para graduados</small></a>
+        </div>
+      </div>
+      <a href="canal.html" data-nav="canal">Canal</a>
+    </nav>
+    <div class="tools">
+      <a class="iconbtn" href="progreso.html" data-nav="progreso" aria-label="Mi progreso" title="Mi progreso"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 20v-8M12 20V5M19 20v-9"/></svg></a>
+      <button class="iconbtn" type="button" data-theme-toggle aria-label="Cambiar a modo oscuro"><svg class="ico i-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg><svg class="ico i-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg></button>
+      <a class="btn solid sm cta" href="entrenador-calculo-mental.html">Empieza</a>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+  <div class="wrap">
+
+    <section class="phead prob">
+      <nav class="crumbs" aria-label="Migas de pan"><a href="practica.html">Practica</a><span class="sep">/</span><a href="codigo.html">Código</a><span class="sep">/</span><span aria-current="page">Mejor precio</span></nav>
+      <p class="kicker"><b>Libro de órdenes</b> / Problema de código</p>
+      <h1 class="h1">Libro de órdenes: mejor precio</h1>
+      <div class="pmeta">
+        <span class="duo"><span class="meter" data-v="2" aria-hidden="true"><i></i><i></i><i></i></span>Dificultad media</span>
+        <span class="mono">Python 3.12</span>
+        <span>Unos 30 minutos</span>
+        <span class="duo"><span class="check" data-done-mark="codigo:libro-de-ordenes" aria-hidden="true"></span><span id="doneLbl">Sin resolver</span></span>
+        <a class="more only-m" href="#editor">Ir al editor ↓</a>
+      </div>
+    </section>
+
+    <section class="sec first" aria-label="Problema y editor">
+      <div class="work">
+
+        <div class="stmt">
+          <div class="tabs" role="tablist" aria-label="Problema">
+            <button class="chip" type="button" role="tab" id="tab-enun" aria-selected="true" aria-controls="p-enun">Enunciado</button>
+            <button class="chip" type="button" role="tab" id="tab-pistas" aria-selected="false" aria-controls="p-pistas" tabindex="-1">Pistas (3)</button>
+            <button class="chip" type="button" role="tab" id="tab-sol" aria-selected="false" aria-controls="p-sol" tabindex="-1">Solución</button>
+          </div>
+
+          <div id="p-enun" role="tabpanel" aria-labelledby="tab-enun" class="prose">
+            <p>Un libro de órdenes (order book) guarda las órdenes limitadas que esperan en un mercado: las de compra (bids) y las de venta (asks). Lo primero que mira cualquier sistema de trading es el mejor precio de cada lado, es decir, la compra más alta y la venta más baja.</p>
+            <p>Escribe la clase <code>LibroOrdenes</code> con estos cuatro métodos:</p>
+            <dl class="api">
+              <div><dt>add(order_id, side, price, qty)</dt><dd>Añade una orden. <code>side</code> es <code>"buy"</code> (compra) o <code>"sell"</code> (venta). <code>price</code> y <code>qty</code> son enteros positivos.</dd></div>
+              <div><dt>cancel(order_id)</dt><dd>Retira la orden entera. Devuelve <code>True</code> si estaba en el libro y <code>False</code> si no existe o ya se canceló.</dd></div>
+              <div><dt>best_bid()</dt><dd>Devuelve la tupla <code>(precio, cantidad)</code> de la mejor compra, o <code>None</code> si no hay compras.</dd></div>
+              <div><dt>best_ask()</dt><dd>Lo mismo para la mejor venta.</dd></div>
+            </dl>
+
+            <h3>Empates y cancelaciones</h3>
+            <ul>
+              <li>Si varias órdenes comparten el mejor precio, la cantidad es la suma de todas ellas.</li>
+              <li>Al cancelar, la cantidad de esa orden sale de su nivel. Si el nivel se queda a cero, el mejor precio pasa al siguiente.</li>
+              <li>Cancelar un id desconocido o ya cancelado no cambia nada.</li>
+              <li>El libro no casa órdenes. Las pruebas nunca envían una compra a un precio igual o superior a la mejor venta, ni al revés.</li>
+            </ul>
+
+            <h3>Ejemplo</h3>
+<pre class="code"><code data-hl>ob = LibroOrdenes()
+ob.add(1, "buy", 100, 5)
+ob.add(2, "buy", 100, 7)
+ob.add(3, "sell", 103, 2)
+ob.best_bid()   # (100, 12): dos órdenes a 100
+ob.best_ask()   # (103, 2)
+ob.cancel(1)    # True
+ob.best_bid()   # (100, 7)
+ob.cancel(1)    # False: ya no está
+ob.cancel(2)    # True
+ob.best_bid()   # None</code></pre>
+
+            <h3>Restricciones</h3>
+            <ul>
+              <li>Hasta 2·10<sup>5</sup> llamadas en total.</li>
+              <li>Precios entre 1 y 10<sup>6</sup> (en ticks, enteros) y cantidades entre 1 y 10<sup>4</sup>.</li>
+              <li>Los id son enteros y no se repiten nunca, ni siquiera después de cancelar.</li>
+              <li>Objetivo: O(log <i>n</i>) por operación, aunque sea amortizado. La última prueba lo comprueba con un límite de 3 segundos.</li>
+            </ul>
+
+            <div class="callout">
+              <span class="label">Por qué importa</span>
+              <p>El mejor precio es la primera pieza de cualquier sistema que cotiza. Si llega tarde o mal, todo lo que va detrás decide con datos viejos.</p>
+            </div>
+          </div>
+
+          <div id="p-pistas" role="tabpanel" aria-labelledby="tab-pistas" class="prose" hidden>
+            <p class="hints-intro">Van en orden: de la forma del problema a la trampa que buscan las pruebas. Ninguna da la solución entera.</p>
+            <div id="hintList" aria-live="polite">
+              <div class="hint" id="hint1" tabindex="-1" hidden><span class="label">Pista 1</span><p>Separa el problema en dos: cuánto hay a cada precio y cuál es el mejor precio vivo. Lo primero es un diccionario. Lo difícil es lo segundo.</p></div>
+              <div class="hint" id="hint2" tabindex="-1" hidden><span class="label">Pista 2</span><p>Un montículo (heap) da el mínimo al instante e inserta en O(log <i>n</i>). En Python, <code>heapq</code> solo hace montículos de mínimos: para las compras, guarda el precio con el signo cambiado.</p></div>
+              <div class="hint" id="hint3" tabindex="-1" hidden><span class="label">Pista 3</span><p>Quitar un elemento del medio de un montículo es caro. No lo hagas: cuando un nivel se vacía, bórralo solo del diccionario y, al pedir el mejor precio, descarta de la cima los precios que ya no están. Cuidado con los niveles que se vacían y vuelven a llenarse.</p></div>
+            </div>
+            <button class="btn ghost sm" type="button" id="hintBtn" aria-controls="hintList">Ver pista 1 de 3</button>
+          </div>
+
+          <div id="p-sol" role="tabpanel" aria-labelledby="tab-sol" class="prose" hidden>
+            <div class="sol-gate">
+              <p>Mírala después de intentarlo. Si la lees antes, el problema ya no te enseña nada.</p>
+              <button class="btn ghost sm" type="button" data-reveal="sol" aria-controls="sol" aria-expanded="false" data-alt="Ocultar la solución">Ver la solución</button>
+            </div>
+            <div id="sol" hidden>
+              <h3>La idea</h3>
+              <p>Para cada lado se guardan dos cosas: un diccionario <code>precio → cantidad total</code> y un montículo con los precios que tienen órdenes. Otro diccionario recuerda cada orden por su id para poder cancelarla.</p>
+              <p>Cancelar solo toca diccionarios. Si un nivel se vacía, su precio se queda en el montículo como entrada caducada y se descarta la próxima vez que llegue a la cima. Esta técnica se llama borrado perezoso (lazy deletion).</p>
+<pre class="code"><code data-hl id="solCode">import heapq
+
+
+class LibroOrdenes:
+    def __init__(self):
+        # id -&gt; (lado, precio, cantidad)
+        self.ordenes = {}
+        # por lado, precio -&gt; cantidad total en ese nivel
+        self.niveles = {"buy": {}, "sell": {}}
+        self.compras = []   # montículo de -precio
+        self.ventas = []    # montículo de precio
+
+    def add(self, order_id, side, price, qty):
+        nivel = self.niveles[side]
+        if price not in nivel:
+            # nivel nuevo: su precio entra en el montículo
+            nivel[price] = 0
+            if side == "buy":
+                heapq.heappush(self.compras, -price)
+            else:
+                heapq.heappush(self.ventas, price)
+        nivel[price] += qty
+        self.ordenes[order_id] = (side, price, qty)
+
+    def cancel(self, order_id):
+        orden = self.ordenes.pop(order_id, None)
+        if orden is None:
+            return False
+        side, price, qty = orden
+        nivel = self.niveles[side]
+        nivel[price] -= qty
+        if nivel[price] == 0:
+            # fuera del diccionario; el montículo, luego
+            del nivel[price]
+        return True
+
+    def best_bid(self):
+        nivel = self.niveles["buy"]
+        # saca de la cima los precios caducados
+        while self.compras and -self.compras[0] not in nivel:
+            heapq.heappop(self.compras)
+        if not self.compras:
+            return None
+        precio = -self.compras[0]
+        return (precio, nivel[precio])
+
+    def best_ask(self):
+        nivel = self.niveles["sell"]
+        while self.ventas and self.ventas[0] not in nivel:
+            heapq.heappop(self.ventas)
+        if not self.ventas:
+            return None
+        precio = self.ventas[0]
+        return (precio, nivel[precio])</code></pre>
+
+              <h3>Coste</h3>
+              <div class="tbl">
+                <table class="cx">
+                  <thead><tr><th scope="col">Operación</th><th scope="col">Coste</th><th scope="col">Por qué</th></tr></thead>
+                  <tbody>
+                    <tr><td>add</td><td>O(log n)</td><td>Un push solo si el precio es nuevo; si no, sumar en el diccionario.</td></tr>
+                    <tr><td>cancel</td><td>O(1)</td><td>Solo diccionarios. El montículo se limpia después.</td></tr>
+                    <tr><td>best_bid / best_ask</td><td>O(log n) amortizado</td><td>Cada precio que entra en el montículo sale como mucho una vez.</td></tr>
+                    <tr><td>memoria</td><td>O(n)</td><td>Las entradas caducadas nunca superan el número de órdenes añadidas.</td></tr>
+                  </tbody>
+                </table>
+              </div>
+              <p class="fnote">Aquí n es el número de órdenes añadidas hasta ese momento.</p>
+
+              <h3>Otras formas</h3>
+              <ul>
+                <li><strong>Recorrer todas las órdenes</strong> en cada consulta cuesta O(n). Con 10<sup>5</sup> llamadas se va a unos 10<sup>10</sup> pasos y no pasa la prueba de rendimiento.</li>
+                <li><strong>Una lista ordenada con <code>bisect</code></strong> responde al instante, pero insertar y borrar desplazan elementos: O(n). En Python suele pasar porque mover memoria es muy rápido; en una entrevista te preguntarán por qué no es O(log n).</li>
+                <li><strong>Un árbol equilibrado</strong> (o <code>SortedDict</code>, del paquete sortedcontainers) da O(log n) en todo y sin entradas caducadas, pero no viene con Python.</li>
+              </ul>
+
+              <h3>Para la entrevista</h3>
+              <ul>
+                <li>¿Cómo devolverías los cinco mejores niveles de cada lado?</li>
+                <li>¿Cómo añadirías <code>modify(order_id, qty)</code> para reducir la cantidad de una orden?</li>
+                <li>¿Qué cambia si una orden que cruza el libro se tiene que ejecutar? Ese es el problema de casación.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="ws" id="editor">
+          <div class="ws-bar">
+            <span class="ws-file"><span class="label">Python 3.12</span><span>libro.py</span></span>
+            <button class="btn ghost sm" type="button" id="resetBtn">Restablecer</button>
+          </div>
+          <div class="ed">
+            <div class="ed-gut" aria-hidden="true"><div class="ed-gut-in" id="gut">1</div></div>
+            <div class="ed-area">
+              <pre class="ed-hl" id="hl" aria-hidden="true"></pre>
+              <label class="sr" for="code">Tu código en Python</label>
+              <textarea class="ed-ta" id="code" wrap="off" spellcheck="false" autocapitalize="off" autocomplete="off" autocorrect="off" aria-describedby="edHelp">class LibroOrdenes:
+    """Libro de órdenes que conoce su mejor precio."""
+
+    def __init__(self):
+        # Tus estructuras de datos van aquí.
+        pass
+
+    def add(self, order_id, side, price, qty):
+        """side es "buy" (compra) o "sell" (venta)."""
+        pass
+
+    def cancel(self, order_id):
+        """True si la orden estaba viva; si no, False."""
+        pass
+
+    def best_bid(self):
+        """(precio, cantidad) de la mejor compra o None."""
+        pass
+
+    def best_ask(self):
+        """(precio, cantidad) de la mejor venta o None."""
+        pass
+</textarea>
+            </div>
+          </div>
+          <div class="ws-run">
+            <p id="edHelp">Tab sangra. Para salir del editor, pulsa Esc y luego Tab. Ctrl o ⌘ + Intro ejecuta.</p>
+            <button class="btn solid" type="button" id="runBtn">Ejecutar pruebas</button>
+          </div>
+          <p class="ws-status" id="status" role="status" aria-live="polite">La primera vez se descarga Python en el navegador, unos 6 MB.</p>
+          <div class="tabs ws-tabs" role="tablist" aria-label="Pruebas">
+            <button class="chip" type="button" role="tab" id="tab-tests" aria-selected="true" aria-controls="p-tests">Pruebas (8)</button>
+            <button class="chip" type="button" role="tab" id="tab-mano" aria-selected="false" aria-controls="p-mano" tabindex="-1">A mano</button>
+          </div>
+          <div class="ws-pane" id="p-tests" role="tabpanel" aria-labelledby="tab-tests">
+            <div class="tsum"><span class="num" id="tCount">0/8</span><div class="bar-p" id="tBar" style="--p:0%"><i></i></div></div>
+            <div class="acc-row trow" data-test="vacio" data-state="idle">
+              <button class="acc-btn" type="button" aria-expanded="false" aria-controls="tb-vacio"><span class="tname"><i class="tdot" aria-hidden="true"></i><span class="item-t">Libro vacío</span></span><span class="item-m"><span class="tst">Sin ejecutar</span></span><span class="plus" aria-hidden="true">+</span></button>
+              <p class="tmsg" hidden></p>
+              <div class="acc-body" id="tb-vacio" hidden><p>Sin órdenes no hay mejor precio, y cancelar algo que no existe devuelve False.</p><p class="tms"></p><pre class="code"><code data-src>ob = LibroOrdenes()
+comprueba(ob.best_bid(), None, "best_bid() sin órdenes")
+comprueba(ob.best_ask(), None, "best_ask() sin órdenes")
+comprueba(ob.cancel(7), False, "cancel(7) sin órdenes")</code></pre></div>
+            </div>
+            <div class="acc-row trow" data-test="una" data-state="idle">
+              <button class="acc-btn" type="button" aria-expanded="false" aria-controls="tb-una"><span class="tname"><i class="tdot" aria-hidden="true"></i><span class="item-t">Una orden en cada lado</span></span><span class="item-m"><span class="tst">Sin ejecutar</span></span><span class="plus" aria-hidden="true">+</span></button>
+              <p class="tmsg" hidden></p>
+              <div class="acc-body" id="tb-una" hidden><p>Cada lado se lleva por separado: una compra no aparece como venta.</p><p class="tms"></p><pre class="code"><code data-src>ob = LibroOrdenes()
+ob.add(1, "buy", 100, 5)
+comprueba(ob.best_bid(), (100, 5), "best_bid()")
+comprueba(ob.best_ask(), None, "best_ask() sin ventas")
+ob.add(2, "sell", 102, 3)
+comprueba(ob.best_ask(), (102, 3), "best_ask()")
+comprueba(ob.best_bid(), (100, 5), "best_bid() tras la venta")</code></pre></div>
+            </div>
+            <div class="acc-row trow" data-test="mejor" data-state="idle">
+              <button class="acc-btn" type="button" aria-expanded="false" aria-controls="tb-mejor"><span class="tname"><i class="tdot" aria-hidden="true"></i><span class="item-t">Gana el mejor precio</span></span><span class="item-m"><span class="tst">Sin ejecutar</span></span><span class="plus" aria-hidden="true">+</span></button>
+              <p class="tmsg" hidden></p>
+              <div class="acc-body" id="tb-mejor" hidden><p>La mejor compra es la más alta y la mejor venta, la más baja, lleguen en el orden que lleguen.</p><p class="tms"></p><pre class="code"><code data-src>ob = LibroOrdenes()
+ob.add(1, "buy", 99, 4)
+ob.add(2, "buy", 101, 2)
+ob.add(3, "buy", 100, 7)
+ob.add(4, "sell", 105, 1)
+ob.add(5, "sell", 103, 6)
+ob.add(6, "sell", 104, 2)
+comprueba(ob.best_bid(), (101, 2), "best_bid()")
+comprueba(ob.best_ask(), (103, 6), "best_ask()")</code></pre></div>
+            </div>
+            <div class="acc-row trow" data-test="empate" data-state="idle">
+              <button class="acc-btn" type="button" aria-expanded="false" aria-controls="tb-empate"><span class="tname"><i class="tdot" aria-hidden="true"></i><span class="item-t">Empates: se suma la cantidad</span></span><span class="item-m"><span class="tst">Sin ejecutar</span></span><span class="plus" aria-hidden="true">+</span></button>
+              <p class="tmsg" hidden></p>
+              <div class="acc-body" id="tb-empate" hidden><p>Dos órdenes al mismo precio forman un solo nivel con la suma de sus cantidades.</p><p class="tms"></p><pre class="code"><code data-src>ob = LibroOrdenes()
+ob.add(1, "buy", 100, 5)
+ob.add(2, "buy", 100, 7)
+ob.add(3, "buy", 98, 50)
+ob.add(4, "sell", 101, 2)
+ob.add(5, "sell", 101, 2)
+comprueba(ob.best_bid(), (100, 12), "best_bid() con 2 órdenes a 100")
+comprueba(ob.best_ask(), (101, 4), "best_ask() con 2 órdenes a 101")</code></pre></div>
+            </div>
+            <div class="acc-row trow" data-test="cancelar" data-state="idle">
+              <button class="acc-btn" type="button" aria-expanded="false" aria-controls="tb-cancelar"><span class="tname"><i class="tdot" aria-hidden="true"></i><span class="item-t">Cancelar la mejor orden</span></span><span class="item-m"><span class="tst">Sin ejecutar</span></span><span class="plus" aria-hidden="true">+</span></button>
+              <p class="tmsg" hidden></p>
+              <div class="acc-body" id="tb-cancelar" hidden><p>Cancelar resta solo esa orden del nivel. Si el nivel se vacía, manda el siguiente precio.</p><p class="tms"></p><pre class="code"><code data-src>ob = LibroOrdenes()
+ob.add(1, "buy", 100, 5)
+ob.add(2, "buy", 100, 7)
+ob.add(3, "buy", 99, 3)
+ob.add(4, "sell", 102, 4)
+ob.add(5, "sell", 103, 1)
+comprueba(ob.cancel(1), True, "cancel(1)")
+comprueba(ob.best_bid(), (100, 7), "best_bid() tras cancel(1)")
+comprueba(ob.cancel(2), True, "cancel(2)")
+comprueba(ob.best_bid(), (99, 3), "best_bid() sin nivel 100")
+comprueba(ob.cancel(4), True, "cancel(4)")
+comprueba(ob.best_ask(), (103, 1), "best_ask() tras cancel(4)")</code></pre></div>
+            </div>
+            <div class="acc-row trow" data-test="repetida" data-state="idle">
+              <button class="acc-btn" type="button" aria-expanded="false" aria-controls="tb-repetida"><span class="tname"><i class="tdot" aria-hidden="true"></i><span class="item-t">Cancelar dos veces o un id desconocido</span></span><span class="item-m"><span class="tst">Sin ejecutar</span></span><span class="plus" aria-hidden="true">+</span></button>
+              <p class="tmsg" hidden></p>
+              <div class="acc-body" id="tb-repetida" hidden><p>Una orden solo se cancela una vez. Lo que no existe no toca el libro y devuelve False.</p><p class="tms"></p><pre class="code"><code data-src>ob = LibroOrdenes()
+ob.add(1, "sell", 50, 10)
+ob.add(2, "buy", 40, 3)
+comprueba(ob.cancel(1), True, "primer cancel(1)")
+comprueba(ob.cancel(1), False, "segundo cancel(1)")
+comprueba(ob.cancel(999), False, "cancel(999)")
+comprueba(ob.best_ask(), None, "best_ask() sin ventas")
+comprueba(ob.best_bid(), (40, 3), "best_bid() intacto")</code></pre></div>
+            </div>
+            <div class="acc-row trow" data-test="rellenar" data-state="idle">
+              <button class="acc-btn" type="button" aria-expanded="false" aria-controls="tb-rellenar"><span class="tname"><i class="tdot" aria-hidden="true"></i><span class="item-t">Vaciar un nivel y volver a llenarlo</span></span><span class="item-m"><span class="tst">Sin ejecutar</span></span><span class="plus" aria-hidden="true">+</span></button>
+              <p class="tmsg" hidden></p>
+              <div class="acc-body" id="tb-rellenar" hidden><p>Un precio puede desaparecer y volver varias veces. Aquí fallan los montículos que no limpian bien.</p><p class="tms"></p><pre class="code"><code data-src>ob = LibroOrdenes()
+ob.add(1, "buy", 100, 5)
+ob.add(2, "buy", 97, 1)
+ob.cancel(1)
+comprueba(ob.best_bid(), (97, 1), "best_bid() sin nivel 100")
+ob.add(3, "buy", 100, 8)
+comprueba(ob.best_bid(), (100, 8), "best_bid() con 100 de nuevo")
+ob.cancel(3)
+ob.add(4, "buy", 100, 2)
+ob.add(5, "buy", 100, 6)
+comprueba(ob.best_bid(), (100, 8), "best_bid() con 100 rellenado")
+ob.cancel(4)
+ob.cancel(5)
+ob.cancel(2)
+comprueba(ob.best_bid(), None, "best_bid() con todo cancelado")</code></pre></div>
+            </div>
+            <div class="acc-row trow" data-test="rendimiento" data-state="idle">
+              <button class="acc-btn" type="button" aria-expanded="false" aria-controls="tb-rendimiento"><span class="tname"><i class="tdot" aria-hidden="true"></i><span class="item-t">Rendimiento: 40 000 órdenes</span></span><span class="item-m"><span class="tst">Sin ejecutar</span></span><span class="plus" aria-hidden="true">+</span></button>
+              <p class="tmsg" hidden></p>
+              <div class="acc-body" id="tb-rendimiento" hidden><p>20 000 compras y 20 000 ventas; después se cancela la mejor de cada lado una y otra vez. Límite: 3 segundos.</p><p class="tms"></p><pre class="code"><code data-src>N = 20000
+ob = LibroOrdenes()
+t0 = time.perf_counter()
+for i in range(1, N + 1):
+    ob.add(i, "buy", i, 1)          # compras a 1 ... N
+    ob.add(N + i, "sell", N + i, 1)  # ventas a N+1 ... 2N
+for k in range(N, 0, -1):
+    comprueba(ob.best_bid(), (k, 1), "best_bid()")
+    comprueba(ob.best_ask(), (2 * N + 1 - k, 1), "best_ask()")
+    ob.cancel(k)
+    ob.cancel(2 * N + 1 - k)
+    if k % 500 == 0:
+        a_tiempo(t0, 3.0)
+comprueba(ob.best_bid(), None, "best_bid() al final")
+comprueba(ob.best_ask(), None, "best_ask() al final")
+a_tiempo(t0, 3.0)</code></pre></div>
+            </div>
+          </div>
+          <div class="ws-pane" id="p-mano" role="tabpanel" aria-labelledby="tab-mano" hidden>
+            <p class="mano-help">Se ejecuta después de tu código. Usa <span class="mono">print()</span> para ver los valores.</p>
+            <label class="sr" for="scratch">Código de prueba a mano</label>
+            <textarea class="input scratch" id="scratch" rows="7" wrap="off" spellcheck="false" autocapitalize="off" autocomplete="off" autocorrect="off">ob = LibroOrdenes()
+ob.add(1, "buy", 100, 5)
+ob.add(2, "sell", 102, 3)
+ob.add(3, "buy", 101, 4)
+print(ob.best_bid(), ob.best_ask())
+ob.cancel(3)
+print(ob.best_bid())</textarea>
+            <div class="mano-run"><button class="btn ghost sm" type="button" id="scratchBtn">Ejecutar</button></div>
+            <pre class="code" id="scratchOut" hidden></pre>
+          </div>
+          <div class="ws-out" id="outBox" hidden><span class="label">Salida de print()</span><pre class="code" id="out"></pre></div>
+        </div>
+
+      </div>
+    </section>
+
+    <section class="sec" aria-labelledby="sig-h">
+      <div class="split">
+        <div class="side">
+          <p class="kicker"><b>Sigue</b> / Libro de órdenes</p>
+          <h2 class="h2" id="sig-h">El siguiente paso</h2>
+          <p class="lead">Con el mejor precio resuelto, el resto del libro sale casi solo.</p>
+          <a class="btn ghost" href="codigo.html">Todos los problemas</a>
+        </div>
+        <div class="list">
+          <a class="item" href="#" data-soon="Borrador: este problema todavía no está montado.">
+            <span><span class="item-t">Barrer el libro: precio medio</span><span class="item-d">Cuánto pagas de media si tu orden se come varios niveles.</span></span>
+            <span class="item-m"><span class="meter" data-v="1" aria-label="Dificultad fácil"><i></i><i></i><i></i></span><span class="arrow" aria-hidden="true">→</span></span>
+          </a>
+          <a class="item" href="#" data-soon="Borrador: este problema todavía no está montado.">
+            <span><span class="item-t">Casar órdenes con prioridad precio-tiempo</span><span class="item-d">Quién se ejecuta primero cuando una orden cruza el libro.</span></span>
+            <span class="item-m"><span class="meter" data-v="3" aria-label="Dificultad difícil"><i></i><i></i><i></i></span><span class="arrow" aria-hidden="true">→</span></span>
+          </a>
+          <a class="item" href="#" data-soon="Borrador: este problema todavía no está montado.">
+            <span><span class="item-t">Mediana de un flujo de precios</span><span class="item-d">Otra vez montículos, ahora dos que se equilibran.</span></span>
+            <span class="item-m"><span class="meter" data-v="3" aria-label="Dificultad difícil"><i></i><i></i><i></i></span><span class="arrow" aria-hidden="true">→</span></span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+  </div>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <div class="cols">
+      <div class="brandcol"><a class="logo" href="index.html"><img src="assets/perfil-128.png" alt="" width="34" height="34"><span>QuantMeraki</span></a><p class="claim">El mundo quant, en español.</p></div>
+      <div><h4>Practica</h4><ul><li><a href="entrenadores.html">Entrenadores</a></li><li><a href="preguntas.html">Preguntas</a></li><li><a href="juegos.html">Juegos de mercado</a></li><li><a href="simulacros.html">Simulacros</a></li><li><a href="codigo.html">Código</a></li></ul></div>
+      <div><h4>Aprende</h4><ul><li><a href="rutas.html">Rutas</a></li><li><a href="cursos.html">Cursos</a></li><li><a href="guias.html">Guías</a></li><li><a href="canal.html">El canal</a></li></ul></div>
+      <div><h4>QuantMeraki</h4><ul><li><a href="firmas.html">Firmas</a></li><li><a href="empleo.html">Empleo</a></li><li><a href="progreso.html">Mi progreso</a></li><li><a href="sobre.html">Sobre el proyecto</a></li></ul></div>
+    </div>
+    <div class="legal"><span>Contenido educativo, nunca asesoramiento financiero.</span><span>© 2026 QuantMeraki</span></div>
+  </div>
+</footer>
+
+<nav class="tabbar" aria-label="Secciones">
+  <a href="index.html" data-tab="inicio"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/><path d="M10 20v-6h4v6"/></svg><span>Inicio</span></a>
+  <a href="practica.html" data-tab="practica"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="4"/><circle class="f" cx="12" cy="12" r="1.4"/></svg><span>Practica</span></a>
+  <a href="aprende.html" data-tab="aprende"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 6c-2-1.5-5-2-8-1.5V19c3-.5 6 0 8 1.5 2-1.5 5-2 8-1.5V4.5c-3-.5-6 0-8 1.5z"/><path d="M12 6v14.5"/></svg><span>Aprende</span></a>
+  <a href="firmas.html" data-tab="firmas"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 21h18M3 9.5l9-5.5 9 5.5M5 10v11M19 10v11M9.5 21v-8M14.5 21v-8"/></svg><span>Firmas</span></a>
+  <a href="canal.html" data-tab="canal"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="3"/><path class="f" d="M10 9v6l5-3z"/></svg><span>Canal</span></a>
+</nav>
+
+<div class="toast" id="toast" role="status" hidden></div>
+<script src="assets/qm.js"></script>
+<script>
+/* Problema de código: editor con sangría, pruebas en Pyodide (en un worker), pistas por pasos y progreso */
+(function(){
+  'use strict';
+  var KEY='codigo:libro-de-ordenes',DRAFT='borrador:'+KEY;
+  var BASE='https://cdn.jsdelivr.net/pyodide/v0.26.4/full/';
+  var HARNESS="import io\nimport json\nimport sys\nimport time\nimport traceback\n\n\nclass FalloPrueba(Exception):\n    pass\n\n\ndef comprueba(obtenido, esperado, que):\n    if isinstance(obtenido, list):\n        obtenido = tuple(obtenido)\n    if obtenido != esperado:\n        raise FalloPrueba(que + \": devuelve \" + repr(obtenido)\n                          + \" y deber\u00eda devolver \" + repr(esperado) + \".\")\n\n\ndef a_tiempo(t0, limite):\n    if time.perf_counter() - t0 > limite:\n        raise FalloPrueba(\"Demasiado lento: pasa de \" + (\"%g\" % limite).replace(\".\", \",\")\n                          + \" s. Busca una estructura en la que el mejor precio\"\n                          + \" no obligue a recorrer todas las \u00f3rdenes.\")\n\n\ndef _describe(e):\n    donde = \"\"\n    for f in traceback.extract_tb(e.__traceback__):\n        if f.filename == \"tu_codigo.py\":\n            donde = \"en tu c\u00f3digo, l\u00ednea \" + str(f.lineno)\n        elif f.filename == \"a_mano.py\":\n            donde = \"en tu prueba, l\u00ednea \" + str(f.lineno)\n    txt = type(e).__name__\n    if str(e):\n        txt += \": \" + str(e)\n    return (\"Error \" + donde + \". \" if donde else \"Error. \") + txt\n\n\ndef _carga(codigo, archivo, ns):\n    try:\n        exec(compile(codigo, archivo, \"exec\"), ns)\n    except SyntaxError as e:\n        return \"Error de sintaxis en la l\u00ednea \" + str(e.lineno) + \": \" + str(e.msg) + \".\"\n    except Exception as e:\n        return _describe(e)\n    return None\n\n\ndef _ejecuta(datos):\n    ns = {\"__name__\": \"tu_codigo\"}\n    fallo = _carga(datos[\"code\"], \"tu_codigo.py\", ns)\n    if fallo:\n        return {\"fatal\": \"Tu c\u00f3digo no se puede cargar. \" + fallo}\n    if datos[\"kind\"] == \"scratch\":\n        fallo = _carga(datos[\"src\"], \"a_mano.py\", ns)\n        return {\"error\": fallo}\n    clase = ns.get(\"LibroOrdenes\")\n    if not isinstance(clase, type):\n        return {\"fatal\": \"No encuentro la clase LibroOrdenes. Mant\u00e9n ese nombre.\"}\n    resultados = []\n    for t in datos[\"tests\"]:\n        entorno = {\"LibroOrdenes\": clase, \"comprueba\": comprueba,\n                   \"a_tiempo\": a_tiempo, \"time\": time}\n        t0 = time.perf_counter()\n        try:\n            exec(compile(t[\"src\"], \"prueba.py\", \"exec\"), entorno)\n            estado, msg = \"ok\", \"\"\n        except FalloPrueba as e:\n            estado, msg = \"fail\", str(e)\n        except Exception as e:\n            estado, msg = \"error\", _describe(e)\n        ms = (time.perf_counter() - t0) * 1000\n        resultados.append({\"id\": t[\"id\"], \"estado\": estado, \"msg\": msg, \"ms\": round(ms)})\n    return {\"tests\": resultados}\n\n\ndef _main(carga):\n    datos = json.loads(carga)\n    salida = io.StringIO()\n    viejo = sys.stdout, sys.stderr\n    sys.stdout = sys.stderr = salida\n    try:\n        res = _ejecuta(datos)\n    finally:\n        sys.stdout, sys.stderr = viejo\n    texto = salida.getvalue()\n    if len(texto) > 5000:\n        texto = texto[:5000] + \"\\n[...] salida recortada\"\n    res[\"out\"] = texto\n    return json.dumps(res, ensure_ascii=False)\n";
+  var LOAD_MAX=90000,RUN_MAX=20000;
+  function $(id){return document.getElementById(id);}
+
+  /* ---------- resaltado ligero de Python ---------- */
+  var RE=/("""[\s\S]*?(?:"""|$)|'''[\s\S]*?(?:'''|$)|"(?:\\.|[^"\\\n])*"?|'(?:\\.|[^'\\\n])*'?)|(#[^\n]*)|\b(def|class)(\s+)([A-Za-z_]\w*)|\b(False|None|True|and|as|assert|break|class|continue|def|del|elif|else|except|finally|for|from|global|if|import|in|is|lambda|nonlocal|not|or|pass|raise|return|try|while|with|yield)\b|\b(\d+(?:\.\d+)?)\b/g;
+  function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+  function tok(c,s){return '<span class="'+c+'">'+esc(s)+'</span>';}
+  function hl(src){
+    var out='',last=0,m;RE.lastIndex=0;
+    while((m=RE.exec(src))){
+      out+=esc(src.slice(last,m.index));
+      if(m[1])out+=tok('tok-s',m[1]);
+      else if(m[2])out+=tok('tok-c',m[2]);
+      else if(m[3])out+=tok('tok-k',m[3])+m[4]+tok('tok-f',m[5]);
+      else if(m[6])out+=tok('tok-k',m[6]);
+      else out+=tok('tok-n',m[7]);
+      last=RE.lastIndex;
+    }
+    return out+esc(src.slice(last));
+  }
+
+  /* ---------- pruebas: el código de cada una está en la página ---------- */
+  var TESTS=[],rows={};
+  QM.each('.trow',function(r){var id=r.getAttribute('data-test');TESTS.push({id:id,src:r.querySelector('[data-src]').textContent});rows[id]=r;});
+  QM.each('code[data-hl],code[data-src]',function(c){c.innerHTML=hl(c.textContent);});
+
+  /* ---------- editor ---------- */
+  var ta=$('code'),hlEl=$('hl'),gut=$('gut'),SKEL=ta.defaultValue,lastN=0,saveT=0;
+  function sync(){
+    hlEl.style.transform='translate('+(-ta.scrollLeft)+'px,'+(-ta.scrollTop)+'px)';
+    gut.style.transform='translateY('+(-ta.scrollTop)+'px)';
+  }
+  function paint(){
+    var v=ta.value;hlEl.innerHTML=hl(v)+'\n';
+    var n=v.split('\n').length;
+    if(n!==lastN){var s='';for(var i=1;i<=n;i++)s+=i+(i<n?'\n':'');gut.textContent=s;lastN=n;}
+    sync();
+  }
+  function save(){clearTimeout(saveT);saveT=setTimeout(function(){QM.store.set(DRAFT,ta.value===SKEL?null:ta.value);},400);}
+  var draft=QM.store.get(DRAFT,null);
+  if(typeof draft==='string'&&draft&&draft!==SKEL){ta.value=draft;}
+  ta.addEventListener('input',function(){paint();save();});
+  ta.addEventListener('scroll',sync);
+  paint();
+
+  var escaped=false;
+  function insert(el,text,s,e){
+    el.focus();el.setSelectionRange(s,e);
+    var ok=false;try{ok=document.execCommand('insertText',false,text);}catch(x){ok=false;}
+    if(!ok){el.setRangeText(text,s,e,'end');el.dispatchEvent(new Event('input'));}
+  }
+  function keys(el,runner){
+    el.addEventListener('keydown',function(e){
+      if(e.isComposing)return;
+      if(e.key==='Escape'){escaped=true;return;}
+      if(e.key==='Tab'&&escaped){escaped=false;return;}
+      escaped=false;
+      if((e.ctrlKey||e.metaKey)&&e.key==='Enter'){e.preventDefault();runner();return;}
+      var v=el.value,s=el.selectionStart,en=el.selectionEnd,ls=v.lastIndexOf('\n',s-1)+1;
+      if(e.key==='Tab'){
+        e.preventDefault();
+        if(s===en&&!e.shiftKey){insert(el,'    '.slice((s-ls)%4),s,en);return;}
+        var endAt=(en>s&&v.charAt(en-1)==='\n')?en-1:en,le=v.indexOf('\n',endAt);if(le<0)le=v.length;
+        var block=v.slice(ls,le),nb=e.shiftKey?block.replace(/^ {1,4}/gm,''):block.replace(/^/gm,'    ');
+        if(nb===block)return;
+        insert(el,nb,ls,le);
+        if(s===en){var p=Math.max(ls,s-(block.length-nb.length));el.setSelectionRange(p,p);}
+        else el.setSelectionRange(ls,ls+nb.length);
+        return;
+      }
+      if(e.key==='Enter'&&!e.shiftKey&&!e.altKey&&!e.ctrlKey&&!e.metaKey){
+        var cur=v.slice(ls,s),ind=(cur.match(/^ */)||[''])[0];
+        if(/:\s*$/.test(cur))ind+='    ';
+        e.preventDefault();insert(el,'\n'+ind,s,en);return;
+      }
+      if(e.key==='Backspace'&&s===en&&s>ls){
+        var before=v.slice(ls,s);
+        if(/^ +$/.test(before)){e.preventDefault();insert(el,'',s-(before.length%4||4),s);}
+      }
+    });
+  }
+
+  /* ---------- estado y resultados ---------- */
+  var statusEl=$('status'),runBtn=$('runBtn'),scrBtn=$('scratchBtn');
+  function setStatus(text,tone,link){
+    statusEl.textContent=text;
+    if(link){statusEl.appendChild(document.createTextNode(' '));var a=document.createElement('a');a.href=link[0];a.textContent=link[1];statusEl.appendChild(a);statusEl.appendChild(document.createTextNode('.'));}
+    if(tone)statusEl.setAttribute('data-tone',tone);else statusEl.removeAttribute('data-tone');
+  }
+  function setRow(id,state,label,msg,ms){
+    var r=rows[id];if(!r)return;
+    r.setAttribute('data-state',state);
+    r.querySelector('.tst').textContent=label;
+    var m=r.querySelector('.tmsg');m.textContent=msg||'';m.hidden=!msg;
+    var t=r.querySelector('.tms');t.textContent=typeof ms==='number'?'Tiempo: '+ms+' ms':'';
+  }
+  function allRows(state,label){TESTS.forEach(function(t){setRow(t.id,state,label,'',null);});}
+  function summary(ok){$('tCount').textContent=ok+'/'+TESTS.length;$('tBar').style.setProperty('--p',Math.round(100*ok/TESTS.length)+'%');}
+  function showOut(txt){var box=$('outBox');if(txt&&txt.trim()){$('out').textContent=txt;box.hidden=false;}else box.hidden=true;}
+  function paintDone(){$('doneLbl').textContent=QM.isDone(KEY)?'Resuelto':'Sin resolver';}
+  document.addEventListener('qm-progress',paintDone);paintDone();
+
+  /* ---------- Python en un worker: se carga al pulsar y se puede detener ---------- */
+  var WSRC=[
+    'var BASE='+JSON.stringify(BASE)+';',
+    'var H='+JSON.stringify(HARNESS)+';',
+    'importScripts(BASE+"pyodide.js");',
+    'var listo=loadPyodide({indexURL:BASE}).then(function(p){p.runPython(H);self.postMessage({type:"ready"});return p;});',
+    'listo.catch(function(e){self.postMessage({type:"loaderror",msg:String(e&&e.message||e)});});',
+    'self.onmessage=function(ev){listo.then(function(p){try{p.globals.set("CARGA",ev.data);self.postMessage({type:"result",data:p.runPython("_main(CARGA)")});}catch(e){self.postMessage({type:"crash",msg:String(e&&e.message||e)});}});};'
+  ].join('\n');
+  var worker=null,ready=false,job=null,loadT=0,runT=0,tick=0,t0=0;
+  var FAIL='No se ha podido cargar Python en este navegador. Si has abierto el archivo en local o estás sin conexión, es lo esperado: las pruebas funcionan en la web publicada. Mientras, tienes las pistas y la solución en sus pestañas.';
+  function kill(){if(worker){worker.terminate();worker=null;}ready=false;clearTimeout(loadT);clearTimeout(runT);clearInterval(tick);}
+  function idle(){
+    job=null;
+    runBtn.textContent='Ejecutar pruebas';scrBtn.textContent='Ejecutar';
+    runBtn.disabled=false;scrBtn.disabled=false;
+  }
+  function busy(kind){
+    runBtn.textContent=kind==='tests'?'Detener':'Ejecutar pruebas';runBtn.disabled=kind!=='tests';
+    scrBtn.textContent=kind==='scratch'?'Detener':'Ejecutar';scrBtn.disabled=kind!=='scratch';
+  }
+  function failLoad(){kill();if(job&&job.kind==='tests')allRows('idle','Sin ejecutar');idle();setStatus(FAIL,'warn');}
+  function loadMsg(){return 'Descargando Python, unos 6 MB (solo la primera vez)… '+Math.round((Date.now()-t0)/1000)+' s';}
+  function startWorker(){
+    try{worker=new Worker(URL.createObjectURL(new Blob([WSRC],{type:'text/javascript'})));}
+    catch(e){worker=null;return false;}
+    ready=false;t0=Date.now();
+    worker.onmessage=onMsg;
+    worker.onerror=function(e){if(e&&e.preventDefault)e.preventDefault();if(!ready)failLoad();else crash('El intérprete se ha detenido.');};
+    loadT=setTimeout(function(){if(!ready)failLoad();},LOAD_MAX);
+    return true;
+  }
+  function armRun(){
+    setStatus(job.kind==='tests'?'Ejecutando las pruebas…':'Ejecutando…','');
+    clearTimeout(runT);
+    runT=setTimeout(function(){
+      var k=job&&job.kind;kill();
+      if(k==='tests')allRows('idle','Sin ejecutar');
+      idle();setStatus('Se ha parado tras 20 segundos. ¿Hay algún bucle que no termina?','bad');
+    },RUN_MAX);
+  }
+  function crash(msg){
+    var k=job&&job.kind;kill();
+    if(k==='tests')allRows('idle','Sin ejecutar');
+    idle();setStatus('Algo ha fallado al ejecutar: '+msg,'bad');
+  }
+  function go(kind,payload){
+    job={kind:kind};busy(kind);
+    if(kind==='tests'){allRows('run','En curso');summary(0);}
+    if(!worker&&!startWorker()){failLoad();return;}
+    if(ready)armRun();
+    else{setStatus(loadMsg(),'');clearInterval(tick);tick=setInterval(function(){if(!ready&&worker)setStatus(loadMsg(),'');},1000);}
+    worker.postMessage(payload);
+  }
+  function onMsg(ev){
+    var d=ev.data||{};
+    if(d.type==='ready'){ready=true;clearTimeout(loadT);clearInterval(tick);if(job)armRun();return;}
+    if(d.type==='loaderror'){failLoad();return;}
+    if(d.type==='crash'){crash(d.msg);return;}
+    if(d.type!=='result')return;
+    clearTimeout(runT);
+    var r;try{r=JSON.parse(d.data);}catch(e){crash('respuesta ilegible.');return;}
+    var kind=job&&job.kind;idle();
+    if(kind==='scratch')showScratch(r);else showTests(r);
+  }
+  function showTests(r){
+    showOut(r.out);
+    if(r.fatal){allRows('idle','Sin ejecutar');summary(0);setStatus(r.fatal,'bad');return;}
+    var ok=0;
+    r.tests.forEach(function(t){
+      if(t.estado==='ok'){ok++;setRow(t.id,'ok','Supera','',t.ms);}
+      else setRow(t.id,'fail',t.estado==='error'?'Error':'Falla',t.msg,t.ms);
+    });
+    summary(ok);
+    if(ok===TESTS.length){QM.setDone(KEY,true);setStatus('Todas las pruebas superadas. El problema queda como resuelto en','good',['progreso.html','Mi progreso']);}
+    else setStatus(ok+' de '+TESTS.length+' pruebas superadas. Debajo de cada prueba que falla tienes el motivo; ábrela para ver su código.','bad');
+  }
+  function showScratch(r){
+    var txt=(r.out||'')+(r.fatal?r.fatal+'\n':'')+(r.error?r.error+'\n':'');
+    var o=$('scratchOut');o.textContent=txt.trim()?txt:'Sin salida. Usa print() para ver valores.';o.hidden=false;
+    setStatus(r.fatal||r.error?'Tu prueba a mano ha dado un error; lo tienes debajo.':'Prueba a mano ejecutada.',r.fatal||r.error?'bad':'');
+  }
+  function run(){
+    if(job){kill();var k=job.kind;if(k==='tests')allRows('idle','Sin ejecutar');idle();setStatus('Detenido. Al volver a ejecutar, Python sale de la caché y carga antes.','');return;}
+    go('tests',JSON.stringify({kind:'tests',code:ta.value,tests:TESTS}));
+  }
+  function runScratch(){
+    if(job){run();return;}
+    go('scratch',JSON.stringify({kind:'scratch',code:ta.value,src:$('scratch').value}));
+  }
+  runBtn.addEventListener('click',run);
+  scrBtn.addEventListener('click',runScratch);
+  keys(ta,run);keys($('scratch'),runScratch);
+
+  /* ---------- restablecer, con confirmación en el propio botón ---------- */
+  var rb=$('resetBtn'),armT=0;
+  rb.addEventListener('click',function(){
+    if(rb.getAttribute('data-armed')!=='1'){
+      rb.setAttribute('data-armed','1');rb.textContent='¿Seguro?';
+      setStatus('Pulsa otra vez para volver al código inicial. Perderás tus cambios.','warn');
+      clearTimeout(armT);armT=setTimeout(function(){rb.removeAttribute('data-armed');rb.textContent='Restablecer';},4000);
+      return;
+    }
+    clearTimeout(armT);rb.removeAttribute('data-armed');rb.textContent='Restablecer';
+    ta.value=SKEL;paint();QM.store.set(DRAFT,null);ta.scrollTop=0;ta.scrollLeft=0;sync();
+    setStatus('Editor restablecido.','');
+  });
+
+  /* ---------- pistas de una en una ---------- */
+  var hints=[$('hint1'),$('hint2'),$('hint3')],hb=$('hintBtn'),shown=0;
+  hb.addEventListener('click',function(){
+    var h=hints[shown];if(!h)return;
+    h.hidden=false;shown++;h.focus();
+    if(shown>=hints.length)hb.hidden=true;else hb.textContent='Ver pista '+(shown+1)+' de '+hints.length;
+  });
+
+  if(typeof draft==='string'&&draft&&draft!==SKEL)setStatus('Recuperado tu borrador de la última vez. "Restablecer" vuelve al código inicial.','');
+})();
+</script>
+</body>
+</html>

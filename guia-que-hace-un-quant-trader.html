@@ -1,0 +1,465 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>¿Qué hace realmente un quant trader? · QuantMeraki</title>
+<meta name="description" content="Qué hace un quant trader en un día normal, cómo nace una estrategia y por qué una ventaja del 52 % puede ser suficiente. Guía en español, con los números comprobados.">
+<link rel="icon" href="assets/perfil-128.png">
+<script>try{var t=localStorage.getItem('qm-theme');document.documentElement.setAttribute('data-theme',t||'light');}catch(e){}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;500;600;700&family=Barlow+Semi+Condensed:wght@600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/qm.css">
+<style>
+  /* barra de lectura, justo debajo de la cabecera */
+  .readbar{position:fixed;left:0;right:0;top:calc(69px + env(safe-area-inset-top,0px));height:2px;z-index:39;pointer-events:none}
+  .readbar i{display:block;height:100%;background:var(--accent);transform-origin:0 50%;transform:scaleX(0)}
+
+  /* cabecera de la guía: texto a la izquierda, el vídeo a la derecha */
+  .ghead{display:grid;grid-template-columns:minmax(0,7fr) minmax(0,5fr);gap:clamp(28px,5vw,64px);align-items:end;padding-block:clamp(36px,6vw,72px) clamp(28px,4vw,52px)}
+  .ghead .h1{font-size:clamp(38px,5.2vw,60px)}
+  .ghead .lead{max-width:46ch}
+  .ghead .byline{margin-top:26px}
+  .vcard{display:block}
+  .vcard .thumb{transition:border-color .15s}
+  .vcard:hover .thumb{border-color:var(--accent-line)}
+  .vplay{display:inline-flex;align-items:center;gap:7px}
+  .vplay::before{content:"";border-style:solid;border-width:5px 0 5px 8px;border-color:transparent transparent transparent #ececee}
+  .vcard-m{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:12px}
+  .vcard-m .label{color:var(--muted)}
+  .vcard:hover .more{color:var(--txt)}
+
+  /* índice: fijo en escritorio, plegable en el móvil */
+  .gdoc{padding-top:clamp(8px,2vw,20px)}
+  .toc .n{font-family:var(--disp);font-weight:800;font-size:12px;color:var(--faint);margin-right:10px;font-variant-numeric:tabular-nums}
+  .toc a[aria-current="true"] .n{color:var(--acc-txt)}
+  .toc-btn{display:none}
+  .toc-x{margin-top:30px}
+  .toc .toc-x a{border-left:0;padding:4px 0;color:var(--dim)}
+  .toc .toc-x a:hover{color:var(--acc-txt)}
+  .toc-btn[aria-expanded="true"] .plus{transform:rotate(45deg);color:var(--acc-txt)}
+
+  /* listas de definición con líneas finas */
+  .rows{margin:20px 0 26px;padding:0;border-top:1px solid var(--line2)}
+  .rows>div{display:grid;grid-template-columns:170px minmax(0,1fr);gap:4px 24px;padding:14px 0;border-bottom:1px solid var(--line2)}
+  .rows dt{font-family:var(--disp);font-weight:700;font-size:16px;letter-spacing:.06em;text-transform:uppercase;color:var(--txt);padding-top:2px}
+  .rows dd{margin:0;font-size:16.5px;line-height:1.65;color:var(--dim)}
+  .rows .hl dt{color:var(--acc-txt)}
+
+  /* etapas numeradas con su raíl */
+  .steps{list-style:none;counter-reset:st;margin:22px 0 26px!important;padding:0!important}
+  .steps li{position:relative;counter-increment:st;padding:0 0 20px 46px;margin:0!important}
+  .steps li::before{content:counter(st,decimal-leading-zero);position:absolute;left:0;top:1px;width:29px;height:29px;display:grid;place-items:center;border:1px solid var(--accent-line);border-radius:50%;background:var(--bg);font-family:var(--disp);font-weight:800;font-size:12px;color:var(--acc-txt)}
+  .steps li::after{content:"";position:absolute;left:14px;top:34px;bottom:4px;width:1px;background:var(--line)}
+  .steps li:last-child{padding-bottom:0}
+  .steps li:last-child::after{display:none}
+  .steps b{display:block;font-family:var(--disp);font-weight:700;font-size:16px;letter-spacing:.06em;text-transform:uppercase;color:var(--txt);margin-bottom:2px}
+
+  /* figura: la ventaja del 52 % */
+  .edge{margin:30px 0;padding:20px 22px;background:var(--panel);border:1px solid var(--line);border-radius:4px}
+  .edge-top{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:12px 16px;margin-bottom:18px}
+  .edge-top .label{color:var(--txt)}
+  .edge-p{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+  .edge-p .chip{min-height:40px;min-width:58px;justify-content:center}
+  .edge-h,.edge-r{display:grid;grid-template-columns:96px minmax(0,1fr) 92px;gap:16px;align-items:center}
+  .edge-h{padding-bottom:8px;border-bottom:1px solid var(--line)}
+  .edge-h span{font-family:var(--disp);font-weight:700;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+  .edge-h .mid{position:relative;height:14px}
+  .edge-h .mid span{position:absolute;left:50%;top:0;transform:translateX(-50%);white-space:nowrap}
+  .edge-h span:last-child{text-align:right}
+  .edge-r{padding:11px 0;border-bottom:1px solid var(--line2)}
+  .edge-r:last-child{border-bottom:0}
+  .edge-n{font-family:var(--disp);font-weight:700;font-size:16px;font-variant-numeric:tabular-nums;color:var(--dim)}
+  .edge-b{position:relative;height:10px;background:var(--line2);border-radius:0 2px 2px 0}
+  .edge-b i{position:absolute;left:0;top:0;bottom:0;width:var(--w,0%);background:var(--accent);border-radius:0 2px 2px 0;transition:width .45s ease}
+  .edge-b::after{content:"";position:absolute;left:50%;top:-6px;bottom:-6px;border-left:1px dashed var(--txt);opacity:.5}
+  .edge-v{text-align:right;font-family:var(--disp);font-weight:800;font-size:18px;font-variant-numeric:tabular-nums;color:var(--txt);white-space:nowrap}
+  .edge-s{margin:16px 0 0!important;font-size:15px!important;color:var(--dim)!important}
+  .edge-s strong{color:var(--txt)}
+
+  /* pruébate */
+  .try{margin:30px 0;padding:20px 22px;border:1px solid var(--line);border-radius:4px}
+  .try .label{display:block;color:var(--acc-txt);margin-bottom:8px}
+  .try p{margin:0 0 14px}
+  .try .ans{margin-top:16px;padding-top:14px;border-top:1px solid var(--line2)}
+  .try .ans p:last-child{margin-bottom:0}
+
+  /* la idea clave */
+  .callout.key .big{font-family:var(--disp);font-weight:800;font-size:clamp(22px,2.6vw,27px);line-height:1.1;text-transform:uppercase;color:var(--txt);margin-bottom:12px}
+  .callout.note{border-left-color:var(--faint)}
+  .callout.note .label{color:var(--muted)}
+
+  /* listas de enlaces dentro del texto */
+  .prose .list{margin:20px 0 26px}
+  .prose a.item{color:inherit;border-bottom:1px solid var(--line2)}
+  .prose .item-t{font-size:17px}
+  .prose .item-d{font-size:15px}
+
+  /* final del artículo */
+  .gcol>*{max-width:680px}
+  .endc{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:14px 24px;margin-top:44px;padding:20px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+  .endc .label{display:block;margin-bottom:4px}
+  .endc p{margin:0;font-size:15.5px;color:var(--dim)}
+  .endc p a{color:var(--acc-txt);border-bottom:1px solid var(--accent-line)}
+  .endc .btn[aria-pressed="true"]{border-color:var(--accent-line);color:var(--acc-txt)}
+  .endc .btn[aria-pressed="true"]:hover{background:transparent;border-color:var(--accent)}
+  .endc .btn .check{width:16px;height:16px}
+  .fbox.wait{visibility:hidden}
+  .src{margin:28px 0 0;font-size:13.5px;line-height:1.6;color:var(--muted)}
+  .src .label{margin-right:8px}
+  .src a{color:var(--dim);border-bottom:1px solid var(--line)}
+  .src a:hover{color:var(--acc-txt)}
+  .after .h3{margin-bottom:16px}
+  .rt{font-family:var(--disp);font-weight:700;font-size:13px;letter-spacing:.06em;color:var(--muted);white-space:nowrap}
+
+  @media (max-width:900px){
+    .readbar{top:calc(61px + env(safe-area-inset-top,0px))}
+    .ghead{grid-template-columns:minmax(0,1fr);align-items:start;gap:28px}
+    .gdoc .doc{gap:28px}
+    .toc{border:1px solid var(--line);border-radius:3px;padding:0 14px}
+    .toc .toc-l,.toc .toc-x{display:none}
+    .toc-btn{display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;min-height:48px;padding:0;background:none;border:0;cursor:pointer;font-family:var(--disp);font-weight:700;font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--dim)}
+    .toc-list{display:none;padding-bottom:10px}
+    .toc.open .toc-list{display:block}
+    .toc-list a{display:flex;align-items:center;min-height:40px}
+  }
+  @media (max-width:600px){
+    .crumbs [aria-current]{max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+    .rows>div{grid-template-columns:minmax(0,1fr)}
+    .rows dd{font-size:16px}
+    .edge,.try{padding:18px 16px}
+    .edge-h,.edge-r{grid-template-columns:62px minmax(0,1fr) 78px;gap:12px}
+    .edge-v{font-size:16px}
+    .edge-h .mid span{font-size:10px;letter-spacing:.1em}
+    .gcol .list .item,.after .list .item{grid-template-columns:minmax(0,1fr) auto;gap:8px 14px}
+    .gcol .list .item .item-m,.after .list .item .item-m{flex-direction:column;align-items:flex-end;justify-content:center;gap:8px}
+    .gcol .list .arrow,.after .list .arrow{display:none}
+    .endc{flex-direction:column;align-items:stretch}
+    .endc .btn{width:100%}
+  }
+</style>
+</head>
+<body data-section="aprende">
+<a class="skip" href="#main">Saltar al contenido</a>
+
+<header class="top">
+  <div class="wrap bar">
+    <a class="logo" href="index.html" aria-label="QuantMeraki, inicio"><img src="assets/perfil-128.png" alt="" width="34" height="34"><span>QuantMeraki</span></a>
+    <nav class="nav" aria-label="Principal">
+      <div class="dd">
+        <button class="dd-btn" type="button" aria-expanded="false" data-nav="practica">Practica</button>
+        <div class="menu" hidden>
+          <a href="entrenadores.html">Entrenadores<small>Cálculo mental y series, contra el reloj</small></a>
+          <a href="preguntas.html">Preguntas<small>Probabilidad, acertijos y series</small></a>
+          <a href="juegos.html">Juegos de mercado<small>Cotiza y ajusta tus precios</small></a>
+          <a href="simulacros.html">Simulacros<small>Pruebas cronometradas, como las de verdad</small></a>
+          <a href="codigo.html">Código<small>Problemas para developers</small></a>
+        </div>
+      </div>
+      <div class="dd">
+        <button class="dd-btn" type="button" aria-expanded="false" data-nav="aprende">Aprende</button>
+        <div class="menu" hidden>
+          <a href="rutas.html">Rutas<small>Trader, researcher o developer, paso a paso</small></a>
+          <a href="cursos.html">Cursos<small>Probabilidad, mercados y opciones</small></a>
+          <a href="guias.html">Guías<small>El sector y los procesos, explicados</small></a>
+        </div>
+      </div>
+      <div class="dd">
+        <button class="dd-btn" type="button" aria-expanded="false" data-nav="firmas">Firmas</button>
+        <div class="menu" hidden>
+          <a href="firmas.html">Directorio<small>Qué hace cada firma y cómo contrata</small></a>
+          <a href="empleo.html">Empleo<small>Prácticas y puestos para graduados</small></a>
+        </div>
+      </div>
+      <a href="canal.html" data-nav="canal">Canal</a>
+    </nav>
+    <div class="tools">
+      <a class="iconbtn" href="progreso.html" data-nav="progreso" aria-label="Mi progreso" title="Mi progreso"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 20v-8M12 20V5M19 20v-9"/></svg></a>
+      <button class="iconbtn" type="button" data-theme-toggle aria-label="Cambiar a modo oscuro"><svg class="ico i-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg><svg class="ico i-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg></button>
+      <a class="btn solid sm cta" href="entrenador-calculo-mental.html">Empieza</a>
+    </div>
+  </div>
+</header>
+<div class="readbar" aria-hidden="true"><i id="readFill"></i></div>
+
+<main id="main">
+  <div class="wrap">
+
+    <section class="ghead">
+      <div>
+        <nav class="crumbs" aria-label="Migas de pan"><a href="aprende.html">Aprende</a><span class="sep">/</span><a href="guias.html">Guías</a><span class="sep">/</span><span aria-current="page">¿Qué hace realmente un quant trader?</span></nav>
+        <p class="kicker"><b>Guía</b> / Profesiones</p>
+        <h1 class="h1">¿Qué hace realmente un quant trader?</h1>
+        <p class="lead">Qué hace en un día normal, cómo nace una estrategia y por qué una ventaja del 52&nbsp;% puede ser suficiente.</p>
+        <p class="byline"><span>QuantMeraki</span><time datetime="2026-10-02">2 de octubre de 2026</time><span>5 min de lectura</span></p>
+      </div>
+      <a class="vcard" href="video-que-hace-un-quant-trader.html" aria-label="Ver el vídeo: ¿Qué hace realmente un quant trader? (4:27)">
+        <span class="thumb"><img src="assets/d01-miniatura.jpg" alt="" width="640" height="360"><span class="badge l vplay">Vídeo</span><span class="badge">4:27</span></span>
+        <span class="vcard-m"><span class="label">También en vídeo</span><span class="more">Verlo →</span></span>
+      </a>
+    </section>
+
+    <div class="gdoc">
+      <div class="doc">
+        <nav class="toc" id="toc" aria-label="En esta página">
+          <span class="label toc-l">En esta página</span>
+          <button class="toc-btn" type="button" aria-expanded="false" aria-controls="tocList"><span>En esta página</span><span class="plus" aria-hidden="true">+</span></button>
+          <div class="toc-list" id="tocList">
+            <a href="#que-es"><span class="n">01</span>Qué es</a>
+            <a href="#un-dia"><span class="n">02</span>Un día de trabajo</a>
+            <a href="#estrategia"><span class="n">03</span>Cómo nace una estrategia</a>
+            <a href="#ventaja"><span class="n">04</span>De dónde sale el dinero</a>
+            <a href="#que-hace-falta"><span class="n">05</span>Qué hace falta</a>
+            <a href="#en-una-frase"><span class="n">06</span>En una frase</a>
+          </div>
+          <div class="toc-x">
+            <span class="label">Ruta relacionada</span>
+            <a href="ruta-trader.html">Ruta de trader →</a>
+          </div>
+        </nav>
+
+        <div class="gcol">
+          <article class="prose" id="art">
+            <p>Si te imaginas a un quant trader mirando un gráfico e intentando adivinar si la bolsa va a subir o a bajar, te equivocas. Nadie adivina el mercado de forma fiable. La realidad es menos de película y bastante más interesante.</p>
+            <p>Esta guía es la versión escrita del primer vídeo del canal: lo mismo, con más calma, los números comprobados y enlaces para practicar cada idea.</p>
+
+            <h2 id="que-es">Qué es</h2>
+            <p>Un quant trader convierte ideas sobre el mercado en <strong>reglas medibles</strong>. Nada de corazonadas: cada decisión se puede escribir, probar y contar.</p>
+            <p>Un ejemplo de regla: <em>si una acción cae un 3&nbsp;% en una hora y el volumen se dispara, compro</em>. Cabe en una línea de código y se puede probar con datos.</p>
+            <p>Se parece más a un científico con un laboratorio lleno de datos que a un gurú que da señales o a alguien que apuesta por intuición.</p>
+
+            <h3>Un equipo de tres</h3>
+            <p>Suele trabajar en firmas de trading, creadores de mercado (market makers) o fondos, en equipo con otros dos perfiles.</p>
+            <dl class="rows">
+              <div><dt>Researcher</dt><dd>Busca en los datos las señales que dan ventaja.</dd></div>
+              <div><dt>Developer</dt><dd>Construye los sistemas que ponen las estrategias en el mercado.</dd></div>
+              <div class="hl"><dt>Trader</dt><dd>Está en medio. Decide qué estrategias salen al mercado, con cuánto capital y con cuánto riesgo.</dd></div>
+            </dl>
+            <p>Si dudas entre los tres, en <a href="rutas.html">Rutas</a> tienes el camino de cada uno.</p>
+
+            <h2 id="un-dia">Un día de trabajo</h2>
+            <dl class="rows">
+              <div><dt>Antes de abrir</dt><dd>Revisa las posiciones, las noticias de la noche y cómo se comportó cada estrategia.</dd></div>
+              <div><dt>Durante la sesión</dt><dd>Vigila el riesgo, ajusta parámetros y reacciona cuando algo se sale de lo normal. Casi todo lo ejecuta el ordenador; su trabajo es supervisarlo y mejorarlo. Si una estrategia empieza a perder más de lo esperado, la apaga.</dd></div>
+              <div><dt>Al cerrar</dt><dd>Analiza qué funcionó, qué no y por qué. De ahí salen las ideas del día siguiente.</dd></div>
+            </dl>
+
+            <h2 id="estrategia">Cómo nace una estrategia</h2>
+            <p>El ejemplo de siempre es el trading de pares (pairs trading): dos acciones que suelen moverse juntas. Así se construye, paso a paso.</p>
+            <ol class="steps">
+              <li><b>Los datos</b>El precio de dos acciones que suelen moverse juntas.</li>
+              <li><b>La hipótesis</b>Si la distancia entre ellas se abre demasiado, tiende a cerrarse.</li>
+              <li><b>La regla</b>Cuando se separan dos desviaciones típicas (standard deviations), vendes la cara y compras la barata. Cuando vuelven a juntarse, cierras.</li>
+              <li><b>El backtest</b>Pruebas la regla con datos pasados. En el ejemplo del vídeo gana en diez de cada once operaciones.</li>
+              <li><b>Los costes</b>El paso que casi todos olvidan. Con comisiones y deslizamiento (slippage), la diferencia entre el precio que esperabas y el que consigues, la mitad del beneficio desaparece. Con costes altos, pierdes dinero.</li>
+            </ol>
+            <p>Y queda un problema que el backtest no ve: tarde o temprano, la relación entre las dos acciones se rompe y la estrategia deja de funcionar.</p>
+            <div class="callout note">
+              <span class="label">Ojo</span>
+              <p>Un quant nunca se fía de un backtest bonito. Los mercados cambian, y lo que funcionó en el pasado no tiene por qué funcionar en el futuro.</p>
+            </div>
+
+            <h2 id="ventaja">De dónde sale el dinero</h2>
+            <p>De ventajas pequeñas, repetidas muchas veces.</p>
+            <p>Piensa en la ruleta europea, la de un solo cero. Si apuestas al rojo, ganas en 18 de las 37 casillas: el 48,6&nbsp;%. El casino gana en las otras 19, el 51,4&nbsp;%. Es casi una moneda al aire y, aun así, el casino siempre gana, porque juega millones de veces.</p>
+            <p>Un quant hace lo mismo. Imagina una estrategia que acierta el 52&nbsp;% de las veces y que gana o pierde lo mismo en cada operación. En una sola operación es casi una moneda al aire. Con 100, acabas ganando en el 62&nbsp;% de los casos. Con 1000, en el 89&nbsp;%. Con 10&nbsp;000, en el 99,997&nbsp;%.</p>
+
+            <figure class="edge" aria-labelledby="edgeCap">
+              <div class="edge-top">
+                <span class="label" id="edgeCap">Probabilidad de acabar ganando</span>
+                <div class="edge-p" role="group" aria-label="Porcentaje de aciertos de la estrategia">
+                  <span class="label">Aciertas el</span>
+                  <button class="chip" type="button" data-p="51" aria-pressed="false">51 %</button>
+                  <button class="chip" type="button" data-p="52" aria-pressed="true">52 %</button>
+                  <button class="chip" type="button" data-p="55" aria-pressed="false">55 %</button>
+                </div>
+              </div>
+              <div class="edge-h" aria-hidden="true"><span>Operaciones</span><span class="mid"><span>Moneda al aire</span></span><span>Ganas</span></div>
+              <div id="edgeRows">
+                <div class="edge-r"><span class="edge-n">1</span><span class="edge-b"><i style="--w:52%"></i></span><span class="edge-v">52 %</span></div>
+                <div class="edge-r"><span class="edge-n">100</span><span class="edge-b"><i style="--w:61.84%"></i></span><span class="edge-v">61,8 %</span></div>
+                <div class="edge-r"><span class="edge-n">1000</span><span class="edge-b"><i style="--w:89.14%"></i></span><span class="edge-v">89,1 %</span></div>
+                <div class="edge-r"><span class="edge-n">10&nbsp;000</span><span class="edge-b"><i style="--w:99.997%"></i></span><span class="edge-v">99,997 %</span></div>
+              </div>
+              <p class="edge-s" id="edgeSum" aria-live="polite">Con un 52&nbsp;% de aciertos y 10&nbsp;000 operaciones, acabas ganando en el <strong>99,997&nbsp;%</strong> de los casos.</p>
+              <figcaption class="fnote" style="margin:10px 0 0!important">Ganar es terminar con más operaciones ganadoras que perdedoras, si todas ganan o pierden lo mismo. Con un número par de operaciones también puede haber empate, y aquí no cuenta como ganar. Distribución binomial exacta.</figcaption>
+            </figure>
+
+            <div class="try">
+              <span class="label">Pruébate</span>
+              <p>Con esa estrategia ganas 100&nbsp;€ cuando aciertas y pierdes 100&nbsp;€ cuando fallas. ¿Cuánto ganas de media en cada operación?</p>
+              <button class="btn ghost sm" type="button" data-reveal="tryAns" data-alt="Ocultar respuesta" aria-controls="tryAns" aria-expanded="false">Ver respuesta</button>
+              <div class="ans" id="tryAns" hidden>
+                <p><strong>4&nbsp;€.</strong> Es el valor esperado (expected value): 0,52&nbsp;×&nbsp;100&nbsp;−&nbsp;0,48&nbsp;×&nbsp;100&nbsp;=&nbsp;52&nbsp;−&nbsp;48&nbsp;=&nbsp;4&nbsp;€. En una operación suelta no se nota. En miles, la media se impone.</p>
+                <p>Lo tienes explicado en la lección de <a href="leccion-valor-esperado.html">valor esperado</a>.</p>
+              </div>
+            </div>
+
+            <p>Los quants lo resumen en una fórmula. Tu rendimiento ajustado al riesgo depende de lo buena que es tu señal, por la raíz de cuántas veces la usas:</p>
+            <div class="fbox" id="fx">\[\mathrm{IR}\;\approx\;\mathrm{IC}\cdot\sqrt{N}\]</div>
+            <p class="fnote">IR es el ratio de información (information ratio), el rendimiento ajustado al riesgo. IC es el coeficiente de información (information coefficient), lo buena que es tu señal. N es el número de apuestas independientes (breadth). Es la ley fundamental de la gestión activa, de Richard Grinold (1989).</p>
+            <p>Con la misma señal, hacer 100 apuestas independientes en lugar de una multiplica el IR por diez, porque la raíz de 100 es 10. Por eso es mejor hacer muchas apuestas pequeñas que una grande.</p>
+
+            <div class="callout key">
+              <span class="label">La idea clave</span>
+              <p class="big">Ventajas pequeñas, repetidas muchas veces.</p>
+              <p>Acertar siempre no hace falta. Lo importante es tener una ventaja real y aguantar el tiempo suficiente para que aparezca.</p>
+            </div>
+
+            <h2 id="que-hace-falta">Qué hace falta</h2>
+            <p>Cuatro cosas, y cada una se entrena.</p>
+            <div class="list">
+              <a class="item" href="preguntas.html"><span><span class="item-t">Probabilidad y estadística</span><span class="item-d">Para distinguir una ventaja real de la suerte.</span></span><span class="item-m"><span class="tag">Preguntas</span><span class="arrow" aria-hidden="true">→</span></span></a>
+              <a class="item" href="codigo.html"><span><span class="item-t">Programación</span><span class="item-d">Sobre todo Python, para probar ideas rápido.</span></span><span class="item-m"><span class="tag">Código</span><span class="arrow" aria-hidden="true">→</span></span></a>
+              <a class="item" href="cursos.html"><span><span class="item-t">Mercados</span><span class="item-d">Entender cómo funcionan por dentro.</span></span><span class="item-m"><span class="tag">Cursos</span><span class="arrow" aria-hidden="true">→</span></span></a>
+              <a class="item" href="entrenador-calculo-mental.html"><span><span class="item-t">Cabeza fría</span><span class="item-d">Para decidir bajo presión, con el reloj en contra.</span></span><span class="item-m"><span class="tag">Entrenador</span><span class="arrow" aria-hidden="true">→</span></span></a>
+            </div>
+            <p>Mucha gente llega desde física, matemáticas o ingeniería, sin haber estudiado finanzas. Lo que todos necesitan es humildad: lo que funcionaba ayer puede dejar de funcionar mañana.</p>
+
+            <h2 id="en-una-frase">En una frase</h2>
+            <p>Un quant trader no adivina el mercado. Lo mide, busca ventajas pequeñas y las repite con disciplina.</p>
+            <p>Si te interesa este mundo, en el canal lo vamos contando paso a paso. Y si hay algo que quieras entender primero, déjalo en los comentarios del vídeo.</p>
+          </article>
+
+          <div class="endc" id="fin">
+            <div>
+              <span class="label">Fin de la guía</span>
+              <p id="readMsg">Márcala como leída y aparecerá en <a href="progreso.html">tu progreso</a>.</p>
+            </div>
+            <button class="btn ghost sm" type="button" id="readBtn" aria-pressed="false">Marcar como leída</button>
+          </div>
+
+          <nav class="prevnext" aria-label="Más guías">
+            <a href="guias.html"><span class="label">← Volver</span><span class="t">Todas las guías</span></a>
+            <a class="next" href="#" data-soon><span class="label">Siguiente guía →</span><span class="t">Trader, researcher o developer</span></a>
+          </nav>
+
+          <p class="src"><span class="label">Fuentes</span>R. C. Grinold, «The fundamental law of active management», <i>The Journal of Portfolio Management</i>, 15(3), 30-37, 1989 (<a href="https://doi.org/10.3905/jpm.1989.409211" rel="noopener" target="_blank">doi</a>). Ruleta y estrategia del 52&nbsp;%: cálculo propio con la distribución binomial exacta. El ejemplo de trading de pares es el del vídeo.</p>
+        </div>
+      </div>
+    </div>
+
+    <section class="sec after" aria-label="Sigue por aquí">
+      <div class="split even">
+        <div>
+          <h2 class="h3">Sigue practicando</h2>
+          <div class="list">
+            <a class="item" href="leccion-valor-esperado.html"><span><span class="item-t">Valor esperado</span><span class="item-d">La idea que hay detrás de la ventaja del 52&nbsp;%.</span></span><span class="item-m"><span class="tag">Lección</span><span class="check" data-done-mark="leccion:valor-esperado" aria-hidden="true"></span><span class="arrow" aria-hidden="true">→</span></span></a>
+            <a class="item" href="pregunta-juego-del-dado.html"><span><span class="item-t">El juego del dado</span><span class="item-d">Ponle precio a un juego con una decisión en medio.</span></span><span class="item-m"><span class="tag">Pregunta</span><span class="check" data-done-mark="pregunta:juego-del-dado" aria-hidden="true"></span><span class="arrow" aria-hidden="true">→</span></span></a>
+            <a class="item" href="juego-hazme-un-mercado.html"><span><span class="item-t">Hazme un mercado</span><span class="item-d">Da un precio de compra y otro de venta, y defiéndelos.</span></span><span class="item-m"><span class="tag">Juego</span><span class="check" data-done-mark="juego:hazme-un-mercado" aria-hidden="true"></span><span class="arrow" aria-hidden="true">→</span></span></a>
+            <a class="item" href="entrenador-calculo-mental.html"><span><span class="item-t">Cálculo mental</span><span class="item-d">Cuentas rápidas y sin fallos, contra el reloj.</span></span><span class="item-m"><span class="tag">Entrenador</span><span class="arrow" aria-hidden="true">→</span></span></a>
+          </div>
+        </div>
+        <div>
+          <h2 class="h3">Guías relacionadas</h2>
+          <div class="list">
+            <a class="item" href="#" data-soon><span><span class="item-t">Trader, researcher o developer</span><span class="item-d">Tres puestos, un mismo equipo.</span></span><span class="item-m"><span class="rt">6 min</span><span class="arrow" aria-hidden="true">→</span></span></a>
+            <a class="item" href="#" data-soon><span><span class="item-t">Pairs trading, explicado con datos</span><span class="item-d">La estrategia de esta guía, con sus costes y sus límites.</span></span><span class="item-m"><span class="rt">9 min</span><span class="arrow" aria-hidden="true">→</span></span></a>
+            <a class="item" href="#" data-soon><span><span class="item-t">Un proceso de selección quant</span><span class="item-d">De la solicitud a la ronda final.</span></span><span class="item-m"><span class="rt">9 min</span><span class="arrow" aria-hidden="true">→</span></span></a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <div class="cols">
+      <div class="brandcol"><a class="logo" href="index.html"><img src="assets/perfil-128.png" alt="" width="34" height="34"><span>QuantMeraki</span></a><p class="claim">El mundo quant, en español.</p></div>
+      <div><h4>Practica</h4><ul><li><a href="entrenadores.html">Entrenadores</a></li><li><a href="preguntas.html">Preguntas</a></li><li><a href="juegos.html">Juegos de mercado</a></li><li><a href="simulacros.html">Simulacros</a></li><li><a href="codigo.html">Código</a></li></ul></div>
+      <div><h4>Aprende</h4><ul><li><a href="rutas.html">Rutas</a></li><li><a href="cursos.html">Cursos</a></li><li><a href="guias.html">Guías</a></li><li><a href="canal.html">El canal</a></li></ul></div>
+      <div><h4>QuantMeraki</h4><ul><li><a href="firmas.html">Firmas</a></li><li><a href="empleo.html">Empleo</a></li><li><a href="progreso.html">Mi progreso</a></li><li><a href="sobre.html">Sobre el proyecto</a></li></ul></div>
+    </div>
+    <div class="legal"><span>Contenido educativo, nunca asesoramiento financiero.</span><span>© 2026 QuantMeraki</span></div>
+  </div>
+</footer>
+
+<nav class="tabbar" aria-label="Secciones">
+  <a href="index.html" data-tab="inicio"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/><path d="M10 20v-6h4v6"/></svg><span>Inicio</span></a>
+  <a href="practica.html" data-tab="practica"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="4"/><circle class="f" cx="12" cy="12" r="1.4"/></svg><span>Practica</span></a>
+  <a href="aprende.html" data-tab="aprende"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 6c-2-1.5-5-2-8-1.5V19c3-.5 6 0 8 1.5 2-1.5 5-2 8-1.5V4.5c-3-.5-6 0-8 1.5z"/><path d="M12 6v14.5"/></svg><span>Aprende</span></a>
+  <a href="firmas.html" data-tab="firmas"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 21h18M3 9.5l9-5.5 9 5.5M5 10v11M19 10v11M9.5 21v-8M14.5 21v-8"/></svg><span>Firmas</span></a>
+  <a href="canal.html" data-tab="canal"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="3"/><path class="f" d="M10 9v6l5-3z"/></svg><span>Canal</span></a>
+</nav>
+
+<div class="toast" id="toast" role="status" hidden></div>
+<script src="assets/qm.js"></script>
+<script>
+/* Guía: fórmula, índice plegable, barra de lectura, figura del 52 % y "leída" */
+(function(){
+  var ID='guia:que-hace-un-quant-trader';
+
+  /* MathJax solo para la fórmula; se configura antes de cargarlo */
+  var fx=document.getElementById('fx');fx.classList.add('wait');
+  function showFx(){fx.classList.remove('wait');}
+  setTimeout(showFx,6000); /* sin conexión: se ve el TeX tal cual */
+  window.MathJax={tex:{inlineMath:[['\\(','\\)']]},svg:{fontCache:'global'},
+    startup:{pageReady:function(){return MathJax.startup.defaultPageReady().then(showFx,showFx);}}};
+  var mj=document.createElement('script');
+  mj.src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-svg.js';mj.async=true;
+  document.head.appendChild(mj);
+
+  /* índice plegable en el móvil */
+  var toc=document.getElementById('toc'),tb=toc.querySelector('.toc-btn');
+  function setToc(open){toc.classList.toggle('open',open);tb.setAttribute('aria-expanded',String(open));}
+  tb.addEventListener('click',function(){setToc(!toc.classList.contains('open'));});
+  QM.each('.toc-list a',function(a){a.addEventListener('click',function(){setToc(false);});});
+
+  /* barra de lectura */
+  var art=document.getElementById('art'),fill=document.getElementById('readFill'),ticking=false;
+  function prog(){
+    ticking=false;
+    var r=art.getBoundingClientRect(),h=window.innerHeight||1;
+    var total=r.height-h*0.6,done=-r.top+h*0.25;
+    var p=total>0?Math.max(0,Math.min(1,done/total)):1;
+    fill.style.transform='scaleX('+p.toFixed(4)+')';
+  }
+  window.addEventListener('scroll',function(){if(!ticking){ticking=true;requestAnimationFrame(prog);}},{passive:true});
+  window.addEventListener('resize',prog);prog();
+
+  /* figura: probabilidad de acabar ganando (binomial exacta, calculada aparte) */
+  var DATA={
+    '51':[[51,'51 %'],[54.01,'54,0 %'],[72.61,'72,6 %'],[97.67,'97,7 %']],
+    '52':[[52,'52 %'],[61.84,'61,8 %'],[89.14,'89,1 %'],[99.997,'99,997 %']],
+    '55':[[55,'55 %'],[81.73,'81,7 %'],[99.92,'99,92 %'],[100,'> 99,999 %']]
+  };
+  var rows=document.querySelectorAll('#edgeRows .edge-r'),sum=document.getElementById('edgeSum');
+  var chips=document.querySelectorAll('.edge-p .chip');
+  function show(p){
+    var d=DATA[p];
+    Array.prototype.forEach.call(rows,function(r,i){
+      r.querySelector('i').style.setProperty('--w',d[i][0]+'%');
+      r.querySelector('.edge-v').textContent=d[i][1];
+    });
+    var last=d[3][1].replace('> ','más del ').replace(' %',' %');
+    sum.innerHTML='Con un '+p+' % de aciertos y 10 000 operaciones, acabas ganando en '+(d[3][1].indexOf('>')===0?'':'el ')+'<strong>'+last+'</strong> de los casos.';
+    Array.prototype.forEach.call(chips,function(c){c.setAttribute('aria-pressed',String(c.getAttribute('data-p')===p));});
+  }
+  Array.prototype.forEach.call(chips,function(c){c.addEventListener('click',function(){show(c.getAttribute('data-p'));});});
+
+  /* leída: con el botón o al llegar al final */
+  var btn=document.getElementById('readBtn'),msg=document.getElementById('readMsg'),userOff=false;
+  var MSG_OFF=msg.innerHTML;
+  function paint(){
+    var on=QM.isDone(ID);
+    btn.setAttribute('aria-pressed',String(on));
+    btn.innerHTML=on?'<span class="check on" aria-hidden="true"></span>Leída':'Marcar como leída';
+    btn.setAttribute('aria-label',on?'Leída. Pulsa para desmarcar':'Marcar como leída');
+    msg.innerHTML=on?'Guardada en <a href="progreso.html">tu progreso</a>. Puedes desmarcarla cuando quieras.':MSG_OFF;
+  }
+  btn.addEventListener('click',function(){var on=!QM.isDone(ID);if(!on)userOff=true;QM.setDone(ID,on);paint();});
+  if('IntersectionObserver' in window){
+    var io=new IntersectionObserver(function(es){
+      if(es[0].isIntersecting&&!userOff&&!QM.isDone(ID)){QM.setDone(ID,true);paint();io.disconnect();}
+    },{threshold:0.6});
+    io.observe(document.getElementById('fin'));
+  }
+  paint();
+})();
+</script>
+</body>
+</html>

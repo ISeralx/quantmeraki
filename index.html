@@ -1,0 +1,245 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>QuantMeraki</title>
+<meta name="description" content="El mundo quant, en español: prepara las entrevistas de las firmas de trading con preguntas, cálculo mental, juegos de mercado y guías. Gratis.">
+<link rel="icon" href="assets/perfil-128.png">
+<script>try{var t=localStorage.getItem('qm-theme');document.documentElement.setAttribute('data-theme',t||'light');}catch(e){}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;500;600;700&family=Barlow+Semi+Condensed:wght@600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/qm.css">
+<style>
+  .hero{display:grid;grid-template-columns:minmax(0,6fr) minmax(0,6fr);gap:32px;align-items:center;padding-block:clamp(40px,7vw,96px) clamp(16px,3vw,40px)}
+  .hero .h1{font-size:clamp(54px,7.4vw,92px);line-height:.88;margin:22px 0 24px}
+  .hero .h1 span{display:block;color:var(--accent)}
+  .hero .lead{font-size:18px;color:var(--dim);max-width:42ch;margin:0 0 30px}
+  .hero-viz{position:relative;height:clamp(240px,32vw,400px)}
+  .hero-viz canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+  .feats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:44px}
+  .feat{display:block;padding:22px 0;border-bottom:1px solid var(--line2)}
+  .feat:nth-last-child(-n+2){border-bottom:0}
+  .feat .h3{transition:color .15s}
+  .feat p{font-size:15px;color:var(--muted);margin:8px 0 0}
+  .feat:hover .h3{color:var(--acc-txt)}
+  .feat .h3 .arrow{margin-left:6px}
+  .route{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:16px}
+  .route .n{font-family:var(--disp);font-weight:800;font-size:32px;color:var(--accent);line-height:1}
+  .challenge{position:relative;overflow:hidden;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:24px 40px;align-items:center;padding:clamp(28px,5vw,56px);background:var(--panel);border:1px solid var(--line);border-radius:4px}
+  .challenge::after{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse 55% 90% at 100% 50%,var(--accent-dim),transparent 70%)}
+  .challenge>*{position:relative;z-index:1}
+  .vt{font-family:var(--disp);font-weight:700;font-size:17px;line-height:1.15;text-transform:uppercase;margin:12px 0 0}
+  .vm{font-size:14px;color:var(--muted);margin:2px 0 0}
+  @media (max-width:900px){
+    .hero{grid-template-columns:minmax(0,1fr)}
+    .hero-viz{height:220px;margin-inline:-4px}
+  }
+  @media (max-width:600px){
+    .feats{grid-template-columns:minmax(0,1fr)}
+    .feat:nth-last-child(2){border-bottom:1px solid var(--line2)}
+    .challenge{grid-template-columns:minmax(0,1fr)}
+    .route{grid-template-columns:auto minmax(0,1fr)}
+    .route .arrow{display:none}
+  }
+</style>
+</head>
+<body data-section="inicio">
+<a class="skip" href="#main">Saltar al contenido</a>
+
+<header class="top">
+  <div class="wrap bar">
+    <a class="logo" href="index.html" aria-label="QuantMeraki, inicio"><img src="assets/perfil-128.png" alt="" width="34" height="34"><span>QuantMeraki</span></a>
+    <nav class="nav" aria-label="Principal">
+      <div class="dd">
+        <button class="dd-btn" type="button" aria-expanded="false" data-nav="practica">Practica</button>
+        <div class="menu" hidden>
+          <a href="entrenadores.html">Entrenadores<small>Cálculo mental y series, contra el reloj</small></a>
+          <a href="preguntas.html">Preguntas<small>Probabilidad, acertijos y series</small></a>
+          <a href="juegos.html">Juegos de mercado<small>Cotiza y ajusta tus precios</small></a>
+          <a href="simulacros.html">Simulacros<small>Pruebas cronometradas, como las de verdad</small></a>
+          <a href="codigo.html">Código<small>Problemas para developers</small></a>
+        </div>
+      </div>
+      <div class="dd">
+        <button class="dd-btn" type="button" aria-expanded="false" data-nav="aprende">Aprende</button>
+        <div class="menu" hidden>
+          <a href="rutas.html">Rutas<small>Trader, researcher o developer, paso a paso</small></a>
+          <a href="cursos.html">Cursos<small>Probabilidad, mercados y opciones</small></a>
+          <a href="guias.html">Guías<small>El sector y los procesos, explicados</small></a>
+        </div>
+      </div>
+      <div class="dd">
+        <button class="dd-btn" type="button" aria-expanded="false" data-nav="firmas">Firmas</button>
+        <div class="menu" hidden>
+          <a href="firmas.html">Directorio<small>Qué hace cada firma y cómo contrata</small></a>
+          <a href="empleo.html">Empleo<small>Prácticas y puestos para graduados</small></a>
+        </div>
+      </div>
+      <a href="canal.html" data-nav="canal">Canal</a>
+    </nav>
+    <div class="tools">
+      <a class="iconbtn" href="progreso.html" data-nav="progreso" aria-label="Mi progreso" title="Mi progreso"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 20v-8M12 20V5M19 20v-9"/></svg></a>
+      <button class="iconbtn" type="button" data-theme-toggle aria-label="Cambiar a modo oscuro"><svg class="ico i-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg><svg class="ico i-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg></button>
+      <a class="btn solid sm cta" href="entrenador-calculo-mental.html">Empieza</a>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+  <div class="wrap">
+
+    <section class="hero" aria-label="Portada">
+      <div>
+        <p class="pill"><i></i>Gratis y en español</p>
+        <h1 class="h1">Mide.<span>No adivina.</span></h1>
+        <p class="lead">Aprende cómo piensan las firmas de trading y prepara su proceso de selección: preguntas de entrevista, cálculo mental y juegos de mercado.</p>
+        <div class="btns"><a class="btn solid" href="practica.html">Empieza a practicar</a><a class="btn ghost" href="canal.html">Ver el canal</a></div>
+      </div>
+      <div class="hero-viz"><canvas id="heroViz" role="img" aria-label="Un camino naranja que sube con ventaja por encima de muchos caminos grises al azar"></canvas></div>
+    </section>
+
+    <section class="sec" aria-labelledby="f-h">
+      <div class="panel split">
+        <div class="side">
+          <p class="kicker"><b>01</b> / Firmas</p>
+          <h2 class="h2" id="f-h">Prepara tu entrevista en las grandes firmas</h2>
+          <p class="lead">Qué hace cada una, qué busca y cómo es su proceso de selección, explicado en español.</p>
+          <a class="btn ghost" href="firmas.html">Ver las firmas</a>
+        </div>
+        <div class="tiles">
+          <a class="tile" href="firma-optiver.html">Optiver</a><a class="tile" href="firmas.html">IMC</a><a class="tile" href="firmas.html">Flow Traders</a>
+          <a class="tile" href="firmas.html">SIG</a><a class="tile" href="firmas.html">Jane Street</a><a class="tile" href="firmas.html">Maven</a>
+          <a class="tile" href="firmas.html">Da Vinci</a><a class="tile" href="firmas.html">Citadel Securities</a><a class="tile more-t" href="firmas.html">Y muchas más</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="sec" aria-labelledby="p-h">
+      <div class="split">
+        <div class="side">
+          <p class="kicker"><b>02</b> / La plataforma</p>
+          <h2 class="h2" id="p-h">Todo el proceso, en un sitio</h2>
+          <p class="lead">Práctica, cursos y guías para llegar preparado a cada fase de las entrevistas de trading.</p>
+          <a class="btn ghost" href="progreso.html">Ver mi progreso</a>
+        </div>
+        <div class="feats">
+          <a class="feat" href="entrenadores.html"><h3 class="h3">Entrenadores</h3><p>Cálculo mental y series contra el reloj, como en las primeras pruebas.</p></a>
+          <a class="feat" href="preguntas.html"><h3 class="h3">Preguntas</h3><p>Probabilidad, acertijos y series, con la solución explicada.</p></a>
+          <a class="feat" href="juegos.html"><h3 class="h3">Juegos de mercado</h3><p>Cotiza, negocia y ajusta tus precios.</p></a>
+          <a class="feat" href="simulacros.html"><h3 class="h3">Simulacros</h3><p>Pruebas cronometradas con el formato de las primeras fases.</p></a>
+          <a class="feat" href="cursos.html"><h3 class="h3">Cursos</h3><p>Probabilidad, mercados y opciones, lección a lección.</p></a>
+          <a class="feat" href="codigo.html"><h3 class="h3">Código</h3><p>Problemas de programación para developers.</p></a>
+          <a class="feat" href="guias.html"><h3 class="h3">Guías</h3><p>Qué hace cada puesto y cuándo aplicar desde España.</p></a>
+          <a class="feat" href="empleo.html"><h3 class="h3">Empleo</h3><p>Prácticas y puestos para recién graduados.</p></a>
+        </div>
+      </div>
+    </section>
+
+    <section class="sec" aria-labelledby="r-h">
+      <div class="split">
+        <div class="side">
+          <p class="kicker"><b>03</b> / Rutas</p>
+          <h2 class="h2" id="r-h">¿Por dónde empiezo?</h2>
+          <p class="lead">Elige tu puesto y sigue los pasos en orden. Tu avance se guarda en este navegador.</p>
+          <a class="btn ghost" href="rutas.html">Ver las rutas</a>
+        </div>
+        <div class="list">
+          <a class="item route" href="ruta-trader.html"><span class="n">T</span><span><span class="item-t">Trader</span><span class="item-d">Decide qué comprar y vender, y a qué precio.</span></span><span class="arrow" aria-hidden="true">→</span></a>
+          <a class="item route" href="rutas.html"><span class="n">R</span><span><span class="item-t">Researcher</span><span class="item-d">Busca en los datos las señales que dan ventaja.</span></span><span class="arrow" aria-hidden="true">→</span></a>
+          <a class="item route" href="rutas.html"><span class="n">D</span><span><span class="item-t">Developer</span><span class="item-d">Construye los sistemas que operan en microsegundos.</span></span><span class="arrow" aria-hidden="true">→</span></a>
+        </div>
+      </div>
+    </section>
+
+    <section class="sec" aria-labelledby="v-h">
+      <div class="head">
+        <div><p class="kicker"><b>04</b> / El canal</p><h2 class="h2" id="v-h">Cada idea, en vídeo</h2></div>
+        <a class="more" href="canal.html">Todos los vídeos →</a>
+      </div>
+      <div class="grid3">
+        <a href="video-que-hace-un-quant-trader.html"><span class="thumb"><img src="assets/d01-miniatura.jpg" alt="" width="640" height="360"><span class="badge">4:27</span></span><p class="vt">¿Qué hace realmente un quant trader?</p><p class="vm">Vídeo largo</p></a>
+        <a href="canal.html"><span class="thumb gen"><b>SIG y Optiver:</b><b>qué hacen de verdad</b><svg class="tl" viewBox="0 0 200 80" preserveAspectRatio="none" aria-hidden="true"><polyline points="0,60 18,52 34,58 52,40 70,46 88,30 104,38 122,26 140,34 158,18 176,24 200,10"/></svg><span class="badge">Próximamente</span></span><p class="vt">SIG y Optiver: qué hacen de verdad</p><p class="vm">Vídeo largo</p></a>
+        <a href="canal.html"><span class="thumb gen"><b>19 libros para entrar</b><b>en una firma quant</b><svg class="tl" viewBox="0 0 200 80" preserveAspectRatio="none" aria-hidden="true"><polyline points="0,70 20,64 40,66 60,52 80,56 100,42 120,46 140,30 160,34 180,20 200,14"/></svg><span class="badge">Próximamente</span></span><p class="vt">19 libros para entrar en una firma quant</p><p class="vm">Vídeo largo</p></a>
+      </div>
+    </section>
+
+    <section class="sec" style="padding-top:0" aria-label="Reto de la semana">
+      <div class="challenge">
+        <div><p class="kicker"><b>Reto de la semana</b></p><h2 class="h2">¿Cuánto vale el juego del dado?</h2><p class="lead">Cada lunes, un reto nuevo. El domingo, la solución en el canal.</p></div>
+        <a class="btn solid" href="pregunta-juego-del-dado.html">Intentarlo</a>
+      </div>
+    </section>
+
+  </div>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <div class="cols">
+      <div class="brandcol"><a class="logo" href="index.html"><img src="assets/perfil-128.png" alt="" width="34" height="34"><span>QuantMeraki</span></a><p class="claim">El mundo quant, en español.</p></div>
+      <div><h4>Practica</h4><ul><li><a href="entrenadores.html">Entrenadores</a></li><li><a href="preguntas.html">Preguntas</a></li><li><a href="juegos.html">Juegos de mercado</a></li><li><a href="simulacros.html">Simulacros</a></li><li><a href="codigo.html">Código</a></li></ul></div>
+      <div><h4>Aprende</h4><ul><li><a href="rutas.html">Rutas</a></li><li><a href="cursos.html">Cursos</a></li><li><a href="guias.html">Guías</a></li><li><a href="canal.html">El canal</a></li></ul></div>
+      <div><h4>QuantMeraki</h4><ul><li><a href="firmas.html">Firmas</a></li><li><a href="empleo.html">Empleo</a></li><li><a href="progreso.html">Mi progreso</a></li><li><a href="sobre.html">Sobre el proyecto</a></li></ul></div>
+    </div>
+    <div class="legal"><span>Contenido educativo, nunca asesoramiento financiero.</span><span>© 2026 QuantMeraki</span></div>
+  </div>
+</footer>
+
+<nav class="tabbar" aria-label="Secciones">
+  <a href="index.html" data-tab="inicio"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/><path d="M10 20v-6h4v6"/></svg><span>Inicio</span></a>
+  <a href="practica.html" data-tab="practica"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="4"/><circle class="f" cx="12" cy="12" r="1.4"/></svg><span>Practica</span></a>
+  <a href="aprende.html" data-tab="aprende"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 6c-2-1.5-5-2-8-1.5V19c3-.5 6 0 8 1.5 2-1.5 5-2 8-1.5V4.5c-3-.5-6 0-8 1.5z"/><path d="M12 6v14.5"/></svg><span>Aprende</span></a>
+  <a href="firmas.html" data-tab="firmas"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 21h18M3 9.5l9-5.5 9 5.5M5 10v11M19 10v11M9.5 21v-8M14.5 21v-8"/></svg><span>Firmas</span></a>
+  <a href="canal.html" data-tab="canal"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="3"/><path class="f" d="M10 9v6l5-3z"/></svg><span>Canal</span></a>
+</nav>
+
+<div class="toast" id="toast" role="status" hidden></div>
+<script src="assets/qm.js"></script>
+<script>
+/* Portada: el camino con ventaja frente a los caminos al azar, como en el banner del canal */
+(function(){
+  var cv=document.getElementById('heroViz');if(!cv)return;
+  var reduce=!!(window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+  var fan=[],main=[0],visible=true,s=20261002;
+  function r(){s=(s*1664525+1013904223)>>>0;return s/4294967296;}
+  function g(){var u=1-r(),v=r();return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v);}
+  for(var k=0;k<36;k++){var y=0,p=[0];for(var i=0;i<140;i++){y+=g()*0.9;p.push(y);}fan.push(p);}
+  var y2=0;for(var j=0;j<90;j++){y2+=0.6+g()*0.85;main.push(y2);}
+  function draw(prog,pulse){
+    var w=cv.clientWidth,h=cv.clientHeight;if(!w||!h)return;
+    var dpr=Math.min(window.devicePixelRatio||1,2);
+    if(cv.width!==Math.round(w*dpr)||cv.height!==Math.round(h*dpr)){cv.width=Math.round(w*dpr);cv.height=Math.round(h*dpr);}
+    var c=cv.getContext('2d');c.setTransform(dpr,0,0,dpr,0,0);c.clearRect(0,0,w,h);
+    var acc=QM.color('accent'),light=QM.theme()==='light';
+    var x0=w*0.04,y0=h*0.66,u=h*0.0125,gr=Math.min(w*0.45,h*0.5);
+    var gl=c.createRadialGradient(w*0.45,h*0.5,0,w*0.45,h*0.5,gr);
+    gl.addColorStop(0,light?'rgba(232,86,28,.07)':'rgba(255,106,43,.10)');gl.addColorStop(1,'rgba(255,106,43,0)');
+    c.fillStyle=gl;c.fillRect(0,0,w,h);
+    c.lineWidth=1;c.strokeStyle=light?'rgba(17,17,19,.13)':'rgba(236,236,238,.11)';
+    var fx=(w-x0)/140;
+    for(var k=0;k<fan.length;k++){var p=fan[k];c.beginPath();c.moveTo(x0,y0);for(var i=1;i<p.length;i++)c.lineTo(x0+i*fx,y0-p[i]*u);c.stroke();}
+    var n=main.length-1,upto=Math.max(1,Math.round(n*prog)),mx=(w*0.76-x0)/n,sc=(y0-h*0.17)/main[n];
+    c.lineWidth=Math.max(3,Math.min(5,w*0.0065));c.lineJoin='round';c.lineCap='round';c.strokeStyle=acc;
+    c.beginPath();c.moveTo(x0,y0);for(var j=1;j<=upto;j++)c.lineTo(x0+j*mx,y0-main[j]*sc);c.stroke();
+    var ex=x0+upto*mx,ey=y0-main[upto]*sc;
+    c.globalAlpha=0.24-0.10*pulse;c.fillStyle=acc;c.beginPath();c.arc(ex,ey,17+6*pulse,0,Math.PI*2);c.fill();
+    c.globalAlpha=1;c.beginPath();c.arc(ex,ey,8,0,Math.PI*2);c.fill();
+  }
+  var t0=0;
+  function loop(ts){
+    if(!t0)t0=ts;var el=ts-t0,prog=Math.min(1,el/1500);prog=1-Math.pow(1-prog,3);
+    var pulse=prog<1?0:0.5-0.5*Math.cos((el-1500)/2400*2*Math.PI);
+    if(visible&&!document.hidden)draw(prog,pulse);
+    requestAnimationFrame(loop);
+  }
+  if('IntersectionObserver' in window)new IntersectionObserver(function(es){visible=es[0].isIntersecting;}).observe(cv);
+  document.addEventListener('qm-theme',function(){if(reduce)draw(1,0);});
+  window.addEventListener('resize',function(){if(reduce)draw(1,0);});
+  if(reduce)draw(1,0);else{draw(0.35,0);requestAnimationFrame(loop);}
+})();
+</script>
+</body>
+</html>

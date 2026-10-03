@@ -1,0 +1,457 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>Cálculo mental · QuantMeraki</title>
+<meta name="description" content="Entrenador de cálculo mental contra el reloj: multiplicaciones, porcentajes, fracciones, restas y divisiones. Elige duración y dificultad y bate tu marca.">
+<link rel="icon" href="assets/perfil-128.png">
+<script>try{var t=localStorage.getItem('qm-theme');document.documentElement.setAttribute('data-theme',t||'light');}catch(e){}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;500;600;700&family=Barlow+Semi+Condensed:wght@600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/qm.css">
+<style>
+  .lobby{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:clamp(24px,4vw,56px);align-items:start}
+  .set-h,.perf-h{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:22px}
+  .grp{padding-bottom:22px;margin-bottom:22px;border-bottom:1px solid var(--line2)}
+  .gl{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:12px}
+  .val{font-family:var(--disp);font-weight:700;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--acc-txt);white-space:nowrap}
+  .set .chip{min-height:44px;justify-content:center}
+  /* opciones marcadas en tono suave: el único naranja sólido es "Empezar" */
+  .set .chip[aria-pressed="true"]{background:var(--accent-dim);border-color:var(--accent-line);color:var(--acc-txt)}
+  .seg{display:grid;gap:8px}
+  .seg3{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .seg2{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .set .chips .chip{flex:1 1 auto}
+  .warn{min-height:20px;margin:10px 0 0;font-size:13.5px;color:var(--acc-txt)}
+  .dif-d{margin:12px 0 0;font-size:14.5px;color:var(--muted)}
+  .ex{margin:0 0 22px}
+  .ex p{margin:8px 0 0;font-family:var(--disp);font-weight:700;font-size:16px;letter-spacing:.02em;color:var(--dim);font-variant-numeric:tabular-nums}
+  .ex .dot{color:var(--faint);padding:0 6px}
+  .go{min-height:48px;font-size:14px}
+  .go-note{margin:12px 0 0;font-size:13.5px;color:var(--muted);text-align:center}
+  .chartbox{margin-top:16px;border:1px solid var(--line);border-radius:4px;background:var(--panel);padding:16px 18px 12px}
+  .cb-h{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:8px 16px;margin-bottom:10px}
+  .lg{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:13px;color:var(--muted)}
+  .lg span{display:inline-flex;align-items:center;gap:6px}
+  .lg i{width:10px;height:10px;border-radius:2px;background:var(--accent)}
+  .lg i.o{background:var(--faint)}
+  .chart{position:relative;height:190px}
+  .chart canvas{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:pan-y}
+  .tip{position:absolute;z-index:2;pointer-events:none;background:var(--raise);border:1px solid var(--line);border-radius:3px;padding:6px 10px;font-size:13px;line-height:1.4;color:var(--dim);box-shadow:var(--shadow);white-space:nowrap}
+  .tip b{color:var(--txt);font-weight:600}
+  .cb-foot{display:flex;justify-content:space-between;font-size:12px;color:var(--faint);margin-top:6px}
+  .tbl-wrap{overflow-x:auto}
+  .tbl{width:100%;border-collapse:collapse;font-size:15px}
+  .tbl th{font-family:var(--disp);font-weight:700;font-size:11.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);text-align:left;padding:0 12px 12px 0;border-bottom:1px solid var(--line2)}
+  .tbl td{padding:15px 12px 15px 0;border-bottom:1px solid var(--line2);color:var(--dim);vertical-align:baseline;white-space:nowrap}
+  .tbl th:last-child,.tbl td:last-child{padding-right:0}
+  .tbl .r{text-align:right}
+  .tbl .n{font-family:var(--disp);font-weight:800;font-size:19px;color:var(--txt);font-variant-numeric:tabular-nums}
+  .tbl .o{color:var(--muted)}
+  .tricks .item-d{margin-top:6px}
+  .tricks .exl{display:block;margin-top:10px;overflow-x:auto;white-space:nowrap;font-family:var(--disp);font-weight:700;font-size:17px;letter-spacing:.02em;color:var(--txt);font-variant-numeric:tabular-nums}
+  .tricks .exl b{color:var(--acc-txt);font-weight:800}
+  .faq{border-top:1px solid var(--line2);border-bottom:1px solid var(--line2)}
+  @media (max-width:900px){
+    .lobby{grid-template-columns:minmax(0,1fr)}
+  }
+  @media (max-width:600px){
+    .tbl .o{display:none}
+    .tbl td{font-size:14px}
+    .chart{height:170px}
+    .chartbox{padding:14px 14px 10px}
+  }
+</style>
+</head>
+<body data-section="practica">
+<a class="skip" href="#main">Saltar al contenido</a>
+
+<header class="top">
+  <div class="wrap bar">
+    <a class="logo" href="index.html" aria-label="QuantMeraki, inicio"><img src="assets/perfil-128.png" alt="" width="34" height="34"><span>QuantMeraki</span></a>
+    <nav class="nav" aria-label="Principal">
+      <div class="dd">
+        <button class="dd-btn" type="button" aria-expanded="false" data-nav="practica">Practica</button>
+        <div class="menu" hidden>
+          <a href="entrenadores.html">Entrenadores<small>Cálculo mental y series, contra el reloj</small></a>
+          <a href="preguntas.html">Preguntas<small>Probabilidad, acertijos y series</small></a>
+          <a href="juegos.html">Juegos de mercado<small>Cotiza y ajusta tus precios</small></a>
+          <a href="simulacros.html">Simulacros<small>Pruebas cronometradas, como las de verdad</small></a>
+          <a href="codigo.html">Código<small>Problemas para developers</small></a>
+        </div>
+      </div>
+      <div class="dd">
+        <button class="dd-btn" type="button" aria-expanded="false" data-nav="aprende">Aprende</button>
+        <div class="menu" hidden>
+          <a href="rutas.html">Rutas<small>Trader, researcher o developer, paso a paso</small></a>
+          <a href="cursos.html">Cursos<small>Probabilidad, mercados y opciones</small></a>
+          <a href="guias.html">Guías<small>El sector y los procesos, explicados</small></a>
+        </div>
+      </div>
+      <div class="dd">
+        <button class="dd-btn" type="button" aria-expanded="false" data-nav="firmas">Firmas</button>
+        <div class="menu" hidden>
+          <a href="firmas.html">Directorio<small>Qué hace cada firma y cómo contrata</small></a>
+          <a href="empleo.html">Empleo<small>Prácticas y puestos para graduados</small></a>
+        </div>
+      </div>
+      <a href="canal.html" data-nav="canal">Canal</a>
+    </nav>
+    <div class="tools">
+      <a class="iconbtn" href="progreso.html" data-nav="progreso" aria-label="Mi progreso" title="Mi progreso"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 20v-8M12 20V5M19 20v-9"/></svg></a>
+      <button class="iconbtn" type="button" data-theme-toggle aria-label="Cambiar a modo oscuro"><svg class="ico i-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg><svg class="ico i-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg></button>
+      <a class="btn solid sm cta" href="entrenador-calculo-mental.html">Empieza</a>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+  <div class="wrap">
+
+    <section class="phead">
+      <nav class="crumbs" aria-label="Migas de pan"><a href="practica.html">Practica</a><span class="sep">/</span><a href="entrenadores.html">Entrenadores</a><span class="sep">/</span><span aria-current="page">Cálculo mental</span></nav>
+      <p class="kicker"><b>Entrenador</b> / Aritmética</p>
+      <h1 class="h1">Cálculo mental</h1>
+      <p class="lead">Cuentas exactas contra el reloj. Elige cuánto dura y qué operaciones entran, y bate tu marca.</p>
+    </section>
+
+    <section class="sec first" aria-label="Ajustes y marcas">
+      <div class="lobby">
+
+        <div class="card set" aria-labelledby="set-h">
+          <div class="set-h"><h2 class="h3" id="set-h">Ajustes</h2><span class="label">Se recuerdan</span></div>
+
+          <div class="grp" role="group" aria-labelledby="g-dur">
+            <div class="gl"><span class="label" id="g-dur">Duración</span><span class="val" id="vDur">1 minuto</span></div>
+            <div class="seg seg3">
+              <button class="chip" type="button" data-dur="60" aria-pressed="true">1 min</button>
+              <button class="chip" type="button" data-dur="120" aria-pressed="false">2 min</button>
+              <button class="chip" type="button" data-dur="300" aria-pressed="false">5 min</button>
+            </div>
+          </div>
+
+          <div class="grp" role="group" aria-labelledby="g-ops">
+            <div class="gl"><span class="label" id="g-ops">Operaciones</span><span class="val" id="vOps">5 de 5</span></div>
+            <div class="chips">
+              <button class="chip" type="button" data-op="mul" aria-pressed="true">Multiplicaciones</button>
+              <button class="chip" type="button" data-op="por" aria-pressed="true">Porcentajes</button>
+              <button class="chip" type="button" data-op="fra" aria-pressed="true">Fracciones a decimal</button>
+              <button class="chip" type="button" data-op="res" aria-pressed="true">Restas</button>
+              <button class="chip" type="button" data-op="div" aria-pressed="true">Divisiones</button>
+            </div>
+            <p class="warn" id="warn" role="status" aria-live="polite"></p>
+          </div>
+
+          <div class="grp" role="group" aria-labelledby="g-dif">
+            <div class="gl"><span class="label" id="g-dif">Dificultad</span><span class="val" id="vDif">Normal</span></div>
+            <div class="seg seg2">
+              <button class="chip" type="button" data-dif="normal" aria-pressed="true">Normal</button>
+              <button class="chip" type="button" data-dif="dificil" aria-pressed="false">Difícil</button>
+            </div>
+            <p class="dif-d" id="difD"></p>
+          </div>
+
+          <div class="ex"><span class="label">Así salen</span><p id="ex"></p></div>
+
+          <a class="btn solid block go" id="go" href="sesion-calculo-mental.html?t=60&amp;ops=mul,por,fra,res,div&amp;dif=normal">Empezar</a>
+          <p class="go-note">Al acertar, pasa sola a la siguiente.</p>
+        </div>
+
+        <div class="perf" aria-labelledby="perf-h">
+          <div class="perf-h"><h2 class="h3" id="perf-h">Tus marcas</h2><span class="label" id="perfCap">Sesiones de 1 minuto</span></div>
+          <div id="perfData" hidden>
+            <div class="stats">
+              <div class="stat"><span class="v" id="sBest">—</span><span class="k">Récord</span></div>
+              <div class="stat"><span class="v" id="sN">0</span><span class="k">Sesiones</span></div>
+              <div class="stat"><span class="v" id="sAcc">—</span><span class="k">Precisión</span></div>
+              <div class="stat"><span class="v" id="sPace">—</span><span class="k">Por acierto</span></div>
+            </div>
+            <div class="chartbox">
+              <div class="cb-h"><span class="label">Aciertos por sesión</span><span class="lg" aria-hidden="true"><span><i></i>Con estos ajustes</span><span><i class="o"></i>Con otros</span></span></div>
+              <div class="chart"><canvas id="chart" role="img" aria-label="Aciertos por sesión"></canvas><div class="tip" id="tip" hidden></div></div>
+              <div class="cb-foot" aria-hidden="true"><span>Más antigua</span><span>Última</span></div>
+            </div>
+            <p class="small muted" style="margin:12px 0 0">Precisión y tiempo por acierto: media de tus últimas 10 sesiones de esta duración.</p>
+          </div>
+          <div class="empty" id="perfEmpty"></div>
+        </div>
+
+      </div>
+    </section>
+
+    <section class="sec" id="ultimas" aria-labelledby="u-h" hidden>
+      <div class="head">
+        <div><p class="kicker"><b>Historial</b> / En este navegador</p><h2 class="h2" id="u-h">Tus últimas sesiones</h2></div>
+        <a class="more" href="progreso.html">Mi progreso →</a>
+      </div>
+      <div class="tbl-wrap">
+        <table class="tbl">
+          <caption class="sr">Tus últimas sesiones de cálculo mental</caption>
+          <thead><tr><th scope="col">Fecha</th><th scope="col">Ajustes</th><th scope="col" class="r">Aciertos</th><th scope="col" class="r">Precisión</th></tr></thead>
+          <tbody id="sessBody"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="sec" aria-labelledby="t-h">
+      <div class="split">
+        <div class="side">
+          <p class="kicker"><b>Trucos</b> / Para ir más rápido</p>
+          <h2 class="h2" id="t-h">Cuatro trucos que ahorran segundos</h2>
+          <p class="lead">Cada miércoles, en el canal, un reto cronometrado con su truco.</p>
+          <a class="more" href="canal.html">Ver el canal →</a>
+        </div>
+        <div class="list tricks">
+          <div class="item lead-num"><span class="item-n">01</span><span><span class="item-t">Diferencia de cuadrados</span><span class="item-d">Si los dos números están a la misma distancia de uno redondo, eleva el redondo al cuadrado y resta la distancia al cuadrado.</span><span class="exl">48 × 52 = 50² − 2² = 2500 − 4 = <b>2496</b></span></span></div>
+          <div class="item lead-num"><span class="item-n">02</span><span><span class="item-t">Porcentajes al revés</span><span class="item-d">El x % de y es lo mismo que el y % de x. Elige el orden que sale solo.</span><span class="exl">16 % de 25 = 25 % de 16 = <b>4</b></span></span></div>
+          <div class="item lead-num"><span class="item-n">03</span><span><span class="item-t">Octavos y dieciseisavos</span><span class="item-d">Con 1/8 = 0,125 sacas todos los octavos. Un dieciseisavo es la mitad de un octavo.</span><span class="exl">5/8 = 5 × 0,125 = 0,625, así que 5/16 = <b>0,3125</b></span></span></div>
+          <div class="item lead-num"><span class="item-n">04</span><span><span class="item-t">Restas desde 1000</span><span class="item-d">Resta de 9 cada cifra y la última, de 10. Sin llevadas.</span><span class="exl">1000 − 386: 9 − 3, 9 − 8, 10 − 6 = <b>614</b></span></span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="sec" aria-labelledby="faq-h" style="padding-top:0">
+      <div class="head"><div><p class="kicker"><b>Dudas</b> / Cómo funciona</p><h2 class="h2" id="faq-h">Preguntas frecuentes</h2></div></div>
+      <div class="faq">
+        <div class="acc-row">
+          <button class="acc-btn" type="button" aria-expanded="false" aria-controls="f1"><span class="item-t">¿Cómo se cuentan los aciertos?</span><span class="plus" aria-hidden="true">+</span></button>
+          <div class="acc-body" id="f1" hidden><p>Cada respuesta correcta suma uno y pasa sola a la siguiente. Si pulsas Intro con un número mal, la casilla se pone en rojo y cuenta como fallo. Saltar también cuenta como fallo.</p><p>La precisión son tus aciertos entre aciertos, fallos y saltos.</p></div>
+        </div>
+        <div class="acc-row">
+          <button class="acc-btn" type="button" aria-expanded="false" aria-controls="f2"><span class="item-t">¿Cómo escribo los decimales?</span><span class="plus" aria-hidden="true">+</span></button>
+          <div class="acc-body" id="f2" hidden><p>Con coma o con punto: 0,375 y 0.375 valen igual. No pongas puntos de miles: escribe 2432, no 2.432.</p></div>
+        </div>
+        <div class="acc-row">
+          <button class="acc-btn" type="button" aria-expanded="false" aria-controls="f3"><span class="item-t">¿Qué duración elijo?</span><span class="plus" aria-hidden="true">+</span></button>
+          <div class="acc-body" id="f3" hidden><p>Un minuto al día para empezar. Cuando tu marca se estanque, pasa a dos o cinco minutos: aguantar la concentración también se entrena.</p></div>
+        </div>
+        <div class="acc-row">
+          <button class="acc-btn" type="button" aria-expanded="false" aria-controls="f4"><span class="item-t">¿Las preguntas se repiten?</span><span class="plus" aria-hidden="true">+</span></button>
+          <div class="acc-body" id="f4" hidden><p>Se generan al azar en cada sesión. Todas tienen resultado exacto: un entero o un decimal que termina, como 0,4375.</p></div>
+        </div>
+        <div class="acc-row">
+          <button class="acc-btn" type="button" aria-expanded="false" aria-controls="f5"><span class="item-t">¿Dónde se guardan mis marcas?</span><span class="plus" aria-hidden="true">+</span></button>
+          <div class="acc-body" id="f5" hidden><p>En este navegador, sin cuentas ni servidores. Si borras sus datos o cambias de aparato, empiezas de cero. En <a class="acc-txt" href="progreso.html">Mi progreso</a> las tienes todas juntas.</p></div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <div class="cols">
+      <div class="brandcol"><a class="logo" href="index.html"><img src="assets/perfil-128.png" alt="" width="34" height="34"><span>QuantMeraki</span></a><p class="claim">El mundo quant, en español.</p></div>
+      <div><h4>Practica</h4><ul><li><a href="entrenadores.html">Entrenadores</a></li><li><a href="preguntas.html">Preguntas</a></li><li><a href="juegos.html">Juegos de mercado</a></li><li><a href="simulacros.html">Simulacros</a></li><li><a href="codigo.html">Código</a></li></ul></div>
+      <div><h4>Aprende</h4><ul><li><a href="rutas.html">Rutas</a></li><li><a href="cursos.html">Cursos</a></li><li><a href="guias.html">Guías</a></li><li><a href="canal.html">El canal</a></li></ul></div>
+      <div><h4>QuantMeraki</h4><ul><li><a href="firmas.html">Firmas</a></li><li><a href="empleo.html">Empleo</a></li><li><a href="progreso.html">Mi progreso</a></li><li><a href="sobre.html">Sobre el proyecto</a></li></ul></div>
+    </div>
+    <div class="legal"><span>Contenido educativo, nunca asesoramiento financiero.</span><span>© 2026 QuantMeraki</span></div>
+  </div>
+</footer>
+
+<nav class="tabbar" aria-label="Secciones">
+  <a href="index.html" data-tab="inicio"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/><path d="M10 20v-6h4v6"/></svg><span>Inicio</span></a>
+  <a href="practica.html" data-tab="practica"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="4"/><circle class="f" cx="12" cy="12" r="1.4"/></svg><span>Practica</span></a>
+  <a href="aprende.html" data-tab="aprende"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 6c-2-1.5-5-2-8-1.5V19c3-.5 6 0 8 1.5 2-1.5 5-2 8-1.5V4.5c-3-.5-6 0-8 1.5z"/><path d="M12 6v14.5"/></svg><span>Aprende</span></a>
+  <a href="firmas.html" data-tab="firmas"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 21h18M3 9.5l9-5.5 9 5.5M5 10v11M19 10v11M9.5 21v-8M14.5 21v-8"/></svg><span>Firmas</span></a>
+  <a href="canal.html" data-tab="canal"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="3"/><path class="f" d="M10 9v6l5-3z"/></svg><span>Canal</span></a>
+</nav>
+
+<div class="toast" id="toast" role="status" hidden></div>
+<script src="assets/qm.js"></script>
+<script>
+/* Entrenador de cálculo mental: ajustes, marcas, gráfica e historial */
+(function(){
+  var OPS=['mul','por','fra','res','div'],DURS=[60,120,300];
+  var SYM={mul:'×',por:'%',fra:'a/b',res:'−',div:'÷'};
+  var EX={
+    normal:{mul:'48 × 7',por:'15 % de 240',fra:'3/8',res:'1000 − 386',div:'156 ÷ 12'},
+    dificil:{mul:'64 × 38',por:'12,5 % de 360',fra:'7/16',res:'20 − 7,46',div:'75 ÷ 8'}
+  };
+  var DIFD={
+    normal:'Dos cifras por una, porcentajes redondos y fracciones sencillas. Restas y divisiones con resultado entero.',
+    dificil:'Dos cifras por dos, cuadrados, porcentajes como el 12,5 % y fracciones de 16 o 125. Restas y divisiones con decimales.'
+  };
+  function $(id){return document.getElementById(id);}
+  function durTxt(t){return t===60?'1 minuto':(t/60)+' minutos';}
+  function dec(x,n){return x.toFixed(n).replace('.',',');}
+  function okT(v){v=+v;return DURS.indexOf(v)>=0?v:null;}
+  function okOps(v){
+    if(!v)return null;
+    var a=(Array.isArray(v)?v:String(v).split(','));
+    var r=OPS.filter(function(o){return a.indexOf(o)>=0;});
+    return r.length?r:null;
+  }
+  function okDif(v){return v==='normal'||v==='dificil'?v:null;}
+
+  /* ajustes: primero la URL (al volver de una sesión), luego los guardados */
+  var saved=QM.store.get('calculo:ajustes',null)||{};
+  var qs=new URLSearchParams(location.search);
+  var S={
+    t:okT(qs.get('t'))||okT(saved.t)||60,
+    ops:okOps(qs.get('ops'))||okOps(saved.ops)||OPS.slice(),
+    dif:okDif(qs.get('dif'))||okDif(saved.dif)||'normal'
+  };
+  function opsKey(o){return (o||[]).join(',');}
+
+  var warnT=0;
+  function render(){
+    QM.each('[data-dur]',function(b){b.setAttribute('aria-pressed',String(+b.getAttribute('data-dur')===S.t));});
+    QM.each('[data-op]',function(b){b.setAttribute('aria-pressed',String(S.ops.indexOf(b.getAttribute('data-op'))>=0));});
+    QM.each('[data-dif]',function(b){b.setAttribute('aria-pressed',String(b.getAttribute('data-dif')===S.dif));});
+    $('vDur').textContent=durTxt(S.t);
+    $('vOps').textContent=S.ops.length===OPS.length?'Todas':S.ops.length+' de '+OPS.length;
+    $('vDif').textContent=S.dif==='normal'?'Normal':'Difícil';
+    $('difD').textContent=DIFD[S.dif];
+    var ex=$('ex');ex.innerHTML='';
+    S.ops.forEach(function(o,i){
+      if(i){var d=document.createElement('span');d.className='dot';d.setAttribute('aria-hidden','true');d.textContent='·';ex.appendChild(d);}
+      ex.appendChild(document.createTextNode(EX[S.dif][o]));
+    });
+    $('go').href='sesion-calculo-mental.html?t='+S.t+'&ops='+opsKey(S.ops)+'&dif='+S.dif;
+    QM.store.set('calculo:ajustes',{t:S.t,ops:opsKey(S.ops),dif:S.dif});
+    renderPerf();
+  }
+
+  QM.each('[data-dur]',function(b){b.addEventListener('click',function(){S.t=+b.getAttribute('data-dur');render();});});
+  QM.each('[data-dif]',function(b){b.addEventListener('click',function(){S.dif=b.getAttribute('data-dif');render();});});
+  QM.each('[data-op]',function(b){
+    b.addEventListener('click',function(){
+      var o=b.getAttribute('data-op'),i=S.ops.indexOf(o);
+      if(i>=0){
+        if(S.ops.length===1){
+          $('warn').textContent='Deja al menos una operación.';
+          clearTimeout(warnT);warnT=setTimeout(function(){$('warn').textContent='';},2600);
+          return;
+        }
+        S.ops=S.ops.filter(function(x){return x!==o;});
+      }else{
+        S.ops=OPS.filter(function(x){return x===o||S.ops.indexOf(x)>=0;});
+      }
+      $('warn').textContent='';
+      render();
+    });
+  });
+
+  /* ---------- gráfica de barras: aciertos por sesión ---------- */
+  var cv=$('chart'),tip=$('tip'),bars=[],data=[];
+  function rr(c,x,y,w,h,r){
+    r=Math.min(r,h,w/2);c.beginPath();c.moveTo(x,y+h);c.lineTo(x,y+r);
+    c.quadraticCurveTo(x,y,x+r,y);c.lineTo(x+w-r,y);c.quadraticCurveTo(x+w,y,x+w,y+r);
+    c.lineTo(x+w,y+h);c.closePath();c.fill();
+  }
+  function draw(){
+    var w=cv.clientWidth,h=cv.clientHeight;if(!w||!h||!data.length)return;
+    var dpr=Math.min(window.devicePixelRatio||1,2);
+    cv.width=Math.round(w*dpr);cv.height=Math.round(h*dpr);
+    var c=cv.getContext('2d');c.setTransform(dpr,0,0,dpr,0,0);c.clearRect(0,0,w,h);
+    var padL=30,padR=4,padT=22,padB=2,ph=h-padT-padB,pw=w-padL-padR;
+    var mx=0,imax=0;data.forEach(function(d,i){if(d.s>=mx){mx=d.s;imax=i;}});
+    var step=mx<=10?2:mx<=25?5:mx<=60?10:20,top=Math.max(step*2,Math.ceil(mx/step)*step);
+    c.font='500 11px Barlow, sans-serif';c.textAlign='right';c.textBaseline='middle';
+    [0,top/2,top].forEach(function(v){
+      var y=Math.round(padT+ph*(1-v/top))+.5;
+      c.strokeStyle=QM.color('line2');c.lineWidth=1;c.beginPath();c.moveTo(padL,y);c.lineTo(w-padR,y);c.stroke();
+      c.fillStyle=QM.color('muted');c.fillText(String(v).replace('.',','),padL-8,y);
+    });
+    var n=Math.max(data.length,12),slot=pw/n,bw=Math.min(24,Math.max(4,slot-4));
+    bars=[];
+    data.forEach(function(d,i){
+      var x=padL+i*slot+(slot-bw)/2,bh=Math.max(2,ph*d.s/top),y=padT+ph-bh;
+      c.fillStyle=d.hi?QM.color('accent'):QM.color('faint');
+      rr(c,x,y,bw,bh,2);
+      bars.push({x0:padL+i*slot,x1:padL+(i+1)*slot,cx:x+bw/2,y:y,d:d});
+    });
+    /* solo dos cifras escritas: la última sesión y la mejor */
+    c.font='700 12px "Barlow Semi Condensed", Barlow, sans-serif';c.textAlign='center';c.textBaseline='bottom';c.fillStyle=QM.color('txt');
+    var last=bars.length-1;
+    c.fillText(String(bars[last].d.s),bars[last].cx,bars[last].y-5);
+    if(Math.abs(imax-last)>=2){c.fillStyle=QM.color('muted');c.fillText(String(bars[imax].d.s),bars[imax].cx,bars[imax].y-5);}
+  }
+  function when(t){
+    var d=new Date(t);
+    return d.toLocaleDateString('es-ES',{day:'numeric',month:'short'})+', '+d.toLocaleTimeString('es-ES',{hour:'2-digit',minute:'2-digit'});
+  }
+  function showTip(e){
+    if(!bars.length)return;
+    var r=cv.getBoundingClientRect(),x=e.clientX-r.left,b=null;
+    bars.forEach(function(k){if(x>=k.x0&&x<k.x1)b=k;});
+    if(!b){tip.hidden=true;return;}
+    tip.innerHTML='';
+    var s=document.createElement('b');s.textContent=b.d.s+(b.d.s===1?' acierto':' aciertos');
+    tip.appendChild(s);
+    tip.appendChild(document.createTextNode(' · '+Math.round((b.d.a||0)*100)+' %'));
+    tip.appendChild(document.createElement('br'));
+    tip.appendChild(document.createTextNode(when(b.d.t)));
+    tip.hidden=false;
+    var tw=tip.offsetWidth,th=tip.offsetHeight;
+    tip.style.left=Math.max(0,Math.min(cv.clientWidth-tw,b.cx-tw/2))+'px';
+    tip.style.top=Math.max(0,b.y-th-8)+'px';
+  }
+  cv.addEventListener('pointermove',showTip);
+  cv.addEventListener('pointerdown',showTip);
+  cv.addEventListener('pointerleave',function(){tip.hidden=true;});
+  document.addEventListener('qm-theme',draw);
+  if('ResizeObserver' in window)new ResizeObserver(draw).observe(cv);else window.addEventListener('resize',draw);
+  if(document.fonts&&document.fonts.ready)document.fonts.ready.then(draw);
+
+  /* ---------- tus marcas para la duración elegida ---------- */
+  function renderPerf(){
+    var hist=(QM.history('calculo')||[]).filter(function(e){return e&&typeof e.s==='number';});
+    var mine=hist.filter(function(e){return e.d===S.t;});
+    $('perfCap').textContent='Sesiones de '+durTxt(S.t);
+    if(!mine.length){
+      $('perfData').hidden=true;$('perfEmpty').hidden=false;
+      $('perfEmpty').textContent='Aún no has hecho ninguna sesión de '+durTxt(S.t)+'. Cuando termines la primera, aquí verás tu récord y cómo evoluciona.';
+      data=[];
+    }else{
+      $('perfData').hidden=false;$('perfEmpty').hidden=true;
+      var b=QM.best('calculo-'+S.t);
+      $('sBest').textContent=typeof b==='number'?b:'—';
+      $('sN').textContent=mine.length;
+      var l10=mine.slice(-10),sa=0;
+      l10.forEach(function(e){sa+=(e.a||0);});
+      $('sAcc').textContent=Math.round(sa/l10.length*100)+' %';
+      var pace=l10.filter(function(e){return e.s>0;}).map(function(e){return e.d/e.s;});
+      $('sPace').textContent=pace.length?dec(pace.reduce(function(a,x){return a+x;},0)/pace.length,1)+' s':'—';
+      var k=opsKey(S.ops)+'|'+S.dif;
+      data=mine.slice(-20).map(function(e){return {s:e.s,a:e.a,t:e.t,hi:(e.ops+'|'+e.dif)===k};});
+      var lo=Math.min.apply(null,data.map(function(d){return d.s;})),hi=Math.max.apply(null,data.map(function(d){return d.s;}));
+      cv.setAttribute('aria-label','Aciertos en tus últimas '+data.length+' sesiones de '+durTxt(S.t)+': entre '+lo+' y '+hi+'. La última, '+data[data.length-1].s+'.');
+      draw();
+    }
+    renderTable(hist);
+  }
+
+  /* ---------- tabla: últimas 10 sesiones, de cualquier duración ---------- */
+  function renderTable(hist){
+    var body=$('sessBody');body.innerHTML='';
+    $('ultimas').hidden=!hist.length;
+    hist.slice(-10).reverse().forEach(function(e){
+      var tr=document.createElement('tr');
+      var ops=okOps(e.ops),opsTxt=!ops?'':ops.length===OPS.length?'Todas':ops.map(function(o){return SYM[o];}).join(' ');
+      var cells=[
+        [when(e.t),''],
+        [(e.d/60)+' min · '+(e.dif==='dificil'?'Difícil':e.dif==='normal'?'Normal':'—'),''],
+        [String(e.s),'r n'],
+        [Math.round((e.a||0)*100)+' %','r']
+      ];
+      cells.forEach(function(cd,i){
+        var td=document.createElement('td');td.className=cd[1];td.textContent=cd[0];
+        if(i===1&&opsTxt){var sp=document.createElement('span');sp.className='o';sp.textContent=' · '+opsTxt;td.appendChild(sp);}
+        tr.appendChild(td);
+      });
+      body.appendChild(tr);
+    });
+  }
+
+  render();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,273 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>Código · QuantMeraki</title>
+<meta name="description" content="Problemas de programación en Python para quant developers: libros de órdenes, estructuras de datos, simulación, probabilidad y rendimiento. Se ejecutan en tu navegador.">
+<link rel="icon" href="assets/perfil-128.png">
+<script>try{var t=localStorage.getItem('qm-theme');document.documentElement.setAttribute('data-theme',t||'light');}catch(e){}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;500;600;700&family=Barlow+Semi+Condensed:wght@600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/qm.css">
+<style>
+  .chead{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,420px);gap:clamp(28px,5vw,72px);align-items:end}
+  .facts{display:flex;flex-wrap:wrap;gap:8px 22px;list-style:none;margin:26px 0 0;padding:0;font-size:14.5px;color:var(--muted)}
+  .facts li{display:flex;align-items:baseline;gap:7px}
+  .facts .num{font-size:20px;color:var(--txt)}
+  .start{position:relative}
+  .start .label{display:block;color:var(--acc-txt)}
+  .start .h3{margin-top:10px;transition:color .15s}
+  .start:hover .h3{color:var(--acc-txt)}
+  .start p{margin-top:8px}
+  .start pre.code{margin:16px 0 0;font-size:13px}
+  .start .card-foot .meter{margin-left:10px}
+  .tb-r{display:flex;flex-wrap:wrap;gap:10px;flex:1 1 420px;justify-content:flex-end}
+  .tb-r .sel{flex:0 0 auto}
+  .clist .item{min-height:52px}
+  .clist .item-m{display:grid;grid-template-columns:188px 60px 34px 20px 14px;align-items:center;gap:0 14px}
+  .clist .item-m .tag{justify-self:start}
+  .lang{font-family:var(--mono);font-size:13px;color:var(--muted)}
+  .empty .btn{margin-top:14px}
+  .faq-side .lead{max-width:40ch}
+  @media (max-width:900px){
+    .chead{grid-template-columns:minmax(0,1fr)}
+    .tb-r{justify-content:flex-start}
+  }
+  @media (max-width:600px){
+    .toolbar{flex-wrap:nowrap}
+    .chip,.btn.sm{min-height:40px}
+    .tb-r{flex:none;width:100%}
+    .tb-r .sel{width:100%}
+    .clist .item-m{display:flex;justify-content:flex-start}
+    .clist .item-m .arrow{display:none}
+    .facts{gap:6px 18px}
+  }
+</style>
+</head>
+<body data-section="practica">
+<a class="skip" href="#main">Saltar al contenido</a>
+
+<header class="top">
+  <div class="wrap bar">
+    <a class="logo" href="index.html" aria-label="QuantMeraki, inicio"><img src="assets/perfil-128.png" alt="" width="34" height="34"><span>QuantMeraki</span></a>
+    <nav class="nav" aria-label="Principal">
+      <div class="dd">
+        <button class="dd-btn" type="button" aria-expanded="false" data-nav="practica">Practica</button>
+        <div class="menu" hidden>
+          <a href="entrenadores.html">Entrenadores<small>Cálculo mental y series, contra el reloj</small></a>
+          <a href="preguntas.html">Preguntas<small>Probabilidad, acertijos y series</small></a>
+          <a href="juegos.html">Juegos de mercado<small>Cotiza y ajusta tus precios</small></a>
+          <a href="simulacros.html">Simulacros<small>Pruebas cronometradas, como las de verdad</small></a>
+          <a href="codigo.html">Código<small>Problemas para developers</small></a>
+        </div>
+      </div>
+      <div class="dd">
+        <button class="dd-btn" type="button" aria-expanded="false" data-nav="aprende">Aprende</button>
+        <div class="menu" hidden>
+          <a href="rutas.html">Rutas<small>Trader, researcher o developer, paso a paso</small></a>
+          <a href="cursos.html">Cursos<small>Probabilidad, mercados y opciones</small></a>
+          <a href="guias.html">Guías<small>El sector y los procesos, explicados</small></a>
+        </div>
+      </div>
+      <div class="dd">
+        <button class="dd-btn" type="button" aria-expanded="false" data-nav="firmas">Firmas</button>
+        <div class="menu" hidden>
+          <a href="firmas.html">Directorio<small>Qué hace cada firma y cómo contrata</small></a>
+          <a href="empleo.html">Empleo<small>Prácticas y puestos para graduados</small></a>
+        </div>
+      </div>
+      <a href="canal.html" data-nav="canal">Canal</a>
+    </nav>
+    <div class="tools">
+      <a class="iconbtn" href="progreso.html" data-nav="progreso" aria-label="Mi progreso" title="Mi progreso"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 20v-8M12 20V5M19 20v-9"/></svg></a>
+      <button class="iconbtn" type="button" data-theme-toggle aria-label="Cambiar a modo oscuro"><svg class="ico i-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg><svg class="ico i-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg></button>
+      <a class="btn solid sm cta" href="entrenador-calculo-mental.html">Empieza</a>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+  <div class="wrap">
+
+    <section class="phead">
+      <div class="chead">
+        <div>
+          <nav class="crumbs" aria-label="Migas de pan"><a href="practica.html">Practica</a><span class="sep">/</span><span aria-current="page">Código</span></nav>
+          <p class="kicker"><b>Python</b> / Para developers</p>
+          <h1 class="h1">Problemas de código</h1>
+          <p class="lead">Problemas propios sobre lo que se programa en una firma de trading. Escribes la solución, pasas las pruebas y comparas con la nuestra, todo en el navegador.</p>
+          <ul class="facts">
+            <li><b class="num">12</b> problemas</li>
+            <li><b class="num">5</b> temas</li>
+            <li>Python 3.12, sin instalar nada</li>
+          </ul>
+        </div>
+        <a class="card start" href="codigo-libro-de-ordenes.html">
+          <span class="label">Empieza por aquí</span>
+          <h2 class="h3">Libro de órdenes: mejor precio</h2>
+          <p>Mantén la mejor compra y la mejor venta mientras llegan y se cancelan órdenes.</p>
+<pre class="code" aria-hidden="true"><code>ob.add(<span class="tok-n">1</span>, <span class="tok-s">"buy"</span>, <span class="tok-n">100</span>, <span class="tok-n">5</span>)
+ob.add(<span class="tok-n">2</span>, <span class="tok-s">"buy"</span>, <span class="tok-n">100</span>, <span class="tok-n">7</span>)
+ob.best_bid()   <span class="tok-c"># (100, 12)</span></code></pre>
+          <span class="card-foot"><span><span class="tag">Libro de órdenes</span><span class="meter" data-v="2" aria-label="Dificultad media"><i></i><i></i><i></i></span></span><span class="more">Resolver →</span></span>
+        </a>
+      </div>
+    </section>
+
+    <section class="sec first" data-filter-root aria-label="Lista de problemas">
+      <div class="toolbar">
+        <div class="chips scroll" role="group" aria-label="Tema">
+          <button class="chip" type="button" data-filter="tema:all" aria-pressed="true">Todos</button>
+          <button class="chip" type="button" data-filter="tema:libro" aria-pressed="false">Libro de órdenes</button>
+          <button class="chip" type="button" data-filter="tema:estructuras" aria-pressed="false">Estructuras de datos</button>
+          <button class="chip" type="button" data-filter="tema:simulacion" aria-pressed="false">Simulación</button>
+          <button class="chip" type="button" data-filter="tema:probabilidad" aria-pressed="false">Probabilidad</button>
+          <button class="chip" type="button" data-filter="tema:rendimiento" aria-pressed="false">Rendimiento</button>
+        </div>
+        <div class="tb-r">
+          <label class="sr" for="dif">Dificultad</label>
+          <select class="sel" id="dif" data-filter-select="dif">
+            <option value="all">Cualquier dificultad</option>
+            <option value="1">Fácil</option>
+            <option value="2">Media</option>
+            <option value="3">Difícil</option>
+          </select>
+          <label class="search"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/></svg><span class="sr">Buscar problemas</span><input type="search" data-search placeholder="Buscar problemas"></label>
+        </div>
+      </div>
+      <p class="count" data-count aria-live="polite"></p>
+      <div class="list clist">
+        <a class="item" href="codigo-libro-de-ordenes.html" data-item data-tags="tema:libro dif:2">
+          <span><span class="item-t">Libro de órdenes: mejor precio</span><span class="item-d">Mantén la mejor compra y la mejor venta mientras llegan y se cancelan órdenes.</span></span>
+          <span class="item-m"><span class="tag">Libro de órdenes</span><span class="lang">Python</span><span class="meter" data-v="2" aria-label="Dificultad media"><i></i><i></i><i></i></span><span class="check" data-done-mark="codigo:libro-de-ordenes" aria-hidden="true"></span><span class="arrow" aria-hidden="true">→</span></span>
+        </a>
+        <a class="item" href="#" data-soon="Borrador: este problema todavía no está montado." data-item data-tags="tema:libro dif:1">
+          <span><span class="item-t">Barrer el libro: precio medio</span><span class="item-d">Cuánto pagas de media si tu orden se come varios niveles del libro.</span></span>
+          <span class="item-m"><span class="tag">Libro de órdenes</span><span class="lang">Python</span><span class="meter" data-v="1" aria-label="Dificultad fácil"><i></i><i></i><i></i></span><span class="check" data-done-mark="codigo:barrer-el-libro" aria-hidden="true"></span><span class="arrow" aria-hidden="true">→</span></span>
+        </a>
+        <a class="item" href="#" data-soon="Borrador: este problema todavía no está montado." data-item data-tags="tema:libro dif:3">
+          <span><span class="item-t">Casar órdenes con prioridad precio-tiempo</span><span class="item-d">Un motor de casación pequeño: quién se ejecuta primero y a qué precio.</span></span>
+          <span class="item-m"><span class="tag">Libro de órdenes</span><span class="lang">Python</span><span class="meter" data-v="3" aria-label="Dificultad difícil"><i></i><i></i><i></i></span><span class="check" data-done-mark="codigo:casar-ordenes" aria-hidden="true"></span><span class="arrow" aria-hidden="true">→</span></span>
+        </a>
+        <a class="item" href="#" data-soon="Borrador: este problema todavía no está montado." data-item data-tags="tema:estructuras dif:1">
+          <span><span class="item-t">Media móvil sin recorrer la ventana</span><span class="item-d">La media de los últimos k precios, actualizada en tiempo constante.</span></span>
+          <span class="item-m"><span class="tag">Estructuras de datos</span><span class="lang">Python</span><span class="meter" data-v="1" aria-label="Dificultad fácil"><i></i><i></i><i></i></span><span class="check" data-done-mark="codigo:media-movil" aria-hidden="true"></span><span class="arrow" aria-hidden="true">→</span></span>
+        </a>
+        <a class="item" href="#" data-soon="Borrador: este problema todavía no está montado." data-item data-tags="tema:estructuras dif:2">
+          <span><span class="item-t">Máximo en una ventana deslizante</span><span class="item-d">El máximo de los últimos k precios con una cola monótona (deque).</span></span>
+          <span class="item-m"><span class="tag">Estructuras de datos</span><span class="lang">Python</span><span class="meter" data-v="2" aria-label="Dificultad media"><i></i><i></i><i></i></span><span class="check" data-done-mark="codigo:maximo-ventana" aria-hidden="true"></span><span class="arrow" aria-hidden="true">→</span></span>
+        </a>
+        <a class="item" href="#" data-soon="Borrador: este problema todavía no está montado." data-item data-tags="tema:estructuras dif:3">
+          <span><span class="item-t">Mediana de un flujo de precios</span><span class="item-d">Dos montículos (heaps) para tener la mediana después de cada dato.</span></span>
+          <span class="item-m"><span class="tag">Estructuras de datos</span><span class="lang">Python</span><span class="meter" data-v="3" aria-label="Dificultad difícil"><i></i><i></i><i></i></span><span class="check" data-done-mark="codigo:mediana-flujo" aria-hidden="true"></span><span class="arrow" aria-hidden="true">→</span></span>
+        </a>
+        <a class="item" href="#" data-soon="Borrador: este problema todavía no está montado." data-item data-tags="tema:simulacion dif:1">
+          <span><span class="item-t">Llegadas de órdenes al azar</span><span class="item-d">Simula llegadas con tiempos exponenciales y comprueba la media y la varianza del recuento.</span></span>
+          <span class="item-m"><span class="tag">Simulación</span><span class="lang">Python</span><span class="meter" data-v="1" aria-label="Dificultad fácil"><i></i><i></i><i></i></span><span class="check" data-done-mark="codigo:llegadas-poisson" aria-hidden="true"></span><span class="arrow" aria-hidden="true">→</span></span>
+        </a>
+        <a class="item" href="#" data-soon="Borrador: este problema todavía no está montado." data-item data-tags="tema:simulacion dif:2">
+          <span><span class="item-t">Paseo aleatorio entre dos barreras</span><span class="item-d">Cuánto tarda en tocar una barrera. Simúlalo y compáralo con la fórmula exacta.</span></span>
+          <span class="item-m"><span class="tag">Simulación</span><span class="lang">Python</span><span class="meter" data-v="2" aria-label="Dificultad media"><i></i><i></i><i></i></span><span class="check" data-done-mark="codigo:paseo-barreras" aria-hidden="true"></span><span class="arrow" aria-hidden="true">→</span></span>
+        </a>
+        <a class="item" href="#" data-soon="Borrador: este problema todavía no está montado." data-item data-tags="tema:probabilidad dif:2">
+          <span><span class="item-t">La suma de n dados, exacta</span><span class="item-d">Su distribución con programación dinámica, sin enumerar las tiradas.</span></span>
+          <span class="item-m"><span class="tag">Probabilidad</span><span class="lang">Python</span><span class="meter" data-v="2" aria-label="Dificultad media"><i></i><i></i><i></i></span><span class="check" data-done-mark="codigo:suma-de-dados" aria-hidden="true"></span><span class="arrow" aria-hidden="true">→</span></span>
+        </a>
+        <a class="item" href="#" data-soon="Borrador: este problema todavía no está montado." data-item data-tags="tema:probabilidad dif:3">
+          <span><span class="item-t">Rachas de caras</span><span class="item-d">La probabilidad exacta de ver r caras seguidas en n lanzamientos.</span></span>
+          <span class="item-m"><span class="tag">Probabilidad</span><span class="lang">Python</span><span class="meter" data-v="3" aria-label="Dificultad difícil"><i></i><i></i><i></i></span><span class="check" data-done-mark="codigo:rachas-de-caras" aria-hidden="true"></span><span class="arrow" aria-hidden="true">→</span></span>
+        </a>
+        <a class="item" href="#" data-soon="Borrador: este problema todavía no está montado." data-item data-tags="tema:rendimiento dif:2">
+          <span><span class="item-t">Velas de un minuto desde ticks</span><span class="item-d">Agrega un millón de ticks en velas (OHLC) sin que el tiempo se dispare.</span></span>
+          <span class="item-m"><span class="tag">Rendimiento</span><span class="lang">Python</span><span class="meter" data-v="2" aria-label="Dificultad media"><i></i><i></i><i></i></span><span class="check" data-done-mark="codigo:velas-un-minuto" aria-hidden="true"></span><span class="arrow" aria-hidden="true">→</span></span>
+        </a>
+        <a class="item" href="#" data-soon="Borrador: este problema todavía no está montado." data-item data-tags="tema:rendimiento dif:1">
+          <span><span class="item-t">De bucles a NumPy</span><span class="item-d">Reescribe un cálculo de rentabilidades con vectores y mide cuánto ganas.</span></span>
+          <span class="item-m"><span class="tag">Rendimiento</span><span class="lang">Python</span><span class="meter" data-v="1" aria-label="Dificultad fácil"><i></i><i></i><i></i></span><span class="check" data-done-mark="codigo:bucles-a-numpy" aria-hidden="true"></span><span class="arrow" aria-hidden="true">→</span></span>
+        </a>
+      </div>
+      <div class="empty" data-empty hidden>
+        <p style="margin:0">No hay problemas con esos filtros.</p>
+        <button class="btn ghost sm" type="button" id="clearF">Quitar filtros</button>
+      </div>
+    </section>
+
+    <section class="sec" aria-labelledby="faq-h">
+      <div class="split">
+        <div class="side faq-side">
+          <p class="kicker"><b>FAQ</b> / Código</p>
+          <h2 class="h2" id="faq-h">Antes de empezar</h2>
+          <p class="lead">Cómo funciona el editor, qué se guarda y qué se valora.</p>
+          <a class="btn ghost" href="rutas.html">Ver las rutas</a>
+        </div>
+        <div>
+          <div class="acc-row">
+            <button class="acc-btn" type="button" aria-expanded="false" aria-controls="q1"><span class="item-t">¿Tengo que instalar algo?</span><span class="plus" aria-hidden="true">+</span></button>
+            <div class="acc-body" id="q1" hidden><p>No. El código se ejecuta en tu navegador con Pyodide, que es Python 3.12 compilado a WebAssembly. La primera vez descarga unos 6 MB; después sale de la caché.</p></div>
+          </div>
+          <div class="acc-row">
+            <button class="acc-btn" type="button" aria-expanded="false" aria-controls="q2"><span class="item-t">¿Por qué solo Python?</span><span class="plus" aria-hidden="true">+</span></button>
+            <div class="acc-body" id="q2" hidden><p>Porque se puede ejecutar sin servidor. En sistemas de baja latencia se usa mucho C++, pero lo que trabajan estos problemas no cambia de un lenguaje a otro: elegir la estructura de datos y saber cuánto cuesta cada operación.</p></div>
+          </div>
+          <div class="acc-row">
+            <button class="acc-btn" type="button" aria-expanded="false" aria-controls="q3"><span class="item-t">¿Puedo usar librerías?</span><span class="plus" aria-hidden="true">+</span></button>
+            <div class="acc-body" id="q3" hidden><p>Solo la biblioteca estándar: heapq, collections, bisect y compañía. La gracia es que construyas tú la pieza que importa.</p></div>
+          </div>
+          <div class="acc-row">
+            <button class="acc-btn" type="button" aria-expanded="false" aria-controls="q4"><span class="item-t">¿Se guarda lo que escribo?</span><span class="plus" aria-hidden="true">+</span></button>
+            <div class="acc-body" id="q4" hidden><p>Sí, en este navegador. Tu borrador y los problemas resueltos se quedan en tu equipo y no se envían a ningún sitio. Los resueltos aparecen en <a class="acc-txt" href="progreso.html">Mi progreso</a>.</p></div>
+          </div>
+          <div class="acc-row">
+            <button class="acc-btn" type="button" aria-expanded="false" aria-controls="q5"><span class="item-t">¿Son problemas de entrevistas reales?</span><span class="plus" aria-hidden="true">+</span></button>
+            <div class="acc-body" id="q5" hidden><p>No. Los escribimos nosotros a partir de lo que hace un sistema de trading: libros de órdenes, flujos de precios y simulaciones. No reproducen la prueba de ninguna firma.</p></div>
+          </div>
+          <div class="acc-row">
+            <button class="acc-btn" type="button" aria-expanded="false" aria-controls="q6"><span class="item-t">¿Por dónde empiezo?</span><span class="plus" aria-hidden="true">+</span></button>
+            <div class="acc-body" id="q6" hidden><p>Por el libro de órdenes. Es corto y toca lo que más se usa: montículos, diccionarios y el coste de cada operación. Si quieres un plan completo, mira la ruta de developer en Rutas.</p></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <div class="cols">
+      <div class="brandcol"><a class="logo" href="index.html"><img src="assets/perfil-128.png" alt="" width="34" height="34"><span>QuantMeraki</span></a><p class="claim">El mundo quant, en español.</p></div>
+      <div><h4>Practica</h4><ul><li><a href="entrenadores.html">Entrenadores</a></li><li><a href="preguntas.html">Preguntas</a></li><li><a href="juegos.html">Juegos de mercado</a></li><li><a href="simulacros.html">Simulacros</a></li><li><a href="codigo.html">Código</a></li></ul></div>
+      <div><h4>Aprende</h4><ul><li><a href="rutas.html">Rutas</a></li><li><a href="cursos.html">Cursos</a></li><li><a href="guias.html">Guías</a></li><li><a href="canal.html">El canal</a></li></ul></div>
+      <div><h4>QuantMeraki</h4><ul><li><a href="firmas.html">Firmas</a></li><li><a href="empleo.html">Empleo</a></li><li><a href="progreso.html">Mi progreso</a></li><li><a href="sobre.html">Sobre el proyecto</a></li></ul></div>
+    </div>
+    <div class="legal"><span>Contenido educativo, nunca asesoramiento financiero.</span><span>© 2026 QuantMeraki</span></div>
+  </div>
+</footer>
+
+<nav class="tabbar" aria-label="Secciones">
+  <a href="index.html" data-tab="inicio"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/><path d="M10 20v-6h4v6"/></svg><span>Inicio</span></a>
+  <a href="practica.html" data-tab="practica"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="4"/><circle class="f" cx="12" cy="12" r="1.4"/></svg><span>Practica</span></a>
+  <a href="aprende.html" data-tab="aprende"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 6c-2-1.5-5-2-8-1.5V19c3-.5 6 0 8 1.5 2-1.5 5-2 8-1.5V4.5c-3-.5-6 0-8 1.5z"/><path d="M12 6v14.5"/></svg><span>Aprende</span></a>
+  <a href="firmas.html" data-tab="firmas"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 21h18M3 9.5l9-5.5 9 5.5M5 10v11M19 10v11M9.5 21v-8M14.5 21v-8"/></svg><span>Firmas</span></a>
+  <a href="canal.html" data-tab="canal"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="3"/><path class="f" d="M10 9v6l5-3z"/></svg><span>Canal</span></a>
+</nav>
+
+<div class="toast" id="toast" role="status" hidden></div>
+<script src="assets/qm.js"></script>
+<script>
+/* Código: "Quitar filtros" devuelve la lista a su estado inicial */
+(function(){
+  var b=document.getElementById('clearF');if(!b)return;
+  b.addEventListener('click',function(){
+    var root=b.closest('[data-filter-root]');
+    var all=root.querySelector('[data-filter="tema:all"]');if(all)all.click();
+    var s=root.querySelector('[data-filter-select]');if(s){s.value='all';s.dispatchEvent(new Event('change'));}
+    var q=root.querySelector('[data-search]');if(q){q.value='';q.dispatchEvent(new Event('input'));q.focus();}
+  });
+})();
+</script>
+</body>
+</html>
